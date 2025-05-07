@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "TicketSystem",
+					"name" : "code",
 					"targetIndexes" : 
 					[
 						0
@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "ticket_system::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ticket_system-Debug-cf2ed5db9df13478a7ac.json",
-					"name" : "ticket_system",
+					"id" : "code::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-code-Debug-1113a2460c7aa9f83ecf.json",
+					"name" : "code",
 					"projectIndex" : 0
 				}
 			]

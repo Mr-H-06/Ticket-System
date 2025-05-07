@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named ticket_system
+# Target rules for targets named code
 
 # Build rule for target.
-ticket_system: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ticket_system
-.PHONY : ticket_system
+code: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 code
+.PHONY : code
 
 # fast build rule for target.
-ticket_system/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ticket_system.dir/build.make CMakeFiles/ticket_system.dir/build
-.PHONY : ticket_system/fast
+code/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/build
+.PHONY : code/fast
 
 src/storage.o: src/storage.cpp.o
 .PHONY : src/storage.o
 
 # target to build an object file
 src/storage.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ticket_system.dir/build.make CMakeFiles/ticket_system.dir/src/storage.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/storage.cpp.o
 .PHONY : src/storage.cpp.o
 
 src/storage.i: src/storage.cpp.i
@@ -142,7 +142,7 @@ src/storage.i: src/storage.cpp.i
 
 # target to preprocess a source file
 src/storage.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ticket_system.dir/build.make CMakeFiles/ticket_system.dir/src/storage.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/storage.cpp.i
 .PHONY : src/storage.cpp.i
 
 src/storage.s: src/storage.cpp.s
@@ -150,7 +150,7 @@ src/storage.s: src/storage.cpp.s
 
 # target to generate assembly for a file
 src/storage.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ticket_system.dir/build.make CMakeFiles/ticket_system.dir/src/storage.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/storage.cpp.s
 .PHONY : src/storage.cpp.s
 
 # Help Target
@@ -161,7 +161,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... ticket_system"
+	@echo "... code"
 	@echo "... src/storage.o"
 	@echo "... src/storage.i"
 	@echo "... src/storage.s"
