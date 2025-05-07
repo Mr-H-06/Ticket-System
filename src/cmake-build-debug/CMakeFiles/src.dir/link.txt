@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/src.dir/storage.cpp.o -o src 
