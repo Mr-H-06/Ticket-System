@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/ticket_system.dir/src/storage.cpp.o -o ticket_system 
