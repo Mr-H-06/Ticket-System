@@ -515,8 +515,18 @@ public:
     Node leaf = read_node(leaf_addr);
     int pos = leaf.find_pos(key_value);
 
-    if (pos >= leaf.num_entries || strcmp(leaf.entries[pos].key, key) != 0 || leaf.entries[pos].value != value) {
+    if (pos < leaf.num_entries && (strcmp(leaf.entries[pos].key, key) != 0 || leaf.entries[pos].value != value)) {
       return; //not found
+    }
+    if (pos == leaf.num_entries) {
+      if (leaf.next == INVALID_ADDR) {
+        return;
+      }
+      leaf = read_node(leaf.next);
+      pos = 0;
+      if (strcmp(leaf.entries[0].key, key) != 0 || leaf.entries[pos].value != value) {
+        return;
+      }
     }
 
     //remove
