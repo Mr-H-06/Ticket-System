@@ -5,7 +5,7 @@
 constexpr int MAX_KEY_SIZE = 64;
 constexpr int BLOCK_SIZE = 4000;
 constexpr int INVALID_ADDR = -1;
-constexpr int MAX_KEY_PER_NODE = 250;
+constexpr int MAX_KEY_PER_NODE = 4;
 constexpr int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE / 2;
 
 //BPT
@@ -151,11 +151,10 @@ private:
     r.parent = parent.self_addr;
     write_node(r);
     if (parent.num_entries < MAX_KEY_PER_NODE) {
-      if (parent.self_addr != root_addr) {
-        write_node(parent);
-      } else {
+      if (parent.self_addr == root_addr) {
         root = parent;
       }
+      write_node(parent);
     } else {
       // split parent
       Node new_node;
