@@ -191,6 +191,9 @@ private:
 
   void handle_merge(Node &node) {
     if (node.num_entries >= MIN_KEY_PER_NODE || node.parent == INVALID_ADDR) {
+      if (node.self_addr == root_addr) {
+        root = node;
+      }
       write_node(node);
       return;
     }
@@ -242,6 +245,9 @@ private:
         }
         write_node(left);
         write_node(node);
+        if (parent.self_addr == root_addr) {
+          root = parent;
+        }
         write_node(parent);
         return;
       }
@@ -285,6 +291,9 @@ private:
         }
         write_node(right);
         write_node(node);
+        if (parent.self_addr == root_addr) {
+          root = parent;
+        }
         write_node(parent);
         return;
       }
@@ -479,6 +488,9 @@ public:
 
     //write
     if (leaf.num_entries < MAX_KEY_PER_NODE) {
+      if (leaf_addr == root_addr) {
+        root = leaf;
+      }
       write_node(leaf);
     } else {
       // split
