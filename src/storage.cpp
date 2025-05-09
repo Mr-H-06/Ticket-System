@@ -5,7 +5,7 @@
 constexpr int MAX_KEY_SIZE = 64;
 constexpr int BLOCK_SIZE = 4000;
 constexpr int INVALID_ADDR = -1;
-constexpr int MAX_KEY_PER_NODE = 250;
+constexpr int MAX_KEY_PER_NODE = 4;
 constexpr int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE / 2;
 
 //BPT
@@ -36,6 +36,7 @@ struct Node {
   }
 
   int find_pos(const KeyValue &key_value) const {
+    // find the minimun pos, key_value <= entries[pos]
     int l = 0, r = num_entries - 1, mid;
     while (l <= r) {
       mid = (l + r) / 2;
@@ -47,12 +48,13 @@ struct Node {
 
   int find_key_pos(const char *key) const {
     int l = 0, r = num_entries - 1, mid;
+    // find the minimum pos, s.t. key <= entries[pos].key
     while (l <= r) {
       mid = (l + r) / 2;
-      if (strcmp(key, entries[mid].key) <= 0) {
-        r = mid - 1;
-      } else {
+      if (strcmp(entries[mid].key, key) < 0) {
         l = mid + 1;
+      } else {
+        r = mid - 1;
       }
     }
     return l;
@@ -98,7 +100,17 @@ private:
     int pos;
     while (node.type != LEAF) {
       pos = node.find_key_pos(key);
-      if (pos >= node.num_entries) pos = node.num_entries - 1;
+      node = read_node(node.children[pos]);
+    }
+    return node.self_addr;
+  }
+
+  int find_leaf(const KeyValue &key) {
+    if (root_addr == INVALID_ADDR) return INVALID_ADDR;
+    Node node = root;
+    int pos;
+    while (node.type != LEAF) {
+      pos = node.find_pos(key);
       node = read_node(node.children[pos]);
     }
     return node.self_addr;
@@ -139,7 +151,11 @@ private:
     r.parent = parent.self_addr;
     write_node(r);
     if (parent.num_entries < MAX_KEY_PER_NODE) {
-      write_node(parent);
+      if (parent.self_addr != root_addr) {
+        write_node(parent);
+      } else {
+        root = parent;
+      }
     } else {
       // split parent
       Node new_node;
@@ -347,12 +363,12 @@ private:
           write_node(child);
           //}
         }
-        node.children[node.num_entries + 1 + node.num_entries] = right.children[right.num_entries];
+        node.children[node.num_entries + 1 + right.num_entries] = right.children[right.num_entries];
         Node child = read_node(right.children[right.num_entries]);
         child.parent = node.self_addr;
         write_node(child);
 
-        node.num_entries += node.num_entries + 1;
+        node.num_entries += right.num_entries + 1;
       }
 
       for (int i = pos; i < parent.num_entries - 1;++i) {
@@ -364,7 +380,7 @@ private:
       //revise root
       if (parent.self_addr == root_addr && parent.num_entries == 0) {
         root_addr = node.self_addr;
-        root = right;
+        root = node;
         node.parent = INVALID_ADDR;
       }
       write_node(node);
@@ -396,6 +412,20 @@ public:
   }
 
   ~BPlusTree() {
+    //check
+    /*{
+      int pos = first_leaf_addr;
+      Node node;
+      while (pos != INVALID_ADDR) {
+        node = read_node(pos);
+        std::cout << node.num_entries << '\n';
+        for (int k = 0; k < node.num_entries; ++k) {
+          std::cout << node.entries[k].key << ' ' << node.entries[k].value << '\n';
+        }
+        std::cout << '\n';
+        pos = node.next;
+      }
+    }*/
     file.seekp(0);
     file.write(reinterpret_cast<char *>(&root_addr), sizeof(root_addr));
     file.write(reinterpret_cast<char *>(&first_leaf_addr), sizeof(first_leaf_addr));
@@ -406,7 +436,7 @@ public:
 
   void insert(const char *key, int value) {
     KeyValue key_value;
-    strncpy(key_value.key, key, MAX_KEY_SIZE);
+    strcpy(key_value.key, key);
     key_value.value = value;
 
     if (root_addr == INVALID_ADDR) {
@@ -424,7 +454,7 @@ public:
       return;
     }
 
-    int leaf_addr = find_leaf(key);
+    int leaf_addr = find_leaf(key_value);
     Node leaf = read_node(leaf_addr);
 
     int pos = leaf.find_pos(key_value);
@@ -432,6 +462,12 @@ public:
     // check if it has existed
     if (pos < leaf.num_entries && strcmp(leaf.entries[pos].key, key) == 0 && leaf.entries[pos].value == value) {
       return;
+    }
+    if (pos == leaf.num_entries && leaf.next != INVALID_ADDR) {
+      Node node = read_node(leaf.next);
+      if (strcmp(node.entries[0].key, key) == 0 && node.entries[0].value == value) {
+        return;
+      }
     }
 
     // insert
@@ -472,14 +508,14 @@ public:
     if (root_addr == INVALID_ADDR) return;
 
     KeyValue key_value;
-    strncpy(key_value.key, key, MAX_KEY_SIZE);
+    strcpy(key_value.key, key);
     key_value.value = value;
 
-    int leaf_addr = find_leaf(key);
+    int leaf_addr = find_leaf(key_value);
     Node leaf = read_node(leaf_addr);
     int pos = leaf.find_pos(key_value);
 
-    if (pos >= leaf.num_entries || strcmp(leaf.entries[pos].key, key) != 00 || leaf.entries[pos].value != value) {
+    if (pos >= leaf.num_entries || strcmp(leaf.entries[pos].key, key) != 0 || leaf.entries[pos].value != value) {
       return; //not found
     }
 
@@ -509,7 +545,7 @@ public:
       }
 
       // check if next node needs search
-      if (leaf.next == INVALID_ADDR || strcmp(leaf.entries[leaf.num_entries - 1].key, key) != 0) {
+      if (leaf.next == INVALID_ADDR || (pos != leaf.num_entries && strcmp(leaf.entries[leaf.num_entries - 1].key, key) != 0)) {
         break;
       }
 
