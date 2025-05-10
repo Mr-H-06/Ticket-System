@@ -3,9 +3,9 @@
 #include <fstream>
 
 constexpr int MAX_KEY_SIZE = 64;
-constexpr int BLOCK_SIZE = 4096;
+constexpr int BLOCK_SIZE = 4000;
 constexpr int INVALID_ADDR = -1;
-constexpr int MAX_KEY_PER_NODE = 56; //56
+constexpr int MAX_KEY_PER_NODE = 250;
 constexpr int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE / 2;
 
 //BPT
@@ -198,16 +198,12 @@ private:
     }
 
     Node parent = read_node(node.parent);
-    int pos = pos = parent.find_pos(node.entries[node.num_entries - 1]); /*
+    int pos = -1;
     for (int i = 0; i <= parent.num_entries; ++i) {
       if (parent.children[i] == node.self_addr) {
         pos = i;
         break;
       }
-    }
-    std::cout << '\n' << pos << ' ' << parent.find_pos(node.entries[node.num_entries - 1]) << '\n';*/
-    if (parent.children[pos] != node.self_addr) {
-      ++pos;
     }
 
     //  borrow from left
@@ -366,8 +362,8 @@ private:
         node.entries[node.num_entries] = parent.entries[pos];
 
         for (int i = 0; i < right.num_entries; ++i) {
-          node.entries[node.num_entries + 1 + i] = right.entries[i];
-          node.children[node.num_entries + 1 + i] = right.children[i];
+          node.entries[node.num_entries + 1 + i] = node.entries[i];
+          node.children[node.num_entries + 1 + i] = node.children[i];
 
           //if (node.children[i] != INVALID_ADDR) {
           Node child = read_node(right.children[i]);
@@ -383,7 +379,7 @@ private:
         node.num_entries += right.num_entries + 1;
       }
 
-      for (int i = pos; i < parent.num_entries - 1; ++i) {
+      for (int i = pos; i < parent.num_entries - 1;++i) {
         parent.entries[i] = parent.entries[i + 1];
         parent.children[i + 1] = parent.children[i + 2];
       }
@@ -423,43 +419,21 @@ public:
     }
   }
 
-  void check() {
-    int pos = first_leaf_addr;
-    Node node;
-    while (pos != INVALID_ADDR) {
-      node = read_node(pos);
-      std::cout << node.num_entries << '\n';
-      for (int k = 0; k < node.num_entries; ++k) {
-        std::cout << node.entries[k].key << ' ' << node.entries[k].value << '\n';
-      }
-      pos = node.next;
-    }
-    std::cout << '\n';
-    int addr[1000], head = 0, tail = 0;
-    if (root_addr == INVALID_ADDR) return;
-    addr[0] = root_addr;
-    while (head <= tail) {
-      pos = tail;
-      for (int k = head; k <= pos; ++k) {
-        node = read_node(addr[k]);
-        for (int i = 0; i < node.num_entries; ++i) {
-          if (node.type == INTERNAL) {
-            addr[++tail] = node.children[i];
-          }
-          std::cout << node.entries[i].key << ' ' << node.entries[i].value << "    ";
-        }
-        if (node.type == INTERNAL) {
-          addr[++tail] = node.children[node.num_entries];
-        }
-        std::cout << "        ";
-      }
-      head = pos + 1;
-      std::cout << '\n';
-    }
-  }
-
   ~BPlusTree() {
-    //check();
+    //check
+    /*{
+      int pos = first_leaf_addr;
+      Node node;
+      while (pos != INVALID_ADDR) {
+        node = read_node(pos);
+        std::cout << node.num_entries << '\n';
+        for (int k = 0; k < node.num_entries; ++k) {
+          std::cout << node.entries[k].key << ' ' << node.entries[k].value << '\n';
+        }
+        std::cout << '\n';
+        pos = node.next;
+      }
+    }*/
     file.seekp(0);
     file.write(reinterpret_cast<char *>(&root_addr), sizeof(root_addr));
     file.write(reinterpret_cast<char *>(&first_leaf_addr), sizeof(first_leaf_addr));
@@ -592,8 +566,7 @@ public:
       }
 
       // check if next node needs search
-      if (leaf.next == INVALID_ADDR || (pos != leaf.num_entries && strcmp(leaf.entries[leaf.num_entries - 1].key, key)
-                                        != 0)) {
+      if (leaf.next == INVALID_ADDR || (pos != leaf.num_entries && strcmp(leaf.entries[leaf.num_entries - 1].key, key) != 0)) {
         break;
       }
 
@@ -620,7 +593,6 @@ int main() {
       std::cin >> key >> value;
       bpt.remove(key.c_str(), value);
     } else if (cmd == "find") {
-      //bpt.check();
       std::cin >> key;
       sjtu::vector<int> result = bpt.find(key.c_str());
 
@@ -632,8 +604,6 @@ int main() {
         }
       }
       std::cout << '\n';
-    } else {
-      return 0;
     }
   }
   return 0;
