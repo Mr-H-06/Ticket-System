@@ -5,7 +5,7 @@
 constexpr int MAX_KEY_SIZE = 64;
 constexpr int BLOCK_SIZE = 4096;
 constexpr int INVALID_ADDR = -1;
-constexpr int MAX_KEY_PER_NODE = 56; //56
+constexpr int MAX_KEY_PER_NODE = 1000; //56
 constexpr int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE / 2;
 
 //BPT
@@ -74,7 +74,6 @@ private:
   Node read_node(int addr) {
     Node node;
     if (addr == INVALID_ADDR) return node;
-    if (addr == root_addr) return root;
     file.seekg(addr);
     file.read(reinterpret_cast<char *>(&node), sizeof(Node));
     return node;
@@ -154,9 +153,8 @@ private:
     if (parent.num_entries < MAX_KEY_PER_NODE) {
       if (parent.self_addr == root_addr) {
         root = parent;
-      } else {
-        write_node(parent);
       }
+      write_node(parent);
     } else {
       // split parent
       Node new_node;
@@ -194,9 +192,8 @@ private:
     if (node.num_entries >= MIN_KEY_PER_NODE || node.parent == INVALID_ADDR) {
       if (node.self_addr == root_addr) {
         root = node;
-      } else {
-        write_node(node);
       }
+      write_node(node);
       return;
     }
 
@@ -253,9 +250,8 @@ private:
         write_node(node);
         if (parent.self_addr == root_addr) {
           root = parent;
-        } else {
-          write_node(parent);
         }
+        write_node(parent);
         return;
       }
     }
@@ -300,9 +296,8 @@ private:
         write_node(node);
         if (parent.self_addr == root_addr) {
           root = parent;
-        } else {
-          write_node(parent);
         }
+        write_node(parent);
         return;
       }
     }
@@ -352,10 +347,9 @@ private:
         root_addr = left.self_addr;
         root = left;
         left.parent = INVALID_ADDR;
-      } else {
-        write_node(left);
-        handle_merge(parent);
       }
+      write_node(left);
+      handle_merge(parent);
     } else if (pos < parent.num_entries) {
       Node right = read_node(parent.children[pos + 1]);
 
@@ -400,10 +394,9 @@ private:
         root_addr = node.self_addr;
         root = node;
         node.parent = INVALID_ADDR;
-      } else {
-        write_node(node);
-        handle_merge(parent);
       }
+      write_node(node);
+      handle_merge(parent);
     }
   }
 
