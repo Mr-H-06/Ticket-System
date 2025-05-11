@@ -5,7 +5,7 @@
 constexpr int MAX_KEY_SIZE = 64;
 constexpr int BLOCK_SIZE = 4096;
 constexpr int INVALID_ADDR = -1;
-constexpr int MAX_KEY_PER_NODE = 56; //56
+constexpr int MAX_KEY_PER_NODE = 250; //56
 constexpr int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE / 2;
 
 //BPT
