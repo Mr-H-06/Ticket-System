@@ -74,6 +74,7 @@ private:
   Node read_node(int addr) {
     Node node;
     if (addr == INVALID_ADDR) return node;
+
     file.seekg(addr);
     file.read(reinterpret_cast<char *>(&node), sizeof(Node));
     return node;
@@ -153,6 +154,8 @@ private:
     if (parent.num_entries < MAX_KEY_PER_NODE) {
       if (parent.self_addr == root_addr) {
         root = parent;
+
+
       }
       write_node(parent);
     } else {
@@ -192,20 +195,15 @@ private:
     if (node.num_entries >= MIN_KEY_PER_NODE || node.parent == INVALID_ADDR) {
       if (node.self_addr == root_addr) {
         root = node;
+
+
       }
       write_node(node);
       return;
     }
 
     Node parent = read_node(node.parent);
-    int pos = parent.find_pos(node.entries[node.num_entries - 1]); /*
-    for (int i = 0; i <= parent.num_entries; ++i) {
-      if (parent.children[i] == node.self_addr) {
-        pos = i;
-        break;
-      }
-    }
-    std::cout << '\n' << pos << ' ' << parent.find_pos(node.entries[node.num_entries - 1]) << '\n';*/
+    int pos = parent.find_pos(node.entries[node.num_entries - 1]);
     if (parent.children[pos] != node.self_addr) {
       ++pos;
     }
@@ -250,6 +248,8 @@ private:
         write_node(node);
         if (parent.self_addr == root_addr) {
           root = parent;
+
+
         }
         write_node(parent);
         return;
@@ -296,6 +296,8 @@ private:
         write_node(node);
         if (parent.self_addr == root_addr) {
           root = parent;
+
+
         }
         write_node(parent);
         return;
@@ -347,6 +349,9 @@ private:
         root_addr = left.self_addr;
         root = left;
         left.parent = INVALID_ADDR;
+
+
+
       }
       write_node(left);
       handle_merge(parent);
@@ -394,6 +399,9 @@ private:
         root_addr = node.self_addr;
         root = node;
         node.parent = INVALID_ADDR;
+
+
+
       }
       write_node(node);
       handle_merge(parent);
@@ -440,7 +448,7 @@ public:
     addr[0] = root_addr;
     while (head <= tail) {
       pos = tail;
-      for (int k = head; k <= pos; ++k) {
+      for (int k = head; k <= pos; ++k){
         node = read_node(addr[k]);
         for (int i = 0; i < node.num_entries; ++i) {
           if (node.type == INTERNAL) {
