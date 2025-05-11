@@ -198,12 +198,16 @@ private:
     }
 
     Node parent = read_node(node.parent);
-    int pos = -1;
+    int pos = parent.find_pos(node.entries[node.num_entries - 1]); /*
     for (int i = 0; i <= parent.num_entries; ++i) {
       if (parent.children[i] == node.self_addr) {
         pos = i;
         break;
       }
+    }
+    std::cout << '\n' << pos << ' ' << parent.find_pos(node.entries[node.num_entries - 1]) << '\n';*/
+    if (parent.children[pos] != node.self_addr) {
+      ++pos;
     }
 
     //  borrow from left
