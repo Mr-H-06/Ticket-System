@@ -5,7 +5,7 @@
 constexpr int MAX_KEY_SIZE = 64;
 constexpr int BLOCK_SIZE = 4096;
 constexpr int INVALID_ADDR = -1;
-constexpr int MAX_KEY_PER_NODE = 250; //56
+constexpr int MAX_KEY_PER_NODE = 56; //56
 constexpr int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE / 2;
 
 //BPT
@@ -70,7 +70,7 @@ private:
   Node root;
 
   void read_node(int addr, Node &node) {
-    if (addr == INVALID_ADDR) return;/*
+    if (addr == INVALID_ADDR) return; /*
     if (addr == root_addr) {
       node = root;
     }*/
@@ -394,10 +394,9 @@ private:
         root_addr = node.self_addr;
         root = node;
         node.parent = INVALID_ADDR;
-      } else {
-        write_node(node);
-        handle_merge(parent);
       }
+      write_node(node);
+      handle_merge(parent);
     }
   }
 
