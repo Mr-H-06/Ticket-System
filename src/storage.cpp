@@ -68,10 +68,18 @@ private:
   int root_addr;
   int first_leaf_addr;
   Node root;
+  //Node leaf;
+  //Node parent;
 
   void read_node(int addr, Node &node) {
-    if (addr == INVALID_ADDR) return;
-
+    if (addr == INVALID_ADDR) {
+      node = Node();
+      return;
+    }
+    /*if (addr == root_addr) {
+      node = root;
+      return;
+    }*/
     file.seekg(addr);
     file.read(reinterpret_cast<char *>(&node), sizeof(Node));
   }
@@ -198,7 +206,7 @@ private:
 
     Node parent;
     read_node(node.parent, parent);
-    int pos = parent.find_pos(node.entries[node.num_entries - 1]);
+    int pos = pos = parent.find_pos(node.entries[node.num_entries - 1]);
     if (parent.children[pos] != node.self_addr) {
       ++pos;
     }
@@ -245,8 +253,6 @@ private:
         write_node(node);
         if (parent.self_addr == root_addr) {
           root = parent;
-
-
         }
         write_node(parent);
         return;
@@ -295,10 +301,9 @@ private:
         write_node(node);
         if (parent.self_addr == root_addr) {
           root = parent;
-
-
+        } else {
+          write_node(parent);
         }
-        write_node(parent);
         return;
       }
     }
@@ -399,9 +404,6 @@ private:
         root_addr = node.self_addr;
         root = node;
         node.parent = INVALID_ADDR;
-
-
-
       }
       write_node(node);
       handle_merge(parent);
@@ -448,7 +450,7 @@ public:
     addr[0] = root_addr;
     while (head <= tail) {
       pos = tail;
-      for (int k = head; k <= pos; ++k){
+      for (int k = head; k <= pos; ++k) {
         read_node(addr[k], node);
         for (int i = 0; i < node.num_entries; ++i) {
           if (node.type == INTERNAL) {
@@ -624,6 +626,7 @@ int main() {
 
   for (int i = 0; i < n; ++i) {
     std::cin >> cmd;
+
     if (cmd == "insert") {
       std::cin >> key >> value;
       bpt.insert(key.c_str(), value);
@@ -634,6 +637,7 @@ int main() {
       //bpt.check();
       std::cin >> key;
       sjtu::vector<int> result = bpt.find(key.c_str());
+
       if (result.empty()) {
         std::cout << "null";
       } else {
