@@ -203,9 +203,12 @@ private:
     }
 
     Node parent = read_node(node.parent);
-    int pos = parent.find_pos(node.entries[node.num_entries - 1]);
-    if (parent.children[pos] != node.self_addr) {
-      ++pos;
+    int pos = -1;
+    for (int i = 0; i <= parent.num_entries; ++i) {
+      if (parent.children[i] == node.self_addr) {
+        pos = i;
+        break;
+      }
     }
 
     //  borrow from left
