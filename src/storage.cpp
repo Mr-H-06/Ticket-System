@@ -47,8 +47,8 @@ struct Node {
   }
 
   int find_key_pos(const char *key) const {
-    int l = 0, r = num_entries - 1, mid;
     // find the minimum pos, s.t. key <= entries[pos].key
+    int l = 0, r = num_entries - 1, mid;
     while (l <= r) {
       mid = (l + r) / 2;
       if (strcmp(entries[mid].key, key) < 0) {
@@ -198,9 +198,12 @@ private:
     }
 
     Node parent = read_node(node.parent);
-    int pos = parent.find_pos(node.entries[node.num_entries - 1]);
-    if (parent.children[pos] != node.self_addr) {
-      ++pos;
+    int pos = -1;
+    for (int i = 0; i <= parent.num_entries; ++i) {
+      if (parent.children[i] == node.self_addr) {
+        pos = i;
+        break;
+      }
     }
 
     //  borrow from left
