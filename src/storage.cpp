@@ -68,16 +68,15 @@ private:
   int root_addr;
   int first_leaf_addr;
   Node root;
-  //Node leaf;
-  //Node parent;
 
-  Node read_node(int addr) {
-    Node node;
-    if (addr == INVALID_ADDR) return node;
+  void read_node(int addr, Node &node) {
+    if (addr == INVALID_ADDR) return;/*
+    if (addr == root_addr) {
+      node = root;
+    }*/
 
     file.seekg(addr);
     file.read(reinterpret_cast<char *>(&node), sizeof(Node));
-    return node;
   }
 
   void write_node(Node &node) {
@@ -101,7 +100,7 @@ private:
     int pos;
     while (node.type != LEAF) {
       pos = node.find_key_pos(key);
-      node = read_node(node.children[pos]);
+      read_node(node.children[pos], node);
     }
     return node.self_addr;
   }
@@ -112,7 +111,7 @@ private:
     int pos;
     while (node.type != LEAF) {
       pos = node.find_pos(key);
-      node = read_node(node.children[pos]);
+      read_node(node.children[pos], node);
     }
     return node.self_addr;
   }
@@ -138,7 +137,8 @@ private:
       root = new_root;
       return;
     }
-    Node parent = read_node(l.parent);
+    Node parent;
+    read_node(l.parent, parent);
     int pos = parent.find_pos(key);
 
     for (int i = parent.num_entries; i > pos; --i) {
@@ -167,17 +167,18 @@ private:
       KeyValue promote_key = parent.entries[split_pos];
 
       //copy node
+      Node child;
       for (int i = split_pos + 1, j = 0; i < parent.num_entries; ++i, ++j) {
         new_node.entries[j] = parent.entries[i];
         new_node.children[j] = parent.children[i];
-        Node child = read_node(parent.children[i]);
+        read_node(parent.children[i], child);
         child.parent = new_node.self_addr;
         write_node(child);
       }
       new_node.children[parent.num_entries - split_pos - 1] = parent.children[parent.num_entries];
-      Node last_child = read_node(parent.children[parent.num_entries]);
-      last_child.parent = new_node.self_addr;
-      write_node(last_child);
+      read_node(parent.children[parent.num_entries], child);
+      child.parent = new_node.self_addr;
+      write_node(child);
 
       new_node.num_entries = parent.num_entries - split_pos - 1;
       parent.num_entries = split_pos;
@@ -198,14 +199,8 @@ private:
       return;
     }
 
-    Node parent = read_node(node.parent);/*
-    int pos = -1;
-    for (int i = 0; i <= parent.num_entries; ++i) {
-      if (parent.children[i] == node.self_addr) {
-        pos = i;
-        break;
-      }
-    }*/
+    Node parent;
+    read_node(node.parent, parent);
     int pos = parent.find_pos(node.entries[node.num_entries - 1]);
     if (parent.children[pos] != node.self_addr) {
       ++pos;
@@ -213,7 +208,8 @@ private:
 
     //  borrow from left
     if (pos > 0) {
-      Node left = read_node(parent.children[pos - 1]);
+      Node left;
+      read_node(parent.children[pos - 1], left);
       if (left.num_entries > MIN_KEY_PER_NODE) {
         // left is enough
         if (node.type == LEAF) {
@@ -239,7 +235,8 @@ private:
           parent.entries[pos - 1] = left.entries[left.num_entries - 1];
 
           //if (node.children[0] != INVALID_ADDR) {
-          Node child = read_node(node.children[0]);
+          Node child;
+          read_node(node.children[0], child);
           child.parent = node.self_addr;
           write_node(child);
           //}
@@ -259,7 +256,8 @@ private:
 
     //borrow from right
     if (pos < parent.num_entries) {
-      Node right = read_node(parent.children[pos + 1]);
+      Node right;
+      read_node(parent.children[pos + 1], right);
       if (right.num_entries > MIN_KEY_PER_NODE) {
         // right is enough
         if (node.type == LEAF) {
@@ -284,11 +282,10 @@ private:
           }
           right.children[right.num_entries - 1] = right.children[right.num_entries];
 
-          //if (node.children[node.entries + 1] !=INVALID_ADDR) {
-          Node child = read_node(node.children[node.num_entries + 1]);
+          Node child;
+          read_node(node.children[node.num_entries + 1], child);
           child.parent = node.self_addr;
           write_node(child);
-          //}
 
           ++node.num_entries;
           --right.num_entries;
@@ -305,7 +302,8 @@ private:
 
     // merge from left
     if (pos > 0) {
-      Node left = read_node(parent.children[pos - 1]);
+      Node left;
+      read_node(parent.children[pos - 1], left);
 
       if (node.type == LEAF) {
         // leaf
@@ -318,18 +316,17 @@ private:
         // internal
         left.entries[left.num_entries] = parent.entries[pos - 1];
 
+        Node child;
         for (int i = 0; i < node.num_entries; ++i) {
           left.entries[left.num_entries + 1 + i] = node.entries[i];
           left.children[left.num_entries + 1 + i] = node.children[i];
 
-          //if (node.children[i] != INVALID_ADDR) {
-          Node child = read_node(node.children[i]);
+          read_node(node.children[i], child);
           child.parent = left.self_addr;
           write_node(child);
-          //}
         }
         left.children[left.num_entries + 1 + node.num_entries] = node.children[node.num_entries];
-        Node child = read_node(node.children[node.num_entries]);
+        read_node(node.children[node.num_entries], child);
         child.parent = left.self_addr;
         write_node(child);
 
@@ -352,7 +349,8 @@ private:
       write_node(left);
       handle_merge(parent);
     } else if (pos < parent.num_entries) {
-      Node right = read_node(parent.children[pos + 1]);
+      Node right;
+      read_node(parent.children[pos + 1], right);
 
       if (node.type == LEAF) {
         //leaf
@@ -366,18 +364,19 @@ private:
         //internal
         node.entries[node.num_entries] = parent.entries[pos];
 
+        Node child;
         for (int i = 0; i < right.num_entries; ++i) {
           node.entries[node.num_entries + 1 + i] = right.entries[i];
           node.children[node.num_entries + 1 + i] = right.children[i];
 
           //if (node.children[i] != INVALID_ADDR) {
-          Node child = read_node(right.children[i]);
+          read_node(right.children[i], child);
           child.parent = node.self_addr;
           write_node(child);
           //}
         }
         node.children[node.num_entries + 1 + right.num_entries] = right.children[right.num_entries];
-        Node child = read_node(right.children[right.num_entries]);
+        read_node(right.children[right.num_entries], child);
         child.parent = node.self_addr;
         write_node(child);
 
@@ -395,9 +394,10 @@ private:
         root_addr = node.self_addr;
         root = node;
         node.parent = INVALID_ADDR;
+      } else {
+        write_node(node);
+        handle_merge(parent);
       }
-      write_node(node);
-      handle_merge(parent);
     }
   }
 
@@ -428,7 +428,7 @@ public:
     int pos = first_leaf_addr;
     Node node;
     while (pos != INVALID_ADDR) {
-      node = read_node(pos);
+      read_node(pos, node);
       std::cout << node.num_entries << '\n';
       for (int k = 0; k < node.num_entries; ++k) {
         std::cout << node.entries[k].key << ' ' << node.entries[k].value << '\n';
@@ -441,8 +441,8 @@ public:
     addr[0] = root_addr;
     while (head <= tail) {
       pos = tail;
-      for (int k = head; k <= pos; ++k){
-        node = read_node(addr[k]);
+      for (int k = head; k <= pos; ++k) {
+        read_node(addr[k], node);
         for (int i = 0; i < node.num_entries; ++i) {
           if (node.type == INTERNAL) {
             addr[++tail] = node.children[i];
@@ -490,7 +490,8 @@ public:
     }
 
     int leaf_addr = find_leaf(key_value);
-    Node leaf = read_node(leaf_addr);
+    Node leaf;
+    read_node(leaf_addr, leaf);
 
     int pos = leaf.find_pos(key_value);
 
@@ -499,7 +500,8 @@ public:
       return;
     }
     if (pos == leaf.num_entries && leaf.next != INVALID_ADDR) {
-      Node node = read_node(leaf.next);
+      Node node;
+      read_node(leaf.next, node);
       if (strcmp(node.entries[0].key, key) == 0 && node.entries[0].value == value) {
         return;
       }
@@ -550,7 +552,8 @@ public:
     key_value.value = value;
 
     int leaf_addr = find_leaf(key_value);
-    Node leaf = read_node(leaf_addr);
+    Node leaf;
+    read_node(leaf_addr, leaf);
     int pos = leaf.find_pos(key_value);
 
     if (pos < leaf.num_entries && (strcmp(leaf.entries[pos].key, key) != 0 || leaf.entries[pos].value != value)) {
@@ -560,7 +563,7 @@ public:
       if (leaf.next == INVALID_ADDR) {
         return;
       }
-      leaf = read_node(leaf.next);
+      read_node(leaf.next, leaf);
       pos = 0;
       if (strcmp(leaf.entries[0].key, key) != 0 || leaf.entries[pos].value != value) {
         return;
@@ -580,7 +583,8 @@ public:
     if (root_addr == INVALID_ADDR) return result;
 
     int leaf_addr = find_leaf(key);
-    Node leaf = read_node(leaf_addr);
+    Node leaf;
+    read_node(leaf_addr, leaf);
     int pos = leaf.find_key_pos(key);
 
     while (true) {
@@ -598,7 +602,7 @@ public:
         break;
       }
 
-      leaf = read_node(leaf.next);
+      read_node(leaf.next, leaf);
       pos = 0;
     }
     return result;
