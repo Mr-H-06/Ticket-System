@@ -1,19 +1,23 @@
+#ifndef BPT_BPLUS_TREE_HPP
+#define BPT_BPLUS_TREE_HPP
+
 #include "vector.hpp"
 #include <iostream>
 #include <fstream>
 
-constexpr int MAX_KEY_SIZE = 64;
+//constexpr int MAX_KEY_SIZE = 64;
 constexpr int BLOCK_SIZE = 4096;
 constexpr int INVALID_ADDR = -1;
-constexpr int MAX_KEY_PER_NODE = 5; //56
-constexpr int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE / 2;
+//constexpr int MAX_KEY_PER_NODE = 170; //56
+//constexpr int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE / 2;
 
 //BPT
 enum NodeType { LEAF, INTERNAL };
 
+template<typename T, size_t MAX_KEY_SIZE>
 struct KeyValue {
   char key[MAX_KEY_SIZE];
-  int value;
+  T value;
 
   bool operator<(const KeyValue &other) const {
     int cmp = strcmp(key, other.key);
@@ -21,10 +25,11 @@ struct KeyValue {
   }
 };
 
+template<typename T,size_t MAX_KEY_SIZE, size_t MAX_KEY_PER_NODE>
 struct Node {
   NodeType type;
   int num_entries;
-  KeyValue entries[MAX_KEY_PER_NODE];
+  KeyValue<T, MAX_KEY_SIZE> entries[MAX_KEY_PER_NODE];
   int children[MAX_KEY_PER_NODE + 1]; //internal - children
   int next; // leaf
   int parent;
@@ -35,7 +40,7 @@ struct Node {
     memset(children, INVALID_ADDR, sizeof(children));
   }
 
-  int find_pos(const KeyValue &key_value) const {
+  int find_pos(const KeyValue<T, MAX_KEY_SIZE> &key_value) const {
     // find the minimun pos, key_value <= entries[pos]
     int l = 0, r = num_entries - 1, mid;
     while (l <= r) {
@@ -61,34 +66,36 @@ struct Node {
   }
 };
 
+template<typename T, size_t MAX_KEY_SIZE, size_t MAX_KEY_PER_NODE>
 class BPlusTree {
 private:
+  const int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE >> 1;
   std::fstream file;
   std::string filename;
   int root_addr;
   int first_leaf_addr;
-  Node root;
+  Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> root;
 
-  void read_node(int addr, Node &node) {
+  void read_node(int addr, Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> &node) {
     if (addr == INVALID_ADDR) return; /*
     if (addr == root_addr) {
       node = root;
     }*/
 
     file.seekg(addr);
-    file.read(reinterpret_cast<char *>(&node), sizeof(Node));
+    file.read(reinterpret_cast<char *>(&node), sizeof(Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE>));
   }
 
-  void write_node(Node &node) {
+  void write_node(Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> &node) {
     if (node.self_addr == INVALID_ADDR) return;
     file.seekp(node.self_addr);
-    file.write(reinterpret_cast<char *>(&node), sizeof(Node));
+    file.write(reinterpret_cast<char *>(&node), sizeof(Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> ));
   }
 
   int allocate_node() {
     file.seekp(0, std::ios::end);
     int addr = file.tellp();
-    Node new_node;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
     new_node.self_addr = addr;
     write_node(new_node);
     return addr;
@@ -96,7 +103,7 @@ private:
 
   int find_leaf(const char *key) {
     if (root_addr == INVALID_ADDR) return INVALID_ADDR;
-    Node node = root;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> node = root;
     int pos;
     while (node.type != LEAF) {
       pos = node.find_key_pos(key);
@@ -105,9 +112,9 @@ private:
     return node.self_addr;
   }
 
-  int find_leaf(const KeyValue &key) {
+  int find_leaf(const KeyValue<T, MAX_KEY_SIZE> &key) {
     if (root_addr == INVALID_ADDR) return INVALID_ADDR;
-    Node node = root;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> node = root;
     int pos;
     while (node.type != LEAF) {
       pos = node.find_pos(key);
@@ -116,10 +123,10 @@ private:
     return node.self_addr;
   }
 
-  void insert_in_parent(Node &l, Node &r, const KeyValue &key) {
+  void insert_in_parent(Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> &l, Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> &r, const KeyValue<T, MAX_KEY_SIZE> &key) {
     if (l.parent == INVALID_ADDR) {
       //add new root
-      Node new_root;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_root;
       new_root.type = INTERNAL;
       new_root.self_addr = allocate_node();
       new_root.entries[0] = key;
@@ -137,7 +144,7 @@ private:
       root = new_root;
       return;
     }
-    Node parent;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> parent;
     read_node(l.parent, parent);
     int pos = parent.find_pos(key);
 
@@ -158,16 +165,16 @@ private:
       write_node(parent);
     } else {
       // split parent
-      Node new_node;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
       new_node.type = INTERNAL;
       new_node.self_addr = allocate_node();
       new_node.parent = parent.parent;
 
       int split_pos = parent.num_entries / 2;
-      KeyValue promote_key = parent.entries[split_pos];
+      KeyValue<T, MAX_KEY_SIZE> promote_key = parent.entries[split_pos];
 
       //copy node
-      Node child;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> child;
       for (int i = split_pos + 1, j = 0; i < parent.num_entries; ++i, ++j) {
         new_node.entries[j] = parent.entries[i];
         new_node.children[j] = parent.children[i];
@@ -190,7 +197,7 @@ private:
     }
   }
 
-  void handle_merge(Node &node) {
+  void handle_merge(Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> &node) {
     if (node.num_entries >= MIN_KEY_PER_NODE || node.parent == INVALID_ADDR) {
       if (node.self_addr == root_addr) {
         root = node;
@@ -199,7 +206,7 @@ private:
       return;
     }
 
-    Node parent;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> parent;
     read_node(node.parent, parent);
     int pos = parent.find_pos(node.entries[node.num_entries - 1]);
     if (parent.children[pos] != node.self_addr) {
@@ -208,7 +215,7 @@ private:
 
     //  borrow from left
     if (pos > 0) {
-      Node left;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> left;
       read_node(parent.children[pos - 1], left);
       if (left.num_entries > MIN_KEY_PER_NODE) {
         // left is enough
@@ -235,7 +242,7 @@ private:
           parent.entries[pos - 1] = left.entries[left.num_entries - 1];
 
           //if (node.children[0] != INVALID_ADDR) {
-          Node child;
+          Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> child;
           read_node(node.children[0], child);
           child.parent = node.self_addr;
           write_node(child);
@@ -256,7 +263,7 @@ private:
 
     //borrow from right
     if (pos < parent.num_entries) {
-      Node right;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> right;
       read_node(parent.children[pos + 1], right);
       if (right.num_entries > MIN_KEY_PER_NODE) {
         // right is enough
@@ -282,7 +289,7 @@ private:
           }
           right.children[right.num_entries - 1] = right.children[right.num_entries];
 
-          Node child;
+          Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> child;
           read_node(node.children[node.num_entries + 1], child);
           child.parent = node.self_addr;
           write_node(child);
@@ -302,7 +309,7 @@ private:
 
     // merge from left
     if (pos > 0) {
-      Node left;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> left;
       read_node(parent.children[pos - 1], left);
 
       if (node.type == LEAF) {
@@ -316,7 +323,7 @@ private:
         // internal
         left.entries[left.num_entries] = parent.entries[pos - 1];
 
-        Node child;
+        Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> child;
         for (int i = 0; i < node.num_entries; ++i) {
           left.entries[left.num_entries + 1 + i] = node.entries[i];
           left.children[left.num_entries + 1 + i] = node.children[i];
@@ -349,7 +356,7 @@ private:
       write_node(left);
       handle_merge(parent);
     } else if (pos < parent.num_entries) {
-      Node right;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> right;
       read_node(parent.children[pos + 1], right);
 
       if (node.type == LEAF) {
@@ -364,7 +371,7 @@ private:
         //internal
         node.entries[node.num_entries] = parent.entries[pos];
 
-        Node child;
+        Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> child;
         for (int i = 0; i < right.num_entries; ++i) {
           node.entries[node.num_entries + 1 + i] = right.entries[i];
           node.children[node.num_entries + 1 + i] = right.children[i];
@@ -425,7 +432,7 @@ public:
 
   void check() {
     int pos = first_leaf_addr;
-    Node node;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> node;
     while (pos != INVALID_ADDR) {
       read_node(pos, node);
       std::cout << node.num_entries << '\n';
@@ -468,14 +475,14 @@ public:
     file.close();
   }
 
-  void insert(const char *key, int value) {
-    KeyValue key_value;
+  void insert(const char *key, T value) {
+    KeyValue<T, MAX_KEY_SIZE> key_value;
     strcpy(key_value.key, key);
     key_value.value = value;
 
     if (root_addr == INVALID_ADDR) {
       // 1. null -> create root(=leaf)
-      Node new_node;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
       new_node.self_addr = allocate_node();
       new_node.entries[0] = key_value;
       new_node.num_entries = 1;
@@ -489,7 +496,7 @@ public:
     }
 
     int leaf_addr = find_leaf(key_value);
-    Node leaf;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> leaf;
     read_node(leaf_addr, leaf);
 
     int pos = leaf.find_pos(key_value);
@@ -499,7 +506,7 @@ public:
       return;
     }
     if (pos == leaf.num_entries && leaf.next != INVALID_ADDR) {
-      Node node;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> node;
       read_node(leaf.next, node);
       if (strcmp(node.entries[0].key, key) == 0 && node.entries[0].value == value) {
         return;
@@ -521,7 +528,7 @@ public:
       write_node(leaf);
     } else {
       // split
-      Node new_leaf;
+      Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_leaf;
       new_leaf.type = LEAF;
       new_leaf.self_addr = allocate_node();
       new_leaf.parent = leaf.parent;
@@ -538,20 +545,20 @@ public:
       write_node(leaf);
       write_node(new_leaf);
 
-      KeyValue promote_key = new_leaf.entries[0];
+      KeyValue<T, MAX_KEY_SIZE> promote_key = new_leaf.entries[0];
       insert_in_parent(leaf, new_leaf, promote_key);
     }
   }
 
-  void remove(const char *key, int value) {
+  void remove(const char *key, T value) {
     if (root_addr == INVALID_ADDR) return;
 
-    KeyValue key_value;
+    KeyValue<T, MAX_KEY_SIZE> key_value;
     strcpy(key_value.key, key);
     key_value.value = value;
 
     int leaf_addr = find_leaf(key_value);
-    Node leaf;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> leaf;
     read_node(leaf_addr, leaf);
     int pos = leaf.find_pos(key_value);
 
@@ -577,12 +584,12 @@ public:
     handle_merge(leaf);
   }
 
-  sjtu::vector<int> find(const char *key) {
-    sjtu::vector<int> result;
+  sjtu::vector<T> find(const char *key) {
+    sjtu::vector<T> result;
     if (root_addr == INVALID_ADDR) return result;
 
     int leaf_addr = find_leaf(key);
-    Node leaf;
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> leaf;
     read_node(leaf_addr, leaf);
     int pos = leaf.find_key_pos(key);
 
@@ -608,8 +615,8 @@ public:
   }
 };
 
-int main() {
-  BPlusTree bpt("bpt.txt");
+/*int main() {
+  BPlusTree<int, 64, 170> bpt("bpt.txt");
   int n, value;
   std::string cmd, key;
   std::cin >> n;
@@ -641,4 +648,6 @@ int main() {
     }
   }
   return 0;
-}
+}*/
+
+#endif
