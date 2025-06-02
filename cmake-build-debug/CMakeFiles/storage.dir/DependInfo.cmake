@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/mnt/c/Users/hejia/Desktop/Ticket System/src/main.cpp" "CMakeFiles/code.dir/src/main.cpp.o" "gcc" "CMakeFiles/code.dir/src/main.cpp.o.d"
+  "/mnt/c/Users/hejia/Desktop/Ticket System/src/storage.cpp" "CMakeFiles/storage.dir/src/storage.cpp.o" "gcc" "CMakeFiles/storage.dir/src/storage.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

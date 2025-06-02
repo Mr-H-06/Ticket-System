@@ -1,0 +1,45 @@
+#ifndef USER_HPP
+#define USER_HPP
+
+#include "storage.cpp"
+
+struct user_basic {
+  //char username[20];   -->key
+  char password[30];
+  char name[20]; // Chinese
+  char mailAddr[30];
+  int privilege; //[0, 10]
+
+  user_basic();
+
+  bool operator==(const user_basic &other) const;
+
+  bool operator<(const user_basic &other) const;
+};
+
+
+class UserManager {
+public:
+  int add_user(char *cur_username, char *username, user_basic &user);
+
+  int login(char *username, char *password);
+
+  int logout(char *username);
+
+  bool query_profile(char *cur_username, char *username);
+
+  bool modify_profile(char *cur_username, char *username, user_basic &user);
+
+  UserManager();
+
+private:
+  BPlusTree<user_basic, 20, 50> basic;
+
+  struct signed_in {
+    char *user;
+    int privilege;
+  };
+
+  sjtu::vector<signed_in> log;
+};
+#endif

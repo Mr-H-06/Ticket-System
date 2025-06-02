@@ -613,6 +613,15 @@ public:
     }
     return result;
   }
+
+  bool empty() {
+    return root_addr == INVALID_ADDR;
+  }
+
+  void clear() {
+    root = INVALID_ADDR;
+    first_leaf_addr = INVALID_ADDR;
+  }
 };
 
 /*int main() {

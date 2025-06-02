@@ -117,6 +117,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named core
+
+# Build rule for target.
+core: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 core
+.PHONY : core
+
+# fast build rule for target.
+core/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/build
+.PHONY : core/fast
+
+#=============================================================================
 # Target rules for targets named code
 
 # Build rule for target.
@@ -129,12 +142,60 @@ code/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/build
 .PHONY : code/fast
 
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
+src/order_manager.o: src/order_manager.cpp.o
+.PHONY : src/order_manager.o
+
+# target to build an object file
+src/order_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/order_manager.cpp.o
+.PHONY : src/order_manager.cpp.o
+
+src/order_manager.i: src/order_manager.cpp.i
+.PHONY : src/order_manager.i
+
+# target to preprocess a source file
+src/order_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/order_manager.cpp.i
+.PHONY : src/order_manager.cpp.i
+
+src/order_manager.s: src/order_manager.cpp.s
+.PHONY : src/order_manager.s
+
+# target to generate assembly for a file
+src/order_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/order_manager.cpp.s
+.PHONY : src/order_manager.cpp.s
+
 src/storage.o: src/storage.cpp.o
 .PHONY : src/storage.o
 
 # target to build an object file
 src/storage.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/storage.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/storage.cpp.o
 .PHONY : src/storage.cpp.o
 
 src/storage.i: src/storage.cpp.i
@@ -142,7 +203,7 @@ src/storage.i: src/storage.cpp.i
 
 # target to preprocess a source file
 src/storage.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/storage.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/storage.cpp.i
 .PHONY : src/storage.cpp.i
 
 src/storage.s: src/storage.cpp.s
@@ -150,8 +211,56 @@ src/storage.s: src/storage.cpp.s
 
 # target to generate assembly for a file
 src/storage.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/src/storage.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/storage.cpp.s
 .PHONY : src/storage.cpp.s
+
+src/train_manager.o: src/train_manager.cpp.o
+.PHONY : src/train_manager.o
+
+# target to build an object file
+src/train_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/train_manager.cpp.o
+.PHONY : src/train_manager.cpp.o
+
+src/train_manager.i: src/train_manager.cpp.i
+.PHONY : src/train_manager.i
+
+# target to preprocess a source file
+src/train_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/train_manager.cpp.i
+.PHONY : src/train_manager.cpp.i
+
+src/train_manager.s: src/train_manager.cpp.s
+.PHONY : src/train_manager.s
+
+# target to generate assembly for a file
+src/train_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/train_manager.cpp.s
+.PHONY : src/train_manager.cpp.s
+
+src/user_manager.o: src/user_manager.cpp.o
+.PHONY : src/user_manager.o
+
+# target to build an object file
+src/user_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/user_manager.cpp.o
+.PHONY : src/user_manager.cpp.o
+
+src/user_manager.i: src/user_manager.cpp.i
+.PHONY : src/user_manager.i
+
+# target to preprocess a source file
+src/user_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/user_manager.cpp.i
+.PHONY : src/user_manager.cpp.i
+
+src/user_manager.s: src/user_manager.cpp.s
+.PHONY : src/user_manager.s
+
+# target to generate assembly for a file
+src/user_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/src/user_manager.cpp.s
+.PHONY : src/user_manager.cpp.s
 
 # Help Target
 help:
@@ -162,9 +271,22 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... code"
+	@echo "... core"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
+	@echo "... src/order_manager.o"
+	@echo "... src/order_manager.i"
+	@echo "... src/order_manager.s"
 	@echo "... src/storage.o"
 	@echo "... src/storage.i"
 	@echo "... src/storage.s"
+	@echo "... src/train_manager.o"
+	@echo "... src/train_manager.i"
+	@echo "... src/train_manager.s"
+	@echo "... src/user_manager.o"
+	@echo "... src/user_manager.i"
+	@echo "... src/user_manager.s"
 .PHONY : help
 
 
