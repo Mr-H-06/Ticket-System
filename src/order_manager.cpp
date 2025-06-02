@@ -1,10 +1,11 @@
 #include "order_manager.hpp"
+#include "user_manager.hpp"
 
-int OrderManager::buy_ticket() {
+bool OrderManager::buy_ticket(UserManager &user) {
 
 }
 
-int OrderManager::refund_ticket() {
+bool OrderManager::refund_ticket() {
 
 }
 

@@ -4,8 +4,9 @@
 #include "storage.cpp"
 class OrderManager {
 public:
-  int buy_ticket();
-  int refund_ticket();
+  bool buy_ticket();
+  bool query_order();
+  bool refund_ticket();
   OrderManager() {
 
   }

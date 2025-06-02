@@ -20,11 +20,11 @@ struct user_basic {
 
 class UserManager {
 public:
-  int add_user(char *cur_username, char *username, user_basic &user);
+  bool add_user(char *cur_username, char *username, user_basic &user);
 
-  int login(char *username, char *password);
+  bool login(char *username, char *password);
 
-  int logout(char *username);
+  bool logout(char *username);
 
   bool query_profile(char *cur_username, char *username);
 
