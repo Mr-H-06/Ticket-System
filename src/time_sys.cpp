@@ -17,13 +17,13 @@ int date::operator-(const date &minus) const {
   }
   if (day[1] - minus.day[1] == 1) {
     if (day[1] == '7') {
-      return day[3] * 10 + day[4] + ('3' - minus.day[3]) * 10 - minus.day[4];
+      return (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
     } else {
-      return day[3] * 10 + day[4] + ('3' - minus.day[3]) * 10 + 1 - minus.day[4];
+      return (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 + 1 - minus.day[4] + '0';
     }
   }
   if (day[1] - minus.day[1] == 2) {
-    return 31 + day[3] * 10 + day[4] + ('3' - minus.day[3]) * 10 - minus.day[4];
+    return 31 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
   }
 }
 
@@ -55,21 +55,21 @@ date_time date_time::operator+(int add) const {
   char ret1[5];
   ret1[2] = ':';
   //minute
-  int s = time_.hm[3] * 10 + time_.hm[4] + add % 60;
+  int s = (time_.hm[3] - '0') * 10 + (time_.hm[4] - '0') + add % 60;
   add /= 60;
   add += s / 60;
   s %= 60;
   ret1[4] = '0' + s % 10;
   ret1[3] = '0' + s / 10;
   //hour
-  s = time_.hm[0] * 10 + time_.hm[1] + add % 24;
+  s = (time_.hm[0] - '0') * 10 + (time_.hm[1] - '0') + add % 24;
   add /= 24;
   add += s / 24;
   s %= 24;
   ret1[1] = '0' + s % 10;
   ret1[0] = '0' + s / 10;
   //day
-  s = date_.day[3] * 10 + date_.day[4] + add;
+  s = (date_.day[3] - '0') * 10 + (date_.day[4] - '0') + add;
   char ret2[5];
   ret2[0] = '0';
   ret2[2] = '-';

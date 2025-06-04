@@ -40,7 +40,7 @@ struct Node {
     memset(children, INVALID_ADDR, sizeof(children));
   }
 
-  int find_pos(const KeyValue<T, MAX_KEY_SIZE> &key_value) const {
+  inline int find_pos(const KeyValue<T, MAX_KEY_SIZE> &key_value) const {
     // find the minimun pos, key_value <= entries[pos]
     int l = 0, r = num_entries - 1, mid;
     while (l <= r) {
@@ -51,7 +51,7 @@ struct Node {
     return l;
   }
 
-  int find_key_pos(const char *key) const {
+  inline int find_key_pos(const char *key) const {
     // find the minimum pos, s.t. key <= entries[pos].key
     int l = 0, r = num_entries - 1, mid;
     while (l <= r) {
@@ -92,7 +92,7 @@ private:
     file.write(reinterpret_cast<char *>(&node), sizeof(Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> ));
   }
 
-  int allocate_node() {
+  inline int allocate_node() {
     file.seekp(0, std::ios::end);
     int addr = file.tellp();
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
@@ -101,7 +101,7 @@ private:
     return addr;
   }
 
-  int find_leaf(const char *key) {
+  inline int find_leaf(const char *key) {
     if (root_addr == INVALID_ADDR) return INVALID_ADDR;
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> node = root;
     int pos;
@@ -112,7 +112,7 @@ private:
     return node.self_addr;
   }
 
-  int find_leaf(const KeyValue<T, MAX_KEY_SIZE> &key) {
+  inline int find_leaf(const KeyValue<T, MAX_KEY_SIZE> &key) {
     if (root_addr == INVALID_ADDR) return INVALID_ADDR;
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> node = root;
     int pos;
@@ -614,7 +614,7 @@ public:
     return result;
   }
 
-  bool empty() {
+  inline bool empty() {
     return root_addr == INVALID_ADDR;
   }
 

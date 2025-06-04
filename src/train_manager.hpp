@@ -12,10 +12,10 @@ struct train_basic {
   char stations[100][41]; //Chinese
   int seatNum; //   <=1e5;
   int price[100]; // <=1e5
-  timing startTime; // hh:mm
+  char startTime[5]; // hh:mm
   int travelTimes[100]; // <=1e4       sum
   int stopoverTimes[100]; // <=1e4     sum
-  date saleDate[2]; //start & end mm-dd
+  char saleDate[2][5]; //start & end mm-dd
   char type;
   bool release;
   int seat[100][100];
@@ -56,7 +56,7 @@ public:
 
   void query_ticket(date d, char *from, char *to, bool type); //type = false -> time / true -> cost
 
-  void query_transfer(date d, char *from, char *to, bool type);
+  void query_transfer(date d, char *from, char *to, bool type); // type = false -> time / true -> cost
 
   void clear();
 
@@ -66,7 +66,7 @@ private:
   struct query_info {
     date_time leaving_time;
     date_time arriving_time;
-    char trainId[20];
+    char trainId[21];
     int price;
     int time;
     int seat;
@@ -87,7 +87,7 @@ private:
   };
 
   struct transfer_info {
-    char trainId[20];
+    char trainId[21];
     int seat;
     int price;
     int time;
@@ -95,7 +95,7 @@ private:
     date_time arriving_time;
   };
 
-  BPlusTree<train_basic, 20, 50> basic;
-  BPlusTree<station_idx, 40, 50> station;
+  BPlusTree<train_basic, 21, 50> basic;
+  BPlusTree<station_idx, 41, 50> station;
 };
 #endif
