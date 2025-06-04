@@ -619,8 +619,18 @@ public:
   }
 
   void clear() {
-    root = INVALID_ADDR;
+    root_addr = INVALID_ADDR;
     first_leaf_addr = INVALID_ADDR;
+    root = Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE>();
+
+    file.close();
+    file.open(filename, std::ios::out | std::ios::trunc | std::ios::binary);
+    file.close();
+    file.open(filename, std::ios::in | std::ios::out | std::ios::binary);
+
+    file.seekp(0);
+    file.write(reinterpret_cast<char*>(&root_addr), sizeof(root_addr));
+    file.write(reinterpret_cast<char*>(&first_leaf_addr), sizeof(first_leaf_addr));
   }
 };
 

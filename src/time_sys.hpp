@@ -6,6 +6,8 @@
 struct date {
   char day[5];
 
+  date();
+
   date(char *day_);
 
   int operator-(const date &minus) const;
@@ -13,18 +15,27 @@ struct date {
   bool operator<(const date &other) const;
 };
 
-struct time {
+struct timing {
   char hm[5];
-  time(char *hm_);
+
+  timing();
+
+  timing(char *hm_);
 };
 
 struct date_time {
   date date_;
-  time time_;
+  timing time_;
 
-  date_time(date d, time t);
+  bool operator<(const date_time &other) const;
+
+  date_time();
+
+  date_time(date d, timing t);
 
   date_time operator+(int add) const;
+
+  int operator-(const date_time &other) const;
 };
 
 #endif

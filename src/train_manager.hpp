@@ -3,6 +3,8 @@
 
 #include "storage.cpp"
 #include "time_sys.hpp"
+#include "priority_queue.hpp"
+#include "map.hpp"
 
 struct train_basic {
   //char trainId[20];     -->key
@@ -10,7 +12,7 @@ struct train_basic {
   char stations[100][40]; //Chinese
   int seatNum; //   <=1e5;
   int price[100]; // <=1e5
-  struct time startTime; // hh:mm
+  timing startTime; // hh:mm
   int travelTimes[100]; // <=1e4       sum
   int stopoverTimes[100]; // <=1e4     sum
   date saleDate[2]; //start & end mm-dd
@@ -18,18 +20,28 @@ struct train_basic {
   bool release;
   int seat[100][100];
 
+  train_basic() : release(false) {
+  }
+
   bool operator<(const train_basic &other) const;
 
   bool operator==(const train_basic &other) const;
+
+  bool operator!=(const train_basic &other) const;
 };
 
-struct station_idx{
+struct station_idx {
   char trainId[20];
+
+  station_idx();
+
   station_idx(char *trainId_);
 
   bool operator<(const station_idx &other) const;
 
   bool operator==(const station_idx &other) const;
+
+  bool operator!=(const station_idx &other) const;
 };
 
 class TrainManager {
@@ -42,13 +54,47 @@ public:
 
   bool query_train(date d, char *trainId);
 
-  void query_ticket();
+  void query_ticket(date d, char *from, char *to, bool type); //type = false -> time / true -> cost
 
-  void query_transfer();
+  void query_transfer(date d, char *from, char *to, bool type);
+
+  void clear();
 
   TrainManager();
 
 private:
+  struct query_info {
+    date_time leaving_time;
+    date_time arriving_time;
+    char trainId[20];
+    int price;
+    int time;
+    int seat;
+  };
+
+  struct CompareTime {
+    bool operator()(const query_info &a, const query_info &b) {
+      if (a.time != b.time) return a.time > b.time;
+      return strcmp(a.trainId, b.trainId) > 0;
+    }
+  };
+
+  struct CompareCost {
+    bool operator()(const query_info &a, const query_info &b) {
+      if (a.price != b.price) return a.price > b.price;
+      return strcmp(a.trainId, b.trainId) > 0;
+    }
+  };
+
+  struct transfer_info {
+    char trainId[20];
+    int seat;
+    int price;
+    int time;
+    date_time leaving_time;
+    date_time arriving_time;
+  };
+
   BPlusTree<train_basic, 20, 50> basic;
   BPlusTree<station_idx, 40, 50> station;
 };

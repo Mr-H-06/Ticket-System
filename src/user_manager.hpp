@@ -15,6 +15,8 @@ struct user_basic {
   bool operator==(const user_basic &other) const;
 
   bool operator<(const user_basic &other) const;
+
+  bool operator!=(const user_basic &other) const;
 };
 
 
@@ -29,6 +31,8 @@ public:
   bool query_profile(char *cur_username, char *username);
 
   bool modify_profile(char *cur_username, char *username, user_basic &user);
+
+  void clear();
 
   UserManager();
 

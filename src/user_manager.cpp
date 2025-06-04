@@ -16,6 +16,11 @@ bool user_basic::operator<(const user_basic &other) const {
   return true;
 }
 
+bool user_basic::operator!=(const user_basic &other) const {
+  return !(*this == other);
+}
+
+
 bool UserManager::add_user(char *cur_username, char *username, user_basic &user) {
   if (basic.empty()) {
     user.privilege = 10;
@@ -101,6 +106,10 @@ bool UserManager::modify_profile(char *cur_username, char *username, user_basic 
       }
     }
   }
+}
+
+void UserManager::clear() {
+  basic.clear();
 }
 
 UserManager::UserManager() : basic("user_basic.txt") {
