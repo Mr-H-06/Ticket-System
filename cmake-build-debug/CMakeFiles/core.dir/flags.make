@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/mnt/c/Users/hejia/Desktop/Ticket System/src/vector" -I"/mnt/c/Users/hejia/Desktop/Ticket System/src"
+CXX_INCLUDES = -I"/mnt/c/Users/hejia/Desktop/Ticket System/src/vector" -I"/mnt/c/Users/hejia/Desktop/Ticket System/src/map" -I"/mnt/c/Users/hejia/Desktop/Ticket System/src/priority_queue" -I"/mnt/c/Users/hejia/Desktop/Ticket System/src"
 
 CXX_FLAGS = -g -fdiagnostics-color=always
 

@@ -9,7 +9,7 @@
 struct train_basic {
   //char trainId[20];     -->key
   int stationNum; //[0, 20];
-  char stations[100][40]; //Chinese
+  char stations[100][41]; //Chinese
   int seatNum; //   <=1e5;
   int price[100]; // <=1e5
   timing startTime; // hh:mm

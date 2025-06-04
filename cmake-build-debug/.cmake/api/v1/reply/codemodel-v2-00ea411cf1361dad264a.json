@@ -9,14 +9,13 @@
 					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
-						"string" : "3.28"
+						"string" : "3.10"
 					},
 					"projectIndex" : 0,
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0,
-						1
+						0
 					]
 				}
 			],
@@ -31,8 +30,7 @@
 					"name" : "Ticket_System",
 					"targetIndexes" : 
 					[
-						0,
-						1
+						0
 					]
 				}
 			],
@@ -41,15 +39,8 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "code::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-code-Debug-5f047dc8840de22a98b7.json",
+					"jsonFile" : "target-code-Debug-d066011ee2ada5ab2570.json",
 					"name" : "code",
-					"projectIndex" : 0
-				},
-				{
-					"directoryIndex" : 0,
-					"id" : "core::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-core-Debug-e7887724af9c64dd0c01.json",
-					"name" : "core",
 					"projectIndex" : 0
 				}
 			]

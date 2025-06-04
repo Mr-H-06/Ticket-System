@@ -1,4 +1,4 @@
-CMakeFiles/code.dir/src/storage.cpp.o: \
+CMakeFiles/core.dir/src/storage.cpp.o: \
  /mnt/c/Users/hejia/Desktop/Ticket\ System/src/storage.cpp \
  /usr/include/stdc-predef.h \
  /mnt/c/Users/hejia/Desktop/Ticket\ System/src/vector/vector.hpp \

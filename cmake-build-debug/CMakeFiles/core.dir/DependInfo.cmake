@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/c/Users/hejia/Desktop/Ticket System/src/order_manager.cpp" "CMakeFiles/core.dir/src/order_manager.cpp.o" "gcc" "CMakeFiles/core.dir/src/order_manager.cpp.o.d"
   "/mnt/c/Users/hejia/Desktop/Ticket System/src/storage.cpp" "CMakeFiles/core.dir/src/storage.cpp.o" "gcc" "CMakeFiles/core.dir/src/storage.cpp.o.d"
+  "/mnt/c/Users/hejia/Desktop/Ticket System/src/time_sys.cpp" "CMakeFiles/core.dir/src/time_sys.cpp.o" "gcc" "CMakeFiles/core.dir/src/time_sys.cpp.o.d"
   "/mnt/c/Users/hejia/Desktop/Ticket System/src/train_manager.cpp" "CMakeFiles/core.dir/src/train_manager.cpp.o" "gcc" "CMakeFiles/core.dir/src/train_manager.cpp.o.d"
   "/mnt/c/Users/hejia/Desktop/Ticket System/src/user_manager.cpp" "CMakeFiles/core.dir/src/user_manager.cpp.o" "gcc" "CMakeFiles/core.dir/src/user_manager.cpp.o.d"
   )

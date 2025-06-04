@@ -17,24 +17,33 @@ int main() {
   while (std::getline(file, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
+    if (strcmp(t, "[2910]") == 0) {
+      std::cout << '\n';
+    }
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
       user_basic u;
-      char *cur_username, *username;
+      char cur_username[21], username[21];
       t = strtok(nullptr, " ");
       while (t) {
         if (strcmp(t, "-c") == 0) {
-          cur_username = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(cur_username, t);
         } else if (strcmp(t, "-u") == 0) {
-          username = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(username, t);
         } else if (strcmp(t, "-p") == 0) {
-          strcpy(u.password, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(u.password, t);
         } else if (strcmp(t, "-n") == 0) {
-          strcpy(u.name, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(u.name, t);
         } else if (strcmp(t, "-m") == 0) {
-          strcpy(u.mailAddr, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(u.mailAddr, t);
         } else if (strcmp(t, "-g") == 0) {
-          u.privilege = std::stoi(strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          u.privilege = std::stoi(t);
         }
         t = strtok(nullptr, " ");
       }
@@ -44,13 +53,15 @@ int main() {
         std::cout << "-1\n";
       }
     } else if (strcmp(t, "login") == 0) {
-      char *username, *password;
+      char username[21], password[31];
       t = strtok(nullptr, " ");
       while (t) {
         if (strcmp(t, "-u") == 0) {
-          username = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(username, t);
         } else if (strcmp(t, "-p") == 0) {
-          password = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(password, t);
         }
         t = strtok(nullptr, " ");;
       }
@@ -62,7 +73,9 @@ int main() {
     } else if (strcmp(t, "logout") == 0) {
       t = strtok(nullptr, " ");
       if (strcmp(t, "-u") == 0) {
-        char *username = strtok(nullptr, " ");
+        char username[20];
+        t = strtok(nullptr, " ");
+        strcpy(username, t);
         if (user.logout(username)) {
           std::cout << "0\n";
         } else {
@@ -71,12 +84,14 @@ int main() {
       }
     } else if (strcmp(t, "query_profile") == 0) {
       t = strtok(nullptr, " ");
-      char *cur_username, *username;
+      char cur_username[21], username[21];
       while (t) {
         if (strcmp(t, "-c") == 0) {
-          cur_username = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(cur_username, t);
         } else if (strcmp(t, "-u") == 0) {
-          username = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(username, t);
         }
         t = strtok(nullptr, " ");
       }
@@ -86,20 +101,26 @@ int main() {
     } else if (strcmp(t, "modify_profile") == 0) {
       t = strtok(nullptr, " ");
       user_basic u;
-      char *cur_username, *username;
+      char cur_username[21], username[21];
       while (t) {
         if (strcmp(t, "-c") == 0) {
-          cur_username = strtok(nullptr, " ");
-        } else if (strcmp(t, " -u") == 0) {
-          username = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(cur_username, t);
+        } else if (strcmp(t, "-u") == 0) {
+          t = strtok(nullptr, " ");
+          strcpy(username, t);
         } else if (strcmp(t, "-p") == 0) {
-          strcpy(u.password, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(u.password, t);
         } else if (strcmp(t, "-n") == 0) {
-          strcpy(u.name, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(u.name, t);
         } else if (strcmp(t, "-m") == 0) {
-          strcpy(u.mailAddr, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(u.mailAddr, t);
         } else if (strcmp(t, "-g") == 0) {
-          u.privilege = std::stoi(strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          u.privilege = std::stoi(t);
         }
         t = strtok(nullptr, " ");
       }
@@ -114,15 +135,18 @@ int main() {
         if (strcmp(t, "-i") == 0) {
           trainId = strtok(nullptr, " ");
         } else if (strcmp(t, "-n") == 0) {
-          newtrain.stationNum = std::stoi(strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          newtrain.stationNum = std::stoi(t);
         } else if (strcmp(t, "-m") == 0) {
-          newtrain.seatNum = std::stoi(strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          newtrain.seatNum = std::stoi(t);
         } else if (strcmp(t, "-s") == 0) {
           station_temp = strtok(nullptr, " ");
         } else if (strcmp(t, "-p") == 0) {
           price_temp = strtok(nullptr, " ");
         } else if (strcmp(t, "-x") == 0) {
-          strcpy(newtrain.startTime.hm, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(newtrain.startTime.hm, t);
         } else if (strcmp(t, "-t") == 0) {
           travelTime_temp = strtok(nullptr, " ");
         } else if (strcmp(t, "-o") == 0) {
@@ -203,13 +227,15 @@ int main() {
       }
     } else if (strcmp(t, "query_train") == 0) {
       t = strtok(nullptr, " ");
-      char *trainId;
+      char trainId[21];
       date d;
       while (t) {
         if (strcmp(t, "-i") == 0) {
-          trainId = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(trainId, t);
         } else if (strcmp(t, "-d") == 0) {
-          strcpy(d.day, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(d.day, t);
         }
         t = strtok(nullptr, " ");
       }
@@ -220,14 +246,17 @@ int main() {
       t = strtok(nullptr, " ");
       bool type;
       date d;
-      char *from, *to;
+      char from[41], to[41];
       while (t) {
         if (strcmp(t, "-s") == 0) {
-          from = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(from, t);
         } else if (strcmp(t, "-t") == 0) {
-          to = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(to, t);
         } else if (strcmp(t, "-d") == 0) {
-          strcpy(d.day, strtok(nullptr, " "));
+          t = strtok(nullptr, " ");
+          strcpy(d.day, t);
         } else if (strcmp(t, "-p") == 0) {
           t = strtok(nullptr, " ");
           if (strcmp(t, "time") == 0) {

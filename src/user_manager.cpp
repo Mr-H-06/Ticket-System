@@ -13,7 +13,10 @@ bool user_basic::operator==(const user_basic &other) const {
 }
 
 bool user_basic::operator<(const user_basic &other) const {
-  return true;
+  if (privilege != other.privilege) return privilege < other.privilege;
+  if (strcmp(name, other.name) != 0) return strcmp(name, other.name) < 0;
+  if (strcmp(mailAddr, other.mailAddr) != 0) return strcmp(mailAddr, other.mailAddr) < 0;
+  return strcmp(password, other.password) < 0;
 }
 
 bool user_basic::operator!=(const user_basic &other) const {
@@ -35,25 +38,26 @@ bool UserManager::add_user(char *cur_username, char *username, user_basic &user)
       if (log[i].privilege > user.privilege) {
         basic.insert(username, user);
         return true;
-      } else {
-        return false;
-      }
+      }return false;
     }
   }
+  return false;
 }
 
 bool UserManager::login(char *username, char *password) {
   for (auto i: log) {
-    if (strcmp(i.user, username)) return false;
+    if (strcmp(i.user, username) == 0) return false;
   }
   auto find = basic.find(username);
   if (find.empty()) return false;
   if (strcmp(find[0].password, password) == 0) {
-    log.push_back({username, find[0].privilege});
+    signed_in s;
+    s.privilege = find[0].privilege;
+    strcpy(s.user, username);
+    log.push_back(s);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 bool UserManager::logout(char *username) {
@@ -78,6 +82,7 @@ bool UserManager::query_profile(char *cur_username, char *username) {
       }
     }
   }
+  return false;
 }
 
 bool UserManager::modify_profile(char *cur_username, char *username, user_basic &user) {
@@ -92,7 +97,7 @@ bool UserManager::modify_profile(char *cur_username, char *username, user_basic 
           strcpy(user.password, find[0].password);
         }
         if (strcmp(user.mailAddr, "") == 0) {
-          strcpy(user.mailAddr, find[0].password);
+          strcpy(user.mailAddr, find[0].mailAddr);
         }
         if (user.privilege == -1) {
           user.privilege = find[0].privilege;
@@ -101,15 +106,16 @@ bool UserManager::modify_profile(char *cur_username, char *username, user_basic 
         basic.insert(username, user);
         std::cout << username << ' ' << user.name << ' ' << user.mailAddr << ' ' << user.privilege << '\n';
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
   }
+  return false;
 }
 
 void UserManager::clear() {
   basic.clear();
+  log.clear();
 }
 
 UserManager::UserManager() : basic("user_basic.txt") {

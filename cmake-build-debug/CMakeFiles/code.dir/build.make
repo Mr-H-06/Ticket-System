@@ -83,17 +83,97 @@ CMakeFiles/code.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/code.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/hejia/Desktop/Ticket System/src/main.cpp" -o CMakeFiles/code.dir/src/main.cpp.s
 
+CMakeFiles/code.dir/src/order_manager.cpp.o: CMakeFiles/code.dir/flags.make
+CMakeFiles/code.dir/src/order_manager.cpp.o: /mnt/c/Users/hejia/Desktop/Ticket\ System/src/order_manager.cpp
+CMakeFiles/code.dir/src/order_manager.cpp.o: CMakeFiles/code.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/Users/hejia/Desktop/Ticket System/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/code.dir/src/order_manager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/code.dir/src/order_manager.cpp.o -MF CMakeFiles/code.dir/src/order_manager.cpp.o.d -o CMakeFiles/code.dir/src/order_manager.cpp.o -c "/mnt/c/Users/hejia/Desktop/Ticket System/src/order_manager.cpp"
+
+CMakeFiles/code.dir/src/order_manager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/code.dir/src/order_manager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/Users/hejia/Desktop/Ticket System/src/order_manager.cpp" > CMakeFiles/code.dir/src/order_manager.cpp.i
+
+CMakeFiles/code.dir/src/order_manager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/code.dir/src/order_manager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/hejia/Desktop/Ticket System/src/order_manager.cpp" -o CMakeFiles/code.dir/src/order_manager.cpp.s
+
+CMakeFiles/code.dir/src/storage.cpp.o: CMakeFiles/code.dir/flags.make
+CMakeFiles/code.dir/src/storage.cpp.o: /mnt/c/Users/hejia/Desktop/Ticket\ System/src/storage.cpp
+CMakeFiles/code.dir/src/storage.cpp.o: CMakeFiles/code.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/Users/hejia/Desktop/Ticket System/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/code.dir/src/storage.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/code.dir/src/storage.cpp.o -MF CMakeFiles/code.dir/src/storage.cpp.o.d -o CMakeFiles/code.dir/src/storage.cpp.o -c "/mnt/c/Users/hejia/Desktop/Ticket System/src/storage.cpp"
+
+CMakeFiles/code.dir/src/storage.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/code.dir/src/storage.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/Users/hejia/Desktop/Ticket System/src/storage.cpp" > CMakeFiles/code.dir/src/storage.cpp.i
+
+CMakeFiles/code.dir/src/storage.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/code.dir/src/storage.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/hejia/Desktop/Ticket System/src/storage.cpp" -o CMakeFiles/code.dir/src/storage.cpp.s
+
+CMakeFiles/code.dir/src/time_sys.cpp.o: CMakeFiles/code.dir/flags.make
+CMakeFiles/code.dir/src/time_sys.cpp.o: /mnt/c/Users/hejia/Desktop/Ticket\ System/src/time_sys.cpp
+CMakeFiles/code.dir/src/time_sys.cpp.o: CMakeFiles/code.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/Users/hejia/Desktop/Ticket System/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/code.dir/src/time_sys.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/code.dir/src/time_sys.cpp.o -MF CMakeFiles/code.dir/src/time_sys.cpp.o.d -o CMakeFiles/code.dir/src/time_sys.cpp.o -c "/mnt/c/Users/hejia/Desktop/Ticket System/src/time_sys.cpp"
+
+CMakeFiles/code.dir/src/time_sys.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/code.dir/src/time_sys.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/Users/hejia/Desktop/Ticket System/src/time_sys.cpp" > CMakeFiles/code.dir/src/time_sys.cpp.i
+
+CMakeFiles/code.dir/src/time_sys.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/code.dir/src/time_sys.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/hejia/Desktop/Ticket System/src/time_sys.cpp" -o CMakeFiles/code.dir/src/time_sys.cpp.s
+
+CMakeFiles/code.dir/src/train_manager.cpp.o: CMakeFiles/code.dir/flags.make
+CMakeFiles/code.dir/src/train_manager.cpp.o: /mnt/c/Users/hejia/Desktop/Ticket\ System/src/train_manager.cpp
+CMakeFiles/code.dir/src/train_manager.cpp.o: CMakeFiles/code.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/Users/hejia/Desktop/Ticket System/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/code.dir/src/train_manager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/code.dir/src/train_manager.cpp.o -MF CMakeFiles/code.dir/src/train_manager.cpp.o.d -o CMakeFiles/code.dir/src/train_manager.cpp.o -c "/mnt/c/Users/hejia/Desktop/Ticket System/src/train_manager.cpp"
+
+CMakeFiles/code.dir/src/train_manager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/code.dir/src/train_manager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/Users/hejia/Desktop/Ticket System/src/train_manager.cpp" > CMakeFiles/code.dir/src/train_manager.cpp.i
+
+CMakeFiles/code.dir/src/train_manager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/code.dir/src/train_manager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/hejia/Desktop/Ticket System/src/train_manager.cpp" -o CMakeFiles/code.dir/src/train_manager.cpp.s
+
+CMakeFiles/code.dir/src/user_manager.cpp.o: CMakeFiles/code.dir/flags.make
+CMakeFiles/code.dir/src/user_manager.cpp.o: /mnt/c/Users/hejia/Desktop/Ticket\ System/src/user_manager.cpp
+CMakeFiles/code.dir/src/user_manager.cpp.o: CMakeFiles/code.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/Users/hejia/Desktop/Ticket System/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/code.dir/src/user_manager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/code.dir/src/user_manager.cpp.o -MF CMakeFiles/code.dir/src/user_manager.cpp.o.d -o CMakeFiles/code.dir/src/user_manager.cpp.o -c "/mnt/c/Users/hejia/Desktop/Ticket System/src/user_manager.cpp"
+
+CMakeFiles/code.dir/src/user_manager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/code.dir/src/user_manager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/Users/hejia/Desktop/Ticket System/src/user_manager.cpp" > CMakeFiles/code.dir/src/user_manager.cpp.i
+
+CMakeFiles/code.dir/src/user_manager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/code.dir/src/user_manager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/hejia/Desktop/Ticket System/src/user_manager.cpp" -o CMakeFiles/code.dir/src/user_manager.cpp.s
+
 # Object files for target code
 code_OBJECTS = \
-"CMakeFiles/code.dir/src/main.cpp.o"
+"CMakeFiles/code.dir/src/main.cpp.o" \
+"CMakeFiles/code.dir/src/order_manager.cpp.o" \
+"CMakeFiles/code.dir/src/storage.cpp.o" \
+"CMakeFiles/code.dir/src/time_sys.cpp.o" \
+"CMakeFiles/code.dir/src/train_manager.cpp.o" \
+"CMakeFiles/code.dir/src/user_manager.cpp.o"
 
 # External object files for target code
 code_EXTERNAL_OBJECTS =
 
 code: CMakeFiles/code.dir/src/main.cpp.o
+code: CMakeFiles/code.dir/src/order_manager.cpp.o
+code: CMakeFiles/code.dir/src/storage.cpp.o
+code: CMakeFiles/code.dir/src/time_sys.cpp.o
+code: CMakeFiles/code.dir/src/train_manager.cpp.o
+code: CMakeFiles/code.dir/src/user_manager.cpp.o
 code: CMakeFiles/code.dir/build.make
 code: CMakeFiles/code.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/mnt/c/Users/hejia/Desktop/Ticket System/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable code"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/mnt/c/Users/hejia/Desktop/Ticket System/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable code"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/code.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

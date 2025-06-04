@@ -1,6 +1,8 @@
-CMakeFiles/code.dir/src/storage.cpp.o: \
- /mnt/c/Users/hejia/Desktop/Ticket\ System/src/storage.cpp \
+CMakeFiles/code.dir/src/order_manager.cpp.o: \
+ /mnt/c/Users/hejia/Desktop/Ticket\ System/src/order_manager.cpp \
  /usr/include/stdc-predef.h \
+ /mnt/c/Users/hejia/Desktop/Ticket\ System/src/order_manager.hpp \
+ /mnt/c/Users/hejia/Desktop/Ticket\ System/src/storage.cpp \
  /mnt/c/Users/hejia/Desktop/Ticket\ System/src/vector/vector.hpp \
  /mnt/c/Users/hejia/Desktop/Ticket\ System/src/vector/exceptions.hpp \
  /usr/include/c++/13/cstddef \
@@ -168,4 +170,5 @@ CMakeFiles/code.dir/src/storage.cpp.o: \
  /usr/include/c++/13/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
- /usr/include/c++/13/bits/fstream.tcc
+ /usr/include/c++/13/bits/fstream.tcc \
+ /mnt/c/Users/hejia/Desktop/Ticket\ System/src/user_manager.hpp

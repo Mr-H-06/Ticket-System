@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/code.dir/src/main.cpp.o -o code  -lstorage 
+/usr/bin/c++  -Wall -Wextra -g CMakeFiles/code.dir/src/main.cpp.o CMakeFiles/code.dir/src/order_manager.cpp.o CMakeFiles/code.dir/src/storage.cpp.o CMakeFiles/code.dir/src/time_sys.cpp.o CMakeFiles/code.dir/src/train_manager.cpp.o CMakeFiles/code.dir/src/user_manager.cpp.o -o code 

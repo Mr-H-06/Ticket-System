@@ -4,7 +4,7 @@
 #include <cstring>
 
 struct date {
-  char day[5];
+  char day[6];
 
   date();
 
@@ -16,7 +16,7 @@ struct date {
 };
 
 struct timing {
-  char hm[5];
+  char hm[6];
 
   timing();
 
