@@ -17,7 +17,7 @@ int main() {
   while (std::getline(file, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
-    if (strcmp(t, "[3403]") == 0) {
+    if (strcmp(t, "[3743]") == 0) {
       std::cout << '\n';
     }
     t = strtok(nullptr, " ");
@@ -129,6 +129,7 @@ int main() {
       }
     } else if (strcmp(t, "add_train") == 0) {
       train_basic newtrain;
+      seats newtrain_seats;
       char *trainId, *station_temp, *date_temp, *price_temp, *travelTime_temp, *stopoverTimes_temp;
       t = strtok(nullptr, " ");
       while (t) {
@@ -166,8 +167,10 @@ int main() {
         t = strtok(nullptr, "|");
       }
       // saleDate
-      strcpy(newtrain.saleDate[0], strtok(date_temp, "|"));
-      strcpy(newtrain.saleDate[1], strtok(nullptr, "|"));
+      t = strtok(date_temp, "|");
+      strcpy(newtrain.saleDate[0], t);
+      t = strtok(nullptr, "|");
+      strcpy(newtrain.saleDate[1], t);
       // price
       ins = 0;
       t = strtok(price_temp, "|");
@@ -194,12 +197,13 @@ int main() {
         newtrain.stopoverTimes[i] += newtrain.travelTimes[i];
         newtrain.travelTimes[i + 1] += newtrain.stopoverTimes[i];
       }
-      for (int i = newtrain.saleDate[1] - newtrain.saleDate[0]; i; --i) {
+      // seats
+      for (int i = date(newtrain.saleDate[1]) - date(newtrain.saleDate[0]); i >= 0; --i) {
         for (int j = 0; j < newtrain.stationNum - 1; ++j) {
-          newtrain.seat[i][j] = newtrain.seatNum;
+          newtrain_seats.seat[i][j] = newtrain.seatNum;
         }
       }
-      if (train.add_train(trainId, newtrain)) {
+      if (train.add_train(trainId, newtrain, newtrain_seats)) {
         std::cout << "0\n";
       } else {
         std::cout << "-1\n";
@@ -346,7 +350,7 @@ int main() {
         if (strcmp(t, "-u") == 0) {
           t = strtok(nullptr, " ");
           strcpy(username, t);
-        } else if (strcpy(t, "-n") == 0) {
+        } else if (strcmp(t, "-n") == 0) {
           t = strtok(nullptr, " ");
           n = std::stoi(t);
         }

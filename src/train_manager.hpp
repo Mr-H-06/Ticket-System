@@ -12,13 +12,12 @@ struct train_basic {
   char stations[100][41]; //Chinese
   int seatNum; //   <=1e5;
   int price[100]; // <=1e5
-  char startTime[5]; // hh:mm
+  char startTime[6]; // hh:mm
   int travelTimes[100]; // <=1e4       sum
   int stopoverTimes[100]; // <=1e4     sum
-  char saleDate[2][5]; //start & end mm-dd
+  char saleDate[2][6]; //start & end mm-dd
   char type;
   bool release;
-  int seat[100][100];
 
   train_basic() : release(false) {
   }
@@ -30,8 +29,20 @@ struct train_basic {
   bool operator!=(const train_basic &other) const;
 };
 
+struct seats {
+  int seat[100][30];
+
+  seats() = default;
+
+  bool operator<(const seats &other) const;
+
+  bool operator==(const seats &other) const;
+
+  bool operator!=(const seats &other) const;
+};
+
 struct station_idx {
-  char trainId[20];
+  char trainId[21];
 
   station_idx();
 
@@ -46,7 +57,7 @@ struct station_idx {
 
 class TrainManager {
 public:
-  bool add_train(char *trainId, train_basic &train);
+  bool add_train(char *trainId, train_basic &train, seats &train_seat);
 
   bool delete_train(char *trainId);
 
@@ -90,12 +101,13 @@ private:
     char trainId[21];
     int seat;
     int price;
-    int time;
+    //int time;
     date_time leaving_time;
     date_time arriving_time;
   };
 
   BPlusTree<train_basic, 21, 50> basic;
+  BPlusTree<seats, 21, 50> seat;
   BPlusTree<station_idx, 41, 50> station;
 };
 #endif

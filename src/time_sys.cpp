@@ -52,7 +52,7 @@ date_time::date_time(date d, timing t) : date_(d), time_(t) {
 }
 
 date_time date_time::operator+(int add) const {
-  char ret1[5];
+  char ret1[6];
   ret1[2] = ':';
   //minute
   int s = (time_.hm[3] - '0') * 10 + (time_.hm[4] - '0') + add % 60;
@@ -70,7 +70,7 @@ date_time date_time::operator+(int add) const {
   ret1[0] = '0' + s / 10;
   //day
   s = (date_.day[3] - '0') * 10 + (date_.day[4] - '0') + add;
-  char ret2[5];
+  char ret2[6];
   ret2[0] = '0';
   ret2[2] = '-';
   if (date_.day[1] == '6') {
@@ -90,6 +90,7 @@ date_time date_time::operator+(int add) const {
   }
   ret2[3] = '0' + s / 10;
   ret2[4] = '0' + s % 10;
+  ret1[5] = ret2[5] = '\0';
   return date_time(date(ret2), timing(ret1));
 }
 
