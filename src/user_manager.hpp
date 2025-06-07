@@ -12,11 +12,25 @@ struct user_basic {
 
   user_basic();
 
-  bool operator==(const user_basic &other) const;
+  bool operator==(const user_basic &other) const {/*
+    return strcmp(password, other.password) == 0 && strcmp(name, other.name) == 0 && strcmp(mailAddr, other.mailAddr) ==
+           0 && privilege == other.privilege;*/
+    return false;
+  }
 
-  bool operator<(const user_basic &other) const;
 
-  bool operator!=(const user_basic &other) const;
+  bool operator<(const user_basic &other) const {/*
+    if (privilege != other.privilege) return privilege < other.privilege;
+    if (strcmp(name, other.name) != 0) return strcmp(name, other.name) < 0;
+    if (strcmp(mailAddr, other.mailAddr) != 0) return strcmp(mailAddr, other.mailAddr) < 0;
+    return strcmp(password, other.password) < 0;*/
+    return false;
+  }
+
+  bool operator!=(const user_basic &other) const{
+    //return !(*this == other);
+    return false;
+  }
 };
 
 
@@ -34,9 +48,10 @@ public:
 
   void clear();
 
+  bool check_log(char *username);
+
   UserManager();
 
-private:
   BPlusTree<user_basic, 21, 50> basic;
 
   struct signed_in {

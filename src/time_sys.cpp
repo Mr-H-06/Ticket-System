@@ -23,8 +23,13 @@ int date::operator-(const date &minus) const {
     }
   }
   if (day[1] - minus.day[1] == 2) {
-    return 31 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
+    if (day[1] == '8') {
+      return 31 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
+    } else {
+      return 32 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
+    }
   }
+  return 63 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
 }
 
 bool date::operator<(const date &other) const {
@@ -105,11 +110,11 @@ int date_time::operator-(const date_time &other) const {
   } else {
     a = 92;
   }
-  a += this->date_.day[3] * 10 + this->date_.day[4];
+  a += (this->date_.day[3] - '0') * 10 + (this->date_.day[4] - '0');
   a *= 24;
-  a += this->time_.hm[0] * 10 + this->time_.hm[1];
+  a += (this->time_.hm[0] - '0') * 10 + (this->time_.hm[1] - '0');
   a *= 60;
-  a += this->time_.hm[3] * 10 + this->time_.hm[4];
+  a += (this->time_.hm[3] - '0') * 10 + this->time_.hm[4] - '0';
 
   if (other.date_.day[1] == '6') {
     b = 0;
@@ -120,10 +125,10 @@ int date_time::operator-(const date_time &other) const {
   } else {
     b = 92;
   }
-  b += other.date_.day[3] * 10 + other.date_.day[4];
+  b += (other.date_.day[3] - '0') * 10 + (other.date_.day[4] - '0');
   b *= 24;
-  b += other.time_.hm[0] * 10 + other.time_.hm[1];
+  b += (other.time_.hm[0] - '0') * 10 + (other.time_.hm[1] - '0');
   b *= 60;
-  b += other.time_.hm[3] * 10 + other.time_.hm[4];
+  b += (other.time_.hm[3] - '0') * 10 + (other.time_.hm[4] - '0');
   return a - b;
 }

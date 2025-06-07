@@ -7,23 +7,6 @@ user_basic::user_basic() {
   privilege = -1;
 }
 
-bool user_basic::operator==(const user_basic &other) const {
-  return strcmp(password, other.password) == 0 && strcmp(name, other.name) == 0 && strcmp(mailAddr, other.mailAddr) ==
-         0 && privilege == other.privilege;
-}
-
-bool user_basic::operator<(const user_basic &other) const {
-  if (privilege != other.privilege) return privilege < other.privilege;
-  if (strcmp(name, other.name) != 0) return strcmp(name, other.name) < 0;
-  if (strcmp(mailAddr, other.mailAddr) != 0) return strcmp(mailAddr, other.mailAddr) < 0;
-  return strcmp(password, other.password) < 0;
-}
-
-bool user_basic::operator!=(const user_basic &other) const {
-  return !(*this == other);
-}
-
-
 bool UserManager::add_user(char *cur_username, char *username, user_basic &user) {
   if (basic.empty()) {
     user.privilege = 10;
@@ -38,7 +21,8 @@ bool UserManager::add_user(char *cur_username, char *username, user_basic &user)
       if (log[i].privilege > user.privilege) {
         basic.insert(username, user);
         return true;
-      }return false;
+      }
+      return false;
     }
   }
   return false;
@@ -116,6 +100,15 @@ bool UserManager::modify_profile(char *cur_username, char *username, user_basic 
 void UserManager::clear() {
   basic.clear();
   log.clear();
+}
+
+bool UserManager::check_log(char *username) {
+  for (int i = 0; i < log.size(); ++i) {
+    if (strcmp(log[i].user, username) == 0) {
+      return true;
+    }
+  }
+  return false;
 }
 
 UserManager::UserManager() : basic("user_basic.txt") {

@@ -22,11 +22,53 @@ struct train_basic {
   train_basic() : release(false) {
   }
 
-  bool operator<(const train_basic &other) const;
+  bool operator<(const train_basic &other) const {/*
+    if (stationNum != other.stationNum) return stationNum < other.stationNum;
+    if (type != other.type) return type < other.type;
+    if (seatNum != other.seatNum) return seatNum < other.seatNum;
+    if (strcmp(startTime, other.startTime) != 0) return strcmp(startTime, other.startTime) < 0;
+    if (strcmp(saleDate[0], other.saleDate[0]) != 0) return strcmp(saleDate[0], other.saleDate[0]) < 0;
+    if (strcmp(saleDate[1], other.saleDate[1]) != 0) return strcmp(saleDate[1], other.saleDate[1]) < 0;
+    if (release != other.release) return release < other.release;
+    for (int i = 0; i < 100; ++i) {
+      if (price[i] != other.price[i]) {
+        return price[i] < other.price[i];
+      }
+      if (stopoverTimes[i] != other.stopoverTimes[i]) {
+        return stopoverTimes[i] < other.stopoverTimes[i];
+      }
+      if (travelTimes[i] != other.travelTimes[i]) {
+        return travelTimes[i] < other.travelTimes[i];
+      }
+      if (strcmp(stations[i], other.stations[i]) != 0) {
+        return strcmp(stations[i], other.stations[i]) < 0;
+      }
+    }*/
+    return false;
+  }
 
-  bool operator==(const train_basic &other) const;
+  bool operator==(const train_basic &other) const {/*
+    if (stationNum != other.stationNum) return false;
+    if (type != other.type) return false;
+    if (seatNum != other.seatNum) return false;
+    if (strcmp(startTime, other.startTime) != 0) return false;
+    if (strcmp(saleDate[0], other.saleDate[0]) != 0) return false;
+    if (strcmp(saleDate[1], other.saleDate[1]) != 0) return false;
+    if (release != other.release) return false;
+    for (int i = 0; i < 100; ++i) {
+      if (price[i] != other.price[i] || stopoverTimes[i] != other.stopoverTimes[i] || travelTimes[i] != other.
+          travelTimes[i] || strcmp(stations[i], other.stations[i]) != 0) {
+        return false;
+      }
+    }
+    return true;*/
+    return false;
+  }
 
-  bool operator!=(const train_basic &other) const;
+  bool operator!=(const train_basic &other) const {
+    //return !(*this == other);
+    return false;
+  }
 };
 
 struct seats {
@@ -34,11 +76,17 @@ struct seats {
 
   seats() = default;
 
-  bool operator<(const seats &other) const;
+  bool operator<(const seats &other) const {
+    return false;
+  }
 
-  bool operator==(const seats &other) const;
+  bool operator==(const seats &other) const {
+    return false;
+  }
 
-  bool operator!=(const seats &other) const;
+  bool operator!=(const seats &other) const {
+    return false;
+  }
 };
 
 struct station_idx {
@@ -48,11 +96,17 @@ struct station_idx {
 
   station_idx(char *trainId_);
 
-  bool operator<(const station_idx &other) const;
+  bool operator<(const station_idx &other) const {
+    return strcmp(trainId, other.trainId) < 0;
+  }
 
-  bool operator==(const station_idx &other) const;
+  bool operator==(const station_idx &other) const {
+    return strcmp(trainId, other.trainId) == 0;
+  }
 
-  bool operator!=(const station_idx &other) const;
+  bool operator!=(const station_idx &other) const {
+    return !(*this == other);
+  }
 };
 
 class TrainManager {
@@ -73,7 +127,6 @@ public:
 
   TrainManager();
 
-private:
   struct query_info {
     date_time leaving_time;
     date_time arriving_time;

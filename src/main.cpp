@@ -5,19 +5,24 @@
 
 
 int main() {
-  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/2.in");
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  std::cout.tie(nullptr);
+  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/15.in");
   std::string line;
   OrderManager order;
   UserManager user;
   TrainManager train;
-  user.clear();
-  order.clear();
-  train.clear();
+  //user.clear();
+  //order.clear();
+  //train.clear();
 
   while (std::getline(file, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
-    if (strcmp(t, "[3743]") == 0) {
+    char idx[10];
+    strcpy(idx, t);
+    if (strcmp(idx, "[52757]") == 0) {
       std::cout << '\n';
     }
     t = strtok(nullptr, " ");
@@ -247,7 +252,7 @@ int main() {
       }
     } else if (strcmp(t, "query_ticket") == 0) {
       t = strtok(nullptr, " ");
-      bool type;
+      bool type = false;
       date d;
       char from[41], to[41];
       while (t) {
@@ -299,28 +304,33 @@ int main() {
       train.query_transfer(d, from, to, type); //type = false -> time / true -> cost
     } else if (strcmp(t, "buy_ticket") == 0) {
       t = strtok(nullptr, " ");
-      char username[21], trainId[21], from[41], to[41], date[6];
-      bool type;
-      int n;
+      char username[21];
+      order_basic neworder;
+      neworder.idx = 0;
+      for (int i = 1; i < strlen(idx) - 1; ++i) {
+        neworder.idx *= 10;
+        neworder.idx += idx[i] - '0';
+      }
+      bool type = false;
       while (t) {
         if (strcmp(t, "-u") == 0) {
           t = strtok(nullptr, " ");
           strcpy(username, t);
         } else if (strcmp(t, "-i") == 0) {
           t = strtok(nullptr, " ");
-          strcpy(trainId, t);
+          strcpy(neworder.trainId, t);
         } else if (strcmp(t, "-d") == 0) {
           t = strtok(nullptr, " ");
-          strcpy(date, t);
+          strcpy(neworder.leaving_time.date_.day, t);
         } else if (strcmp(t, "-n") == 0) {
           t = strtok(nullptr, " ");
-          n = std::stoi(t);
+          neworder.num = std::stoi(t);
         } else if (strcmp(t, "-f") == 0) {
           t = strtok(nullptr, " ");
-          strcpy(from, t);
+          strcpy(neworder.from, t);
         } else if (strcmp(t, "-t") == 0) {
           t = strtok(nullptr, " ");
-          strcpy(to, t);
+          strcpy(neworder.to, t);
         } else if (strcmp(t, "-q") == 0) {
           t = strtok(nullptr, " ");
           if (t[0] == 't') {
@@ -331,7 +341,7 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      if (!order.buy_ticket(username, trainId, date, n, from, to, type)) {
+      if (!order.buy_ticket(username,neworder , type, train, user)) {
         std::cout << "-1\n";
       }
     } else if (strcmp(t, "query_order") == 0) {
@@ -356,7 +366,7 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      if (order.refund_ticket(username, n)) {
+      if (order.refund_ticket(username, n, user, train)) {
         std::cout << "0\n";
       } else {
         std::cout << "-1\n";
