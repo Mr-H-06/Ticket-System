@@ -8,7 +8,7 @@ int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/11.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/11.in");
   std::string line;
   OrderManager order;
   UserManager user;
@@ -17,7 +17,7 @@ int main() {
   //order.clear();
   //train.clear();
 
-  while (std::getline(file, line)) {
+  while (std::getline(std::cin, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
     char idx[10];
