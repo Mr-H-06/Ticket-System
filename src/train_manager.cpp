@@ -222,6 +222,7 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
       info.leaving_time = date_time(d, find[0].startTime);
       del = d - date(find[0].saleDate[0]);
     }
+    if (del < 0) continue;
     for (k = f + 1; k < find[0].stationNum; ++k) {
       info.price += find[0].price[k - 1];
       info.seat = std::min(info.seat, s[0].seat[del][k - 1]);
