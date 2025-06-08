@@ -17,6 +17,9 @@ bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, Tra
       break;
     }
   }
+  if (t >= find_train[0].stationNum) {
+    return false;
+  }
   int del;
   if (f > 0) {
     del = order.leaving_time.date_ - (date_time(find_train[0].saleDate[0], find_train[0].startTime) + find_train[0].

@@ -64,6 +64,7 @@ void TrainManager::query_ticket(date d, char *from, char *to, bool type) {
   auto find_to = station.find(to);
   if (find_from.empty() || find_to.empty()) {
     std::cout << "0\n";
+    return;
   }
   if (type) {
     //cost

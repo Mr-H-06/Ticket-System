@@ -41,7 +41,7 @@ struct waiting { //trainId
   int num;
 
   bool operator<(const waiting &other)const {
-    return idx > other.idx;
+    return idx < other.idx;
   }
 
   bool operator==(const waiting &other) const {
