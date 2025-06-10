@@ -33,7 +33,7 @@ struct order_basic {
 
 struct waiting { //trainId
   int idx;
-  char username[21];
+  char username[25];
   char from[51];
   char to[51];
   date_time leaving_time;

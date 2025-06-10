@@ -6,7 +6,7 @@
 struct user_basic {
   //char username[20];   -->key
   char password[31];
-  char name[21]; // Chinese
+  char name[25]; // Chinese
   char mailAddr[31];
   int privilege; //[0, 10]
 
@@ -52,10 +52,10 @@ public:
 
   UserManager();
 
-  BPlusTree<user_basic, 21, 50> basic;
+  BPlusTree<user_basic, 25, 50> basic;
 
   struct signed_in {
-    char user[21];
+    char user[25];
     int privilege;
   };
 

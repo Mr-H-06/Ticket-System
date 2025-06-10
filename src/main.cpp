@@ -8,7 +8,7 @@ int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/3.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/34.in");
   std::string line;
   OrderManager order;
   UserManager user;
@@ -26,7 +26,7 @@ int main() {
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
       user_basic u;
-      char cur_username[21], username[21];
+      char cur_username[25], username[25];
       t = strtok(nullptr, " ");
       while (t) {
         if (strcmp(t, "-c") == 0) {
@@ -56,7 +56,7 @@ int main() {
         std::cout << "-1\n";
       }
     } else if (strcmp(t, "login") == 0) {
-      char username[21], password[31];
+      char username[25], password[31];
       t = strtok(nullptr, " ");
       while (t) {
         if (strcmp(t, "-u") == 0) {
@@ -87,7 +87,7 @@ int main() {
       }
     } else if (strcmp(t, "query_profile") == 0) {
       t = strtok(nullptr, " ");
-      char cur_username[21], username[21];
+      char cur_username[25], username[25];
       while (t) {
         if (strcmp(t, "-c") == 0) {
           t = strtok(nullptr, " ");
@@ -104,7 +104,7 @@ int main() {
     } else if (strcmp(t, "modify_profile") == 0) {
       t = strtok(nullptr, " ");
       user_basic u;
-      char cur_username[21], username[21];
+      char cur_username[25], username[25];
       while (t) {
         if (strcmp(t, "-c") == 0) {
           t = strtok(nullptr, " ");
@@ -302,7 +302,7 @@ int main() {
       train.query_transfer(d, from, to, type); //type = false -> time / true -> cost
     } else if (strcmp(t, "buy_ticket") == 0) {
       t = strtok(nullptr, " ");
-      char username[21];
+      char username[25];
       order_basic neworder;
       neworder.idx = 0;
       for (int i = 1; i < strlen(idx) - 1; ++i) {

@@ -95,9 +95,9 @@ private:
   inline int allocate_node() {
     file.seekp(0, std::ios::end);
     int addr = file.tellp();
-    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
-    new_node.self_addr = addr;
-    write_node(new_node);
+    //Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
+    //new_node.self_addr = addr;
+    //write_node(new_node);
     return addr;
   }
 

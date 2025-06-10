@@ -76,7 +76,7 @@ struct train_basic {
 };
 
 struct seats {
-  int seat[100][30];
+  int seat[100][25];
 
   seats() = default;
 
@@ -117,13 +117,13 @@ class Block {
   std::fstream file;
   std::string filename;
 
-  int allocate() {
+  /*int allocate() {
     file.seekp(0, std::ios::end);
     int addr = file.tellp();
     seats newseat;
     file.write(reinterpret_cast<char *>(&newseat), sizeof(seats));
     return addr;
-  }
+  }*/
 public:
   Block(const std::string &fname) : filename(fname) {
     file.open(filename, std::ios::in | std::ios::out | std::ios::binary);
@@ -139,7 +139,8 @@ public:
   }
 
   int insert(seats &seat) {
-    int addr = allocate();
+    file.seekp(0, std::ios::end);
+    int addr = file.tellp();
     file.seekp(addr);
     file.write(reinterpret_cast<char *>(&seat), sizeof(seats));
     return addr;
