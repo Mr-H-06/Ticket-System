@@ -76,7 +76,7 @@ struct train_basic {
 };
 
 struct seats {
-  int seat[100][25];
+  int seat[100][30];
 
   seats() = default;
 
