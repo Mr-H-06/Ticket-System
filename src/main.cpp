@@ -338,7 +338,7 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      if (!order.buy_ticket(username,neworder , type, train, user)) {
+      if (!order.buy_ticket(username, neworder, type, train, user)) {
         std::cout << "-1\n";
       }
     } else if (strcmp(t, "query_order") == 0) {
