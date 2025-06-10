@@ -207,6 +207,9 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
   sjtu::map<std::string, sjtu::vector<transfer_info> > transfer;
   for (auto x: find_from) {
     auto find = basic.find(x.trainId);
+    if (d < date(find[0].saleDate[0]) || date(find[0].saleDate[1]) < d) {
+      continue;
+    }
     seats s;
     seat.find(find[0].seatAddr, s);
     int f, k, del;
@@ -270,6 +273,9 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
                                             k - 1];
             if (!(y.arriving_time < present_second.leaving_time)) {
               strcpy(present_second.leaving_time.date_.day, y.arriving_time.date_.day);
+              if (strcmp(present_second.leaving_time.time_.hm, y.arriving_time.time_.hm) < 0) {
+                present_second.leaving_time = present_second.leaving_time + 1440;
+              }
             }
             present_second.arriving_time = present_second.leaving_time +
                                            (find[0].travelTimes[t - 1] - find[0].stopoverTimes[k - 1]);
@@ -315,12 +321,16 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
         for (auto y: it->second) {
           // from start -> transfer message
 
+          if (strcmp(y.trainId,  x.trainId) == 0) continue;
           if (date_time(find[0].saleDate[1], find[0].startTime) < y.arriving_time) {
             continue;
           }
           present_second.leaving_time = date_time(find[0].saleDate[0], find[0].startTime);
           if (!(y.arriving_time < present_second.leaving_time)) {
             strcpy(present_second.leaving_time.date_.day, y.arriving_time.date_.day);
+            if (strcmp(present_second.leaving_time.time_.hm, y.arriving_time.time_.hm) < 0) {
+              present_second.leaving_time = present_second.leaving_time + 1440;
+            }
           }
           present_second.arriving_time = present_second.leaving_time + find[0].travelTimes[t - 1];
           if (present_second.price + y.price > ans_price) {
@@ -374,7 +384,9 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
         if (it != transfer.end()) {
           for (auto y: it->second) {
             // from start -> transfer message
-            if (date_time(find[0].saleDate[1], find[0].startTime) < y.arriving_time) {
+
+            if (strcmp(y.trainId, x.trainId) == 0) continue;
+            if (date_time(find[0].saleDate[1], find[0].startTime) + find[0].stopoverTimes[k - 1] < y.arriving_time) {
               continue;
             }
             present_second.leaving_time = date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[
@@ -382,6 +394,9 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
 
             if (!(y.arriving_time < present_second.leaving_time)) {
               strcpy(present_second.leaving_time.date_.day, y.arriving_time.date_.day);
+              if (strcmp(present_second.leaving_time.time_.hm, y.arriving_time.time_.hm) < 0) {
+                present_second.leaving_time = present_second.leaving_time + 1440;
+              }
             }
             present_second.arriving_time = present_second.leaving_time +
                                            (find[0].travelTimes[t - 1] - find[0].stopoverTimes[k - 1]);
@@ -427,12 +442,16 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
         for (auto y: it->second) {
           // from start -> transfer message
 
+          if (strcmp(y.trainId, x.trainId) == 0) continue;
           if (date_time(find[0].saleDate[1], find[0].startTime) < y.arriving_time) {
             continue;
           }
           present_second.leaving_time = date_time(find[0].saleDate[0], find[0].startTime);
           if (!(y.arriving_time < present_second.leaving_time)) {
             strcpy(present_second.leaving_time.date_.day, y.arriving_time.date_.day);
+            if (strcmp(present_second.leaving_time.time_.hm, y.arriving_time.time_.hm) < 0) {
+              present_second.leaving_time = present_second.leaving_time + 1440;
+            }
           }
           present_second.arriving_time = present_second.leaving_time + find[0].travelTimes[t - 1];
           if (present_second.arriving_time - y.leaving_time > ans_time) {

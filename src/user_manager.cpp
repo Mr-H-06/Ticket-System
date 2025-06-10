@@ -73,7 +73,8 @@ bool UserManager::modify_profile(char *cur_username, char *username, user_basic 
   for (int i = 0; i < log.size(); ++i) {
     if (strcmp(log[i].user, cur_username) == 0) {
       auto find = basic.find(username);
-      if (!find.empty() && (log[i].privilege > find[0].privilege || strcmp(cur_username, username) == 0)) {
+      auto cur = basic.find(cur_username);
+      if (!find.empty() && (log[i].privilege > find[0].privilege || strcmp(cur_username, username) == 0) && cur[0].privilege > find[0].privilege) {
         if (strcmp(user.name, "") == 0) {
           strcpy(user.name, find[0].name);
         }

@@ -8,7 +8,7 @@ int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/13.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/63.in");
   std::string line;
   OrderManager order;
   UserManager user;
@@ -20,7 +20,7 @@ int main() {
   while (std::getline(std::cin, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
-    char idx[10];
+    char idx[12];
     strcpy(idx, t);
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {

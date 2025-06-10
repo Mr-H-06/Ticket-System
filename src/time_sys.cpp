@@ -47,7 +47,7 @@ timing::timing(char *hm_) {
 bool date_time::operator<(const date_time &other) const {
   int cmp = strcmp(this->date_.day, other.date_.day);
   if (cmp != 0) return cmp < 0;
-  return strcmp(this->date_.day, other.time_.hm) < 0;
+  return strcmp(this->time_.hm, other.time_.hm) < 0;
 }
 
 date_time::date_time() : date_(""), time_("") {
