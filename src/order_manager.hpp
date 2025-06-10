@@ -11,8 +11,8 @@ struct order_basic {
   int idx;
   char trainId[21];
   char status[11];
-  char from[41];
-  char to[41];
+  char from[51];
+  char to[51];
   date_time leaving_time;
   date_time arriving_time;
   int price;
@@ -34,8 +34,8 @@ struct order_basic {
 struct waiting { //trainId
   int idx;
   char username[21];
-  char from[41];
-  char to[41];
+  char from[51];
+  char to[51];
   date_time leaving_time;
   date_time arriving_time;
   int num;

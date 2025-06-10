@@ -11,8 +11,9 @@ station_idx::station_idx(char *trainId_) {
 
 bool TrainManager::add_train(char *trainId, train_basic &train, seats &train_seat) {
   if (!basic.find(trainId).empty()) return false;
+  train.seatAddr = seat.insert(train_seat);
   basic.insert(trainId, train);
-  seat.insert(trainId, train_seat);
+  //seat.insert(trainId, train_seat);
   return true;
 }
 
@@ -38,19 +39,20 @@ bool TrainManager::release_train(char *trainId) {
 
 bool TrainManager::query_train(date d, char *trainId) {
   auto find = basic.find(trainId);
-  auto s = seat.find(trainId);
   if (find.empty() || date(find[0].saleDate[1]) < d || d < date(find[0].saleDate[0])) return false;
+  seats s;
+  seat.find(find[0].seatAddr, s);
   int del = d - date(find[0].saleDate[0]), cost = 0, stationnum = find[0].stationNum;
   date_time start(d, find[0].startTime), t;
   std::cout << trainId << ' ' << find[0].type << '\n';
   std::cout << find[0].stations[0] << " xx-xx xx:xx -> " << start.date_.day << ' ' << start.time_.hm << " 0 " <<
-      s[0].seat[del][0] << '\n';
+      s.seat[del][0] << '\n';
   for (int i = 1; i < stationnum - 1; ++i) {
     t = start + find[0].travelTimes[i - 1];
     std::cout << find[0].stations[i] << ' ' << t.date_.day << ' ' << t.time_.hm << " -> ";
     t = start + find[0].stopoverTimes[i - 1];
     cost += find[0].price[i - 1];
-    std::cout << t.date_.day << ' ' << t.time_.hm << ' ' << cost << ' ' << s[0].seat[del][i] << '\n';
+    std::cout << t.date_.day << ' ' << t.time_.hm << ' ' << cost << ' ' << s.seat[del][i] << '\n';
   }
   t = start + find[0].travelTimes[stationnum - 2];
   std::cout << find[0].stations[stationnum - 1] << ' ' << t.date_.day << ' ' << t.time_.hm << " -> xx-xx xx:xx " <<
@@ -74,7 +76,8 @@ void TrainManager::query_ticket(date d, char *from, char *to, bool type) {
       for (auto y: find_to) {
         if (x == y) {
           auto find = basic.find(x.trainId);
-          auto s = seat.find(x.trainId);
+          seats s;
+          seat.find(find[0].seatAddr, s);
           int f, t;
           for (f = 0; f < find[0].stationNum; ++f) {
             if (strcmp(from, find[0].stations[f]) == 0) {
@@ -101,10 +104,10 @@ void TrainManager::query_ticket(date d, char *from, char *to, bool type) {
           if ((date_time(find[0].saleDate[1], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_ < d) {
             continue;
           }
-          info.seat = s[0].seat[del][f];
+          info.seat = s.seat[del][f];
           for (int k = f; k < t; ++k) {
             info.price += find[0].price[k];
-            info.seat = std::min(info.seat, s[0].seat[del][k]);
+            info.seat = std::min(info.seat, s.seat[del][k]);
           }
           if (f == 0) {
             info.time = find[0].travelTimes[t - 1];
@@ -136,7 +139,8 @@ void TrainManager::query_ticket(date d, char *from, char *to, bool type) {
       for (auto y: find_to) {
         if (x == y) {
           auto find = basic.find(x.trainId);
-          auto s = seat.find(x.trainId);
+          seats s;
+          seat.find(find[0].seatAddr, s);
           int f, t;
           for (f = 0; f < find[0].stationNum; ++f) {
             if (strcmp(from, find[0].stations[f]) == 0) {
@@ -163,10 +167,10 @@ void TrainManager::query_ticket(date d, char *from, char *to, bool type) {
           if ((date_time(find[0].saleDate[1], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_ < d) {
             continue;
           }
-          info.seat = s[0].seat[del][f];
+          info.seat = s.seat[del][f];
           for (int k = f; k < t; ++k) {
             info.price += find[0].price[k];
-            info.seat = std::min(info.seat, s[0].seat[del][k]);
+            info.seat = std::min(info.seat, s.seat[del][k]);
           }
           if (f == 0) {
             info.time = find[0].travelTimes[t - 1];
@@ -201,16 +205,17 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
     return;
   }
   sjtu::map<std::string, sjtu::vector<transfer_info> > transfer;
-  transfer_info info;
   for (auto x: find_from) {
     auto find = basic.find(x.trainId);
-    auto s = seat.find(x.trainId);
+    seats s;
+    seat.find(find[0].seatAddr, s);
     int f, k, del;
     for (f = 0; f < find[0].stationNum; ++f) {
       if (strcmp(from, find[0].stations[f]) == 0) {
         break;
       }
     }
+    transfer_info info;
     info.price = 0;
     info.seat = 1e9;
     strcpy(info.trainId, x.trainId);
@@ -225,7 +230,7 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
     if (del < 0) continue;
     for (k = f + 1; k < find[0].stationNum; ++k) {
       info.price += find[0].price[k - 1];
-      info.seat = std::min(info.seat, s[0].seat[del][k - 1]);
+      info.seat = std::min(info.seat, s.seat[del][k - 1]);
       if (f == 0) {
         info.arriving_time = info.leaving_time + find[0].travelTimes[k - 1];
       } else {
@@ -236,7 +241,7 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
   }
 
   int ans_time = 1e9, ans_price = 1e9;
-  char trans_station[41];
+  char trans_station[51];
   transfer_info first, second, present_second;
   if (type) {
     for (auto x: find_to) {
@@ -257,6 +262,7 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
           for (auto y: it->second) {
             // from start -> transfer message
 
+            if (strcmp(y.trainId, x.trainId) == 0) continue;
             if (date_time(find[0].saleDate[1], find[0].startTime) + find[0].stopoverTimes[k - 1] < y.arriving_time) {
               continue;
             }
@@ -292,9 +298,10 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
             present_second.seat = 1e9;
             int del = present_second.leaving_time.date_ -
                       (date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[k - 1]).date_;
-            auto s = seat.find(x.trainId);
+            seats s;
+            seat.find(find[0].seatAddr, s);
             for (int p = t - 1; p >= k; --p) {
-              present_second.seat = std::min(present_second.seat, s[0].seat[del][p]);
+              present_second.seat = std::min(present_second.seat, s.seat[del][p]);
             }
             second = present_second;
           }
@@ -340,9 +347,10 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
           ans_price = present_second.price + y.price;
           present_second.seat = 1e9;
           int del = present_second.leaving_time.date_ - date_time(find[0].saleDate[0], find[0].startTime).date_;
-          auto s = seat.find(x.trainId);
+          seats s;
+          seat.find(find[0].seatAddr, s);
           for (int p = t - 1; p >= 0; --p) {
-            present_second.seat = std::min(present_second.seat, s[0].seat[del][p]);
+            present_second.seat = std::min(present_second.seat, s.seat[del][p]);
           }
           second = present_second;
         }
@@ -402,9 +410,10 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
             present_second.seat = 1e9;
             int del = present_second.leaving_time.date_ -
                       (date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[k - 1]).date_;
-            auto s = seat.find(x.trainId);
+            seats s;
+            seat.find(find[0].seatAddr, s);
             for (int p = t - 1; p >= k; --p) {
-              present_second.seat = std::min(present_second.seat, s[0].seat[del][p]);
+              present_second.seat = std::min(present_second.seat, s.seat[del][p]);
             }
             second = present_second;
           }
@@ -450,9 +459,10 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
           ans_price = present_second.price + y.price;
           present_second.seat = 1e9;
           int del = present_second.leaving_time.date_ - date_time(find[0].saleDate[0], find[0].startTime).date_;
-          auto s = seat.find(x.trainId);
+          seats s;
+          seat.find(find[0].seatAddr, s);
           for (int p = t - 1; p >= 0; --p) {
-            present_second.seat = std::min(present_second.seat, s[0].seat[del][p]);
+            present_second.seat = std::min(present_second.seat, s.seat[del][p]);
           }
           second = present_second;
         }

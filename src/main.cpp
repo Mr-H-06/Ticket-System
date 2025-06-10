@@ -8,23 +8,21 @@ int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/11.in");
+  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/3.in");
   std::string line;
   OrderManager order;
   UserManager user;
   TrainManager train;
-  //user.clear();
-  //order.clear();
-  //train.clear();
+  user.clear();
+  order.clear();
+  train.clear();
 
-  while (std::getline(std::cin, line)) {
+  while (std::getline(file, line)) {
+  //while (std::getline(std::cin, file)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
     char idx[10];
     strcpy(idx, t);
-    if (strcmp(idx, "[52757]") == 0) {
-      std::cout << '\n';
-    }
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
       user_basic u;
@@ -254,7 +252,7 @@ int main() {
       t = strtok(nullptr, " ");
       bool type = false;
       date d;
-      char from[41], to[41];
+      char from[51], to[51];
       while (t) {
         if (strcmp(t, "-s") == 0) {
           t = strtok(nullptr, " ");
@@ -280,7 +278,7 @@ int main() {
       t = strtok(nullptr, " ");
       bool type;
       date d;
-      char from[41], to[41];
+      char from[51], to[51];
       while (t) {
         if (strcmp(t, "-s") == 0) {
           t = strtok(nullptr, " ");
@@ -354,7 +352,7 @@ int main() {
       }
     } else if (strcmp(t, "refund_ticket") == 0) {
       t = strtok(nullptr, " ");
-      char username[41];
+      char username[51];
       int n = 1;
       while (t) {
         if (strcmp(t, "-u") == 0) {

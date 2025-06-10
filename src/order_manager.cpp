@@ -4,7 +4,8 @@
 bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, TrainManager &train, UserManager &user) {
   if (!user.check_log(username)) return false;
   auto find_train = train.basic.find(order.trainId);
-  auto find_seat = train.seat.find(order.trainId);
+  seats find_seat;
+  train.seat.find(find_train[0].seatAddr, find_seat);
   if (find_train.empty() || !find_train[0].release) return false;
   int f, t;
   for (f = 0; f < find_train[0].stationNum; ++f) {
@@ -38,7 +39,7 @@ bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, Tra
     order.price += find_train[0].price[i];
   }
   for (int i = f; i < t; ++i) {
-    if (find_seat[0].seat[del][i] < order.num) {
+    if (find_seat.seat[del][i] < order.num) {
       if (type) {
         waiting w;
         w.arriving_time = order.arriving_time;
@@ -59,11 +60,11 @@ bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, Tra
     }
   }
   strcpy(order.status, "success");
-  train.seat.remove(order.trainId, find_seat[0]);
+  //train.seat.remove(order.trainId, find_seat[0]);
   for (int i = f; i < t; ++i) {
-    find_seat[0].seat[del][i] -= order.num;
+    find_seat.seat[del][i] -= order.num;
   }
-  train.seat.insert(order.trainId, find_seat[0]);
+  train.seat.modify(find_train[0].seatAddr, find_seat);
   basic.insert(username, order);
   std::cout << order.price * order.num << '\n';
   return true;
@@ -109,8 +110,9 @@ bool OrderManager::refund_ticket(char *username, int n, UserManager &user, Train
   strcpy(find[n - 1].status, "refunded");
   basic.insert(username, find[n - 1]);
   auto find_train = train.basic.find(find[n - 1].trainId);
-  auto seat = train.seat.find(find[n - 1].trainId);
-  train.seat.remove(find[n - 1].trainId, seat[0]);
+  seats seat;
+  train.seat.find(find_train[0].seatAddr, seat);
+  //train.seat.remove(find[n - 1].trainId, seat[0]);
   int f, t;
   for (f = 0; f < find_train[0].stationNum; ++f) {
     if (strcmp(find[n - 1].from, find_train[0].stations[f]) == 0) {
@@ -130,7 +132,7 @@ bool OrderManager::refund_ticket(char *username, int n, UserManager &user, Train
     del = find[n - 1].leaving_time.date_ - find_train[0].saleDate[0];
   }
   for (int i = f; i < t; ++i) {
-    seat[0].seat[del][i] += find[n - 1].num;
+    seat.seat[del][i] += find[n - 1].num;
   }
 
   // deal with queue
@@ -154,7 +156,7 @@ bool OrderManager::refund_ticket(char *username, int n, UserManager &user, Train
     }
     bool check = true;
     for (int i = f; i < t; ++i) {
-      if (seat[0].seat[del][i] < x.num) {
+      if (seat.seat[del][i] < x.num) {
         check = false;
         break;
       }
@@ -170,12 +172,12 @@ bool OrderManager::refund_ticket(char *username, int n, UserManager &user, Train
         }
       }
       for (int i = f; i < t; ++i) {
-        seat[0].seat[del][i] -= x.num;
+        seat.seat[del][i] -= x.num;
       }
     }
   }
 
-  train.seat.insert(find[n - 1].trainId, seat[0]);
+  train.seat.modify(find_train[0].seatAddr, seat);
   return true;
 }
 
