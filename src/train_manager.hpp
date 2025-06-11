@@ -22,11 +22,11 @@ struct train_basic {
   int seatAddr;
 
   train_basic() : release(false) {
-    memset(stations, 0, sizeof(stations));
-    memset(startTime, 0, sizeof(startTime));
-    memset(travelTimes, 0, sizeof(travelTimes));
-    memset(stopoverTimes, 0, sizeof(stopoverTimes));
-    memset(saleDate, 0, sizeof(saleDate));
+    //memset(stations, 0, sizeof(stations));
+    //memset(startTime, 0, sizeof(startTime));
+    //memset(travelTimes, 0, sizeof(travelTimes));
+    //memset(stopoverTimes, 0, sizeof(stopoverTimes));
+    //memset(saleDate, 0, sizeof(saleDate));
   }
 
   bool operator<(const train_basic &other) const {
@@ -86,7 +86,7 @@ struct seats {
   int seat[95][25];
 
   seats() {
-    memset(seat, 0, sizeof(seat));
+    //memset(seat, 0, sizeof(seat));
   };
 
   bool operator<(const seats &other) const {

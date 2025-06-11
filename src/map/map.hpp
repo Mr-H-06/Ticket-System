@@ -36,16 +36,15 @@ namespace sjtu {
 
     struct Node {
       Color color;
+      value_type data;
       Node *parent;
       Node *left;
       Node *right;
 
-      value_type data;
-
       Node() = default;
 
       Node(Color color_, const value_type &val, Node *parent_ = nullptr, Node *left_ = nullptr,
-           Node *right_ = nullptr) : data(val), color(color_), parent(parent_), left(left_), right(right_) {
+           Node *right_ = nullptr) : color(color_), data(val), parent(parent_), left(left_), right(right_) {
       }
     };
 

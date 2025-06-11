@@ -7,41 +7,23 @@
 int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
-  std::cout.tie(nullptr);/*
-  BPlusTree<int, 21, 6> trying("try.txt");
-  trying.clear();
-  for (int i = 0; i < 93; ++i) {
-    trying.insert("a", i);
-  }
-  for (int i = 0; i < 6; ++i) {
-    trying.remove("a", i);
-  }
-  for (int i = 0; i <= 3; ++i) {
-    trying.insert("a", i);
-  }
-  for (auto k: trying.find("a")) {
-    std::cout << k << '\n';
-  }
-  return 0;*/
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/36.in");
-  //freopen("out.out", "w", stdout);
+  std::cout.tie(nullptr);
+  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/53.in");
+  freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
   UserManager user;
   TrainManager train;
-  //user.clear();
-  //order.clear();
-  //train.clear();
-  //while (std::getline(file, line)) {
-  while (std::getline(std::cin, line)) {
+  user.clear();
+  order.clear();
+  train.clear();
+  while (std::getline(file, line)) {
+  //while (std::getline(std::cin, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
     char idx[12];
-    memset(idx, 0, sizeof(idx));
+    //memset(idx, 0, sizeof(idx));
     strcpy(idx, t);
-    if (strcmp(idx, "[750566]") == 0) {
-      //std::cout << '\n';
-    }
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
       user_basic u;
@@ -153,12 +135,12 @@ int main() {
       train_basic newtrain;
       seats newtrain_seats;
       char trainId[21], station_temp[5000], date_temp[12], price_temp[600], travelTime_temp[500], stopoverTimes_temp[500];
-      memset(trainId, 0, 21);
-      memset(station_temp, 0, 5000);
-      memset(date_temp, 0, 12);
-      memset(price_temp, 0, 600);
-      memset(travelTime_temp, 0, 500);
-      memset(stopoverTimes_temp, 0, 500);
+      //memset(trainId, 0, 21);
+      //memset(station_temp, 0, 5000);
+      //memset(date_temp, 0, 12);
+      //memset(price_temp, 0, 600);
+      //memset(travelTime_temp, 0, 500);
+      //memset(stopoverTimes_temp, 0, 500);
       t = strtok(nullptr, " ");
       while (t) {
         if (strcmp(t, "-i") == 0) {
@@ -313,7 +295,7 @@ int main() {
       train.query_ticket(d, from, to, type); //type = false -> time / true -> cost
     } else if (strcmp(t, "query_transfer") == 0) {
       t = strtok(nullptr, " ");
-      bool type;
+      bool type = false;
       date d;
       char from[51], to[51];
       while (t) {
