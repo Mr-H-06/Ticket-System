@@ -2,13 +2,14 @@
 #include "order_manager.hpp"
 #include "train_manager.hpp"
 #include "user_manager.hpp"
-
+#include <cstdio>
 
 int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/63.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/24.in");
+  //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
   UserManager user;
