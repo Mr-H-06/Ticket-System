@@ -218,6 +218,33 @@ public:
     }
   };
 
+  template<typename T, typename Compare = std::less<T>>
+  void quick_sort(sjtu::vector<T>& vec, Compare comp = Compare()) {
+    if (vec.empty()) return;
+
+    std::function<void(int, int)> sort_range = [&](int left, int right) {
+      if (left >= right) return;
+
+      T pivot = vec[(left + right) / 2];
+      int i = left, j = right;
+
+      while (i <= j) {
+        while (comp(vec[i], pivot)) i++;
+        while (comp(pivot, vec[j])) j--;
+        if (i <= j) {
+          std::swap(vec[i], vec[j]);
+          i++;
+          j--;
+        }
+      }
+
+      sort_range(left, j);
+      sort_range(i, right);
+    };
+
+    sort_range(0, vec.size() - 1);
+  }
+
   struct transfer_info {
     char trainId[21];
     int seat;
