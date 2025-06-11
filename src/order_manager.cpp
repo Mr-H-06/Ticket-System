@@ -4,6 +4,7 @@
 bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, TrainManager &train, UserManager &user) {
   if (!user.check_log(username)) return false;
   auto find_train = train.basic.find(order.trainId);
+  if (order.num > find_train[0].seatNum) return false;
   seats find_seat;
   train.seat.find(find_train[0].seatAddr, find_seat);
   if (find_train.empty() || !find_train[0].release) return false;

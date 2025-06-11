@@ -23,7 +23,7 @@ int main() {
     std::cout << k << '\n';
   }
   return 0;*/
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/13.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/36.in");
   //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
@@ -36,8 +36,12 @@ int main() {
   while (std::getline(std::cin, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
-    char idx[12] = {0};
+    char idx[12];
+    memset(idx, 0, sizeof(idx));
     strcpy(idx, t);
+    if (strcmp(idx, "[750566]") == 0) {
+      //std::cout << '\n';
+    }
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
       user_basic u;
@@ -148,17 +152,19 @@ int main() {
     } else if (strcmp(t, "add_train") == 0) {
       train_basic newtrain;
       seats newtrain_seats;
-      char *trainId, *station_temp, *date_temp, *price_temp, *travelTime_temp, *stopoverTimes_temp;
-      /*memset(trainId, 0, 21);
+      char trainId[21], station_temp[5000], date_temp[12], price_temp[600], travelTime_temp[500], stopoverTimes_temp[500];
+      memset(trainId, 0, 21);
       memset(station_temp, 0, 5000);
       memset(date_temp, 0, 12);
       memset(price_temp, 0, 600);
       memset(travelTime_temp, 0, 500);
-      memset(stopoverTimes_temp, 0, 500);*/
+      memset(stopoverTimes_temp, 0, 500);
       t = strtok(nullptr, " ");
       while (t) {
         if (strcmp(t, "-i") == 0) {
-          trainId = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(trainId, t);
+          //trainId = strtok(nullptr, " ");
         } else if (strcmp(t, "-n") == 0) {
           t = strtok(nullptr, " ");
           newtrain.stationNum = std::stoi(t);
@@ -166,18 +172,28 @@ int main() {
           t = strtok(nullptr, " ");
           newtrain.seatNum = std::stoi(t);
         } else if (strcmp(t, "-s") == 0) {
-          station_temp = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(station_temp, t);
+          //station_temp = strtok(nullptr, " ");
         } else if (strcmp(t, "-p") == 0) {
-          price_temp = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(price_temp, t);
+          //price_temp = strtok(nullptr, " ");
         } else if (strcmp(t, "-x") == 0) {
           t = strtok(nullptr, " ");
           strcpy(newtrain.startTime, t);
         } else if (strcmp(t, "-t") == 0) {
-          travelTime_temp = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(travelTime_temp, t);
+          //travelTime_temp = strtok(nullptr, " ");
         } else if (strcmp(t, "-o") == 0) {
-          stopoverTimes_temp = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(stopoverTimes_temp, t);
+          //stopoverTimes_temp = strtok(nullptr, " ");
         } else if (strcmp(t, "-d") == 0) {
-          date_temp = strtok(nullptr, " ");
+          t = strtok(nullptr, " ");
+          strcpy(date_temp, t);
+          //date_temp = strtok(nullptr, " ");
         } else if (strcmp(t, "-y") == 0) {
           newtrain.type = strtok(nullptr, " ")[0];
         }
