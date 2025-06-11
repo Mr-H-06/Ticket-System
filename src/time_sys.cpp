@@ -51,8 +51,8 @@ bool date_time::operator<(const date_time &other) const {
 }
 
 date_time::date_time() {
-  memset(date_.day, 0, sizeof(date_));
-  memset(time_.hm, 0, sizeof(time_));
+  //memset(date_.day, 0, sizeof(date_));
+  //memset(time_.hm, 0, sizeof(time_));
 }
 
 date_time::date_time(date d, timing t) : date_(d), time_(t) {
