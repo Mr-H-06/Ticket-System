@@ -206,15 +206,15 @@ public:
 
   struct CompareTime {
     bool operator()(const query_info &a, const query_info &b) {
-      if (a.time != b.time) return a.time > b.time;
-      return strcmp(a.trainId, b.trainId) > 0;
+      if (a.time != b.time) return a.time < b.time;
+      return strcmp(a.trainId, b.trainId) < 0;
     }
   };
 
   struct CompareCost {
     bool operator()(const query_info &a, const query_info &b) {
-      if (a.price != b.price) return a.price > b.price;
-      return strcmp(a.trainId, b.trainId) > 0;
+      if (a.price != b.price) return a.price < b.price;
+      return strcmp(a.trainId, b.trainId) < 0;
     }
   };
 
