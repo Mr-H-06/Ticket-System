@@ -76,7 +76,7 @@ struct train_basic {
 };
 
 struct seats {
-  int seat[100][30];
+  int seat[95][25];
 
   seats() = default;
 
@@ -100,16 +100,16 @@ struct station_idx {
 
   station_idx(char *trainId_);
 
-  bool operator<(const station_idx &other) const {
-    return strcmp(trainId, other.trainId) < 0;
+  bool operator!=(const station_idx &other) const {
+    return !(*this == other);
   }
 
   bool operator==(const station_idx &other) const {
     return strcmp(trainId, other.trainId) == 0;
   }
 
-  bool operator!=(const station_idx &other) const {
-    return !(*this == other);
+  bool operator<(const station_idx &other) const {
+    return strcmp(trainId, other.trainId) < 0;
   }
 };
 

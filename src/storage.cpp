@@ -40,7 +40,7 @@ struct Node {
     memset(children, INVALID_ADDR, sizeof(children));
   }
 
-  inline int find_pos(const KeyValue<T, MAX_KEY_SIZE> &key_value) const {
+   int find_pos(const KeyValue<T, MAX_KEY_SIZE> &key_value) const {
     // find the minimun pos, key_value <= entries[pos]
     int l = 0, r = num_entries - 1, mid;
     while (l <= r) {
@@ -51,7 +51,7 @@ struct Node {
     return l;
   }
 
-  inline int find_key_pos(const char *key) const {
+   int find_key_pos(const char *key) const {
     // find the minimum pos, s.t. key <= entries[pos].key
     int l = 0, r = num_entries - 1, mid;
     while (l <= r) {
@@ -92,16 +92,16 @@ private:
     file.write(reinterpret_cast<char *>(&node), sizeof(Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> ));
   }
 
-  inline int allocate_node() {
+  int allocate_node() {
     file.seekp(0, std::ios::end);
     int addr = file.tellp();
-    //Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
-    //new_node.self_addr = addr;
-    //write_node(new_node);
+    Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
+    new_node.self_addr = addr;
+    write_node(new_node);
     return addr;
   }
 
-  inline int find_leaf(const char *key) {
+   int find_leaf(const char *key) {
     if (root_addr == INVALID_ADDR) return INVALID_ADDR;
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> node = root;
     int pos;
@@ -112,7 +112,7 @@ private:
     return node.self_addr;
   }
 
-  inline int find_leaf(const KeyValue<T, MAX_KEY_SIZE> &key) {
+   int find_leaf(const KeyValue<T, MAX_KEY_SIZE> &key) {
     if (root_addr == INVALID_ADDR) return INVALID_ADDR;
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> node = root;
     int pos;
@@ -136,12 +136,12 @@ private:
 
       l.parent = r.parent = new_root.self_addr;
 
+      root_addr = new_root.self_addr;
+      root = new_root;
+
       write_node(l);
       write_node(r);
       write_node(new_root);
-
-      root_addr = new_root.self_addr;
-      root = new_root;
       return;
     }
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> parent;
@@ -217,7 +217,7 @@ private:
     if (pos > 0) {
       Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> left;
       read_node(parent.children[pos - 1], left);
-      if (left.num_entries > MIN_KEY_PER_NODE) {
+      if (left.num_entries >= MIN_KEY_PER_NODE) {
         // left is enough
         if (node.type == LEAF) {
           // leaf
@@ -265,7 +265,7 @@ private:
     if (pos < parent.num_entries) {
       Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> right;
       read_node(parent.children[pos + 1], right);
-      if (right.num_entries > MIN_KEY_PER_NODE) {
+      if (right.num_entries >= MIN_KEY_PER_NODE) {
         // right is enough
         if (node.type == LEAF) {
           // leaf
@@ -461,7 +461,7 @@ public:
         std::cout << "        ";
       }
       head = pos + 1;
-      std::cout << '\n';
+      std::cout << '\n' << '\n';
     }
   }
 

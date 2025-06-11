@@ -7,8 +7,26 @@
 int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
-  std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/24.in");
+  std::cout.tie(nullptr);/*
+  BPlusTree<int, 21, 6> trying("try.txt");
+  trying.clear();
+  for (int i = 0; i < 93; ++i) {
+    trying.insert("a", i);
+  }
+  trying.check();
+  for (int i = 0; i < 6; ++i) {
+    trying.remove("a", i);
+    trying.check();
+  }
+  for (int i = 0; i <= 3; ++i) {
+    trying.insert("a", i);
+    trying.check();
+  }
+  for (auto k: trying.find("a")) {
+    std::cout << k << '\n';
+  }
+  return 0;*/
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/12.in");
   //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
