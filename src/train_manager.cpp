@@ -68,59 +68,64 @@ void TrainManager::query_ticket(date d, char *from, char *to, bool type) {
     std::cout << "0\n";
     return;
   }
+  size_t i, j;
   if (type) {
     //cost
     sjtu::priority_queue<query_info, CompareCost> queue;
     query_info info;
-    for (auto x: find_from) {
-      for (auto y: find_to) {
-        if (x == y) {
-          auto find = basic.find(x.trainId);
-          seats s;
-          seat.find(find[0].seatAddr, s);
-          int f, t;
-          for (f = 0; f < find[0].stationNum; ++f) {
-            if (strcmp(from, find[0].stations[f]) == 0) {
-              break;
-            }
+    for (i = 0, j = 0; i < find_from.size() && j < find_to.size(); ++i, ++j) {
+      auto x = find_from[i];
+      auto y = find_to[j];
+      if (x == y) {
+        auto find = basic.find(x.trainId);
+        seats s;
+        seat.find(find[0].seatAddr, s);
+        int f, t;
+        for (f = 0; f < find[0].stationNum; ++f) {
+          if (strcmp(from, find[0].stations[f]) == 0) {
+            break;
           }
-          for (t = 0; t < find[0].stationNum; ++t) {
-            if (strcmp(to, find[0].stations[t]) == 0) {
-              break;
-            }
-          }
-          if (f > t) continue;
-          strcpy(info.trainId, x.trainId);
-          info.price = 0;
-          int del;
-          if (f == 0) {
-            del = d - date(find[0].saleDate[0]);
-          } else {
-            del = d - (date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_;
-          }
-          if (del < 0) {
-            continue;
-          }
-          if ((date_time(find[0].saleDate[1], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_ < d) {
-            continue;
-          }
-          info.seat = s.seat[del][f];
-          for (int k = f; k < t; ++k) {
-            info.price += find[0].price[k];
-            info.seat = std::min(info.seat, s.seat[del][k]);
-          }
-          if (f == 0) {
-            info.time = find[0].travelTimes[t - 1];
-            info.leaving_time = date_time(d, find[0].startTime);
-            info.arriving_time = info.leaving_time + find[0].travelTimes[t - 1];
-          } else {
-            info.time = find[0].travelTimes[t - 1] - find[0].stopoverTimes[f - 1];
-            info.leaving_time = date_time(d, find[0].startTime) + find[0].stopoverTimes[f - 1];
-            info.leaving_time.date_ = d;
-            info.arriving_time = info.leaving_time + (find[0].travelTimes[t - 1] - find[0].stopoverTimes[f - 1]);
-          }
-          queue.push(info);
         }
+        for (t = 0; t < find[0].stationNum; ++t) {
+          if (strcmp(to, find[0].stations[t]) == 0) {
+            break;
+          }
+        }
+        if (f > t) continue;
+        strcpy(info.trainId, x.trainId);
+        info.price = 0;
+        int del;
+        if (f == 0) {
+          del = d - date(find[0].saleDate[0]);
+        } else {
+          del = d - (date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_;
+        }
+        if (del < 0) {
+          continue;
+        }
+        if ((date_time(find[0].saleDate[1], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_ < d) {
+          continue;
+        }
+        info.seat = s.seat[del][f];
+        for (int k = f; k < t; ++k) {
+          info.price += find[0].price[k];
+          info.seat = std::min(info.seat, s.seat[del][k]);
+        }
+        if (f == 0) {
+          info.time = find[0].travelTimes[t - 1];
+          info.leaving_time = date_time(d, find[0].startTime);
+          info.arriving_time = info.leaving_time + find[0].travelTimes[t - 1];
+        } else {
+          info.time = find[0].travelTimes[t - 1] - find[0].stopoverTimes[f - 1];
+          info.leaving_time = date_time(d, find[0].startTime) + find[0].stopoverTimes[f - 1];
+          info.leaving_time.date_ = d;
+          info.arriving_time = info.leaving_time + (find[0].travelTimes[t - 1] - find[0].stopoverTimes[f - 1]);
+        }
+        queue.push(info);
+      } else if (x < y) {
+        --j;
+      } else {
+        --i;
       }
     }
     std::cout << queue.size() << '\n';
@@ -135,55 +140,59 @@ void TrainManager::query_ticket(date d, char *from, char *to, bool type) {
     //time
     sjtu::priority_queue<query_info, CompareTime> queue;
     query_info info;
-    for (auto x: find_from) {
-      for (auto y: find_to) {
-        if (x == y) {
-          auto find = basic.find(x.trainId);
-          seats s;
-          seat.find(find[0].seatAddr, s);
-          int f, t;
-          for (f = 0; f < find[0].stationNum; ++f) {
-            if (strcmp(from, find[0].stations[f]) == 0) {
-              break;
-            }
+    for (i = 0, j = 0; i < find_from.size() && j < find_to.size(); ++i, ++j) {
+      auto x = find_from[i];
+      auto y = find_to[j];
+      if (x == y) {
+        auto find = basic.find(x.trainId);
+        seats s;
+        seat.find(find[0].seatAddr, s);
+        int f, t;
+        for (f = 0; f < find[0].stationNum; ++f) {
+          if (strcmp(from, find[0].stations[f]) == 0) {
+            break;
           }
-          for (t = 0; t < find[0].stationNum; ++t) {
-            if (strcmp(to, find[0].stations[t]) == 0) {
-              break;
-            }
-          }
-          if (f > t) continue;
-          strcpy(info.trainId, x.trainId);
-          info.price = 0;
-          int del;
-          if (f == 0) {
-            del = d - date(find[0].saleDate[0]);
-          } else {
-            del = d - (date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_;
-          }
-          if (del < 0) {
-            continue;
-          }
-          if ((date_time(find[0].saleDate[1], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_ < d) {
-            continue;
-          }
-          info.seat = s.seat[del][f];
-          for (int k = f; k < t; ++k) {
-            info.price += find[0].price[k];
-            info.seat = std::min(info.seat, s.seat[del][k]);
-          }
-          if (f == 0) {
-            info.time = find[0].travelTimes[t - 1];
-            info.leaving_time = date_time(d, find[0].startTime);
-            info.arriving_time = info.leaving_time + find[0].travelTimes[t - 1];
-          } else {
-            info.time = find[0].travelTimes[t - 1] - find[0].stopoverTimes[f - 1];
-            info.leaving_time = date_time(d, find[0].startTime) + find[0].stopoverTimes[f - 1];
-            info.leaving_time.date_ = d;
-            info.arriving_time = info.leaving_time + (find[0].travelTimes[t - 1] - find[0].stopoverTimes[f - 1]);
-          }
-          queue.push(info);
         }
+        for (t = 0; t < find[0].stationNum; ++t) {
+          if (strcmp(to, find[0].stations[t]) == 0) {
+            break;
+          }
+        }
+        if (f > t) continue;
+        strcpy(info.trainId, x.trainId);
+        info.price = 0;
+        int del;
+        if (f == 0) {
+          del = d - date(find[0].saleDate[0]);
+        } else {
+          del = d - (date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_;
+        }
+        if (del < 0) {
+          continue;
+        }
+        if ((date_time(find[0].saleDate[1], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_ < d) {
+          continue;
+        }
+        info.seat = s.seat[del][f];
+        for (int k = f; k < t; ++k) {
+          info.price += find[0].price[k];
+          info.seat = std::min(info.seat, s.seat[del][k]);
+        }
+        if (f == 0) {
+          info.time = find[0].travelTimes[t - 1];
+          info.leaving_time = date_time(d, find[0].startTime);
+          info.arriving_time = info.leaving_time + find[0].travelTimes[t - 1];
+        } else {
+          info.time = find[0].travelTimes[t - 1] - find[0].stopoverTimes[f - 1];
+          info.leaving_time = date_time(d, find[0].startTime) + find[0].stopoverTimes[f - 1];
+          info.leaving_time.date_ = d;
+          info.arriving_time = info.leaving_time + (find[0].travelTimes[t - 1] - find[0].stopoverTimes[f - 1]);
+        }
+        queue.push(info);
+      } else if (x < y) {
+        --j;
+      } else {
+        --i;
       }
     }
     std::cout << queue.size() << '\n';
@@ -321,7 +330,7 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
         for (auto y: it->second) {
           // from start -> transfer message
 
-          if (strcmp(y.trainId,  x.trainId) == 0) continue;
+          if (strcmp(y.trainId, x.trainId) == 0) continue;
           if (date_time(find[0].saleDate[1], find[0].startTime) < y.arriving_time) {
             continue;
           }
