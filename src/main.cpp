@@ -5,8 +5,8 @@
 #include <cstdio>
 
 int main() {
-  clock_t start = clock();
-  double timek = 0;
+  //clock_t start = clock();
+  //double timek = 0;
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
@@ -294,10 +294,10 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      clock_t s = clock();
+      //clock_t s = clock();
       train.query_ticket(d, from, to, type); //type = false -> time / true -> cost
-      clock_t t = clock();
-      timek += t - s;
+      //clock_t t = clock();
+      //timek += t - s;
     } else if (strcmp(t, "query_transfer") == 0) {
       t = strtok(nullptr, " ");
       bool type = false;
@@ -399,9 +399,9 @@ int main() {
       order.clear();
     } else if (strcmp(t, "exit") == 0) {
       std::cout << "bye\n";
-      clock_t end = clock();
-      std::cout << double(end - start) / CLOCKS_PER_SEC << '\n';
-      std::cout << timek / CLOCKS_PER_SEC << '\n';
+      //clock_t end = clock();
+      //std::cout << double(end - start) / CLOCKS_PER_SEC << '\n';
+      //std::cout << timek / CLOCKS_PER_SEC << '\n';
       return 0;
     }
   }
