@@ -18,6 +18,8 @@ struct order_basic {
   int price;
   int num;
 
+  order_basic() = default;
+
   bool operator<(const order_basic &other) const {
     return idx > other.idx;
   }
@@ -39,6 +41,8 @@ struct waiting { //trainId
   date_time leaving_time;
   date_time arriving_time;
   int num;
+
+  waiting() = default;
 
   bool operator<(const waiting &other)const {
     return idx < other.idx;

@@ -22,6 +22,11 @@ struct train_basic {
   int seatAddr;
 
   train_basic() : release(false) {
+    memset(stations, 0, sizeof(stations));
+    memset(startTime, 0, sizeof(startTime));
+    memset(travelTimes, 0, sizeof(travelTimes));
+    memset(stopoverTimes, 0, sizeof(stopoverTimes));
+    memset(saleDate, 0, sizeof(saleDate));
   }
 
   bool operator<(const train_basic &other) const {
@@ -47,6 +52,7 @@ struct train_basic {
             return strcmp(stations[i], other.stations[i]) < 0;
           }
         }*/
+    return stationNum < other.stationNum;
     return false;
   }
 
@@ -66,11 +72,12 @@ struct train_basic {
           }
         }
         return true;*/
+    return stationNum == other.stationNum;
     return false;
   }
 
   bool operator!=(const train_basic &other) const {
-    //return !(*this == other);
+    return !(*this == other);
     return false;
   }
 };
@@ -78,17 +85,22 @@ struct train_basic {
 struct seats {
   int seat[95][25];
 
-  seats() = default;
+  seats() {
+    memset(seat, 0, sizeof(seat));
+  };
 
   bool operator<(const seats &other) const {
+    return seat[0][0] < other.seat[0][0];
     return false;
   }
 
   bool operator==(const seats &other) const {
+    return seat[0][0] == other.seat[0][0];
     return false;
   }
 
   bool operator!=(const seats &other) const {
+    return !(*this == other);
     return false;
   }
 };

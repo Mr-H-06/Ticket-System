@@ -13,20 +13,17 @@ int main() {
   for (int i = 0; i < 93; ++i) {
     trying.insert("a", i);
   }
-  trying.check();
   for (int i = 0; i < 6; ++i) {
     trying.remove("a", i);
-    trying.check();
   }
   for (int i = 0; i <= 3; ++i) {
     trying.insert("a", i);
-    trying.check();
   }
   for (auto k: trying.find("a")) {
     std::cout << k << '\n';
   }
   return 0;*/
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/12.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/13.in");
   //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
@@ -39,7 +36,7 @@ int main() {
   while (std::getline(std::cin, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
-    char idx[12];
+    char idx[12] = {0};
     strcpy(idx, t);
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
@@ -152,6 +149,12 @@ int main() {
       train_basic newtrain;
       seats newtrain_seats;
       char *trainId, *station_temp, *date_temp, *price_temp, *travelTime_temp, *stopoverTimes_temp;
+      /*memset(trainId, 0, 21);
+      memset(station_temp, 0, 5000);
+      memset(date_temp, 0, 12);
+      memset(price_temp, 0, 600);
+      memset(travelTime_temp, 0, 500);
+      memset(stopoverTimes_temp, 0, 500);*/
       t = strtok(nullptr, " ");
       while (t) {
         if (strcmp(t, "-i") == 0) {
@@ -323,7 +326,7 @@ int main() {
       char username[25];
       order_basic neworder;
       neworder.idx = 0;
-      for (int i = 1; i < strlen(idx) - 1; ++i) {
+      for (size_t i = 1; i < strlen(idx) - 1; ++i) {
         neworder.idx *= 10;
         neworder.idx += idx[i] - '0';
       }

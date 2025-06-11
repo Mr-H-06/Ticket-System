@@ -25,10 +25,10 @@ struct KeyValue {
   }
 };
 
-template<typename T,size_t MAX_KEY_SIZE, size_t MAX_KEY_PER_NODE>
+template<typename T, size_t MAX_KEY_SIZE, size_t MAX_KEY_PER_NODE>
 struct Node {
   NodeType type;
-  int num_entries;
+  size_t num_entries;
   KeyValue<T, MAX_KEY_SIZE> entries[MAX_KEY_PER_NODE];
   int children[MAX_KEY_PER_NODE + 1]; //internal - children
   int next; // leaf
@@ -36,8 +36,8 @@ struct Node {
   int self_addr; //address
 
   Node() : type(LEAF), num_entries(0), next(-1), parent(INVALID_ADDR), self_addr(INVALID_ADDR) {
-    memset(entries, 0, sizeof(entries));
-    memset(children, INVALID_ADDR, sizeof(children));
+    //memset(entries, 0, sizeof(entries));
+    //memset(children, INVALID_ADDR, sizeof(children));
   }
 
    int find_pos(const KeyValue<T, MAX_KEY_SIZE> &key_value) const {
@@ -66,10 +66,10 @@ struct Node {
   }
 };
 
-template<typename T, size_t MAX_KEY_SIZE, size_t MAX_KEY_PER_NODE>
+template<typename T,  size_t MAX_KEY_SIZE,  size_t MAX_KEY_PER_NODE>
 class BPlusTree {
 private:
-  const int MIN_KEY_PER_NODE = MAX_KEY_PER_NODE >> 1;
+  const size_t MIN_KEY_PER_NODE = MAX_KEY_PER_NODE >> 1;
   std::fstream file;
   std::string filename;
   int root_addr;
@@ -175,7 +175,7 @@ private:
 
       //copy node
       Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> child;
-      for (int i = split_pos + 1, j = 0; i < parent.num_entries; ++i, ++j) {
+      for (size_t i = split_pos + 1, j = 0; i < parent.num_entries; ++i, ++j) {
         new_node.entries[j] = parent.entries[i];
         new_node.children[j] = parent.children[i];
         read_node(parent.children[i], child);
@@ -208,7 +208,7 @@ private:
 
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> parent;
     read_node(node.parent, parent);
-    int pos = parent.find_pos(node.entries[node.num_entries - 1]);
+    size_t pos = parent.find_pos(node.entries[node.num_entries - 1]);
     if (parent.children[pos] != node.self_addr) {
       ++pos;
     }
@@ -270,7 +270,7 @@ private:
         if (node.type == LEAF) {
           // leaf
           node.entries[node.num_entries] = right.entries[0];
-          for (int i = 0; i < right.num_entries - 1; ++i) {
+          for (size_t i = 0; i < right.num_entries - 1; ++i) {
             right.entries[i] = right.entries[i + 1];
           }
           ++node.num_entries;
@@ -283,7 +283,7 @@ private:
           node.children[node.num_entries + 1] = right.children[0];
 
           parent.entries[pos] = right.entries[0];
-          for (int i = 0; i < right.num_entries - 1; ++i) {
+          for (size_t i = 0; i < right.num_entries - 1; ++i) {
             right.entries[i] = right.entries[i + 1];
             right.children[i] = right.children[i + 1];
           }
@@ -314,7 +314,7 @@ private:
 
       if (node.type == LEAF) {
         // leaf
-        for (int i = 0; i < node.num_entries; ++i) {
+        for (size_t i = 0; i < node.num_entries; ++i) {
           left.entries[left.num_entries + i] = node.entries[i];
         }
         left.num_entries += node.num_entries;
@@ -324,7 +324,7 @@ private:
         left.entries[left.num_entries] = parent.entries[pos - 1];
 
         Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> child;
-        for (int i = 0; i < node.num_entries; ++i) {
+        for (size_t i = 0; i < node.num_entries; ++i) {
           left.entries[left.num_entries + 1 + i] = node.entries[i];
           left.children[left.num_entries + 1 + i] = node.children[i];
 
@@ -340,7 +340,7 @@ private:
         left.num_entries += node.num_entries + 1;
       }
 
-      for (int i = pos - 1; i < parent.num_entries - 1; ++i) {
+      for (size_t i = pos - 1; i < parent.num_entries - 1; ++i) {
         parent.entries[i] = parent.entries[i + 1];
         parent.children[i + 1] = parent.children[i + 2];
       }
@@ -362,7 +362,7 @@ private:
       if (node.type == LEAF) {
         //leaf
 
-        for (int i = 0; i < right.num_entries; ++i) {
+        for (size_t i = 0; i < right.num_entries; ++i) {
           node.entries[node.num_entries + i] = right.entries[i];
         }
         node.num_entries += right.num_entries;
@@ -372,7 +372,7 @@ private:
         node.entries[node.num_entries] = parent.entries[pos];
 
         Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> child;
-        for (int i = 0; i < right.num_entries; ++i) {
+        for (size_t i = 0; i < right.num_entries; ++i) {
           node.entries[node.num_entries + 1 + i] = right.entries[i];
           node.children[node.num_entries + 1 + i] = right.children[i];
 
@@ -390,7 +390,7 @@ private:
         node.num_entries += right.num_entries + 1;
       }
 
-      for (int i = pos; i < parent.num_entries - 1; ++i) {
+      for (size_t i = pos; i < parent.num_entries - 1; ++i) {
         parent.entries[i] = parent.entries[i + 1];
         parent.children[i + 1] = parent.children[i + 2];
       }
@@ -476,7 +476,7 @@ public:
   }
 
   void insert(const char *key, T value) {
-    KeyValue<T, MAX_KEY_SIZE> key_value;
+    KeyValue<T, MAX_KEY_SIZE> key_value = {};
     strcpy(key_value.key, key);
     key_value.value = value;
 
@@ -499,7 +499,7 @@ public:
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> leaf;
     read_node(leaf_addr, leaf);
 
-    int pos = leaf.find_pos(key_value);
+    size_t pos = leaf.find_pos(key_value);
 
     // check if it has existed
     if (pos < leaf.num_entries && strcmp(leaf.entries[pos].key, key) == 0 && leaf.entries[pos].value == value) {
@@ -514,7 +514,7 @@ public:
     }
 
     // insert
-    for (int i = leaf.num_entries; i > pos; --i) {
+    for (size_t i = leaf.num_entries; i > pos; --i) {
       leaf.entries[i] = leaf.entries[i - 1];
     }
     leaf.entries[pos] = key_value;
@@ -535,7 +535,7 @@ public:
       new_leaf.next = leaf.next;
 
       int split_pos = leaf.num_entries / 2;
-      for (int i = split_pos, j = 0; i < leaf.num_entries; ++i, ++j) {
+      for (size_t i = split_pos, j = 0; i < leaf.num_entries; ++i, ++j) {
         new_leaf.entries[j] = leaf.entries[i];
       }
       new_leaf.num_entries = leaf.num_entries - split_pos;
@@ -560,7 +560,7 @@ public:
     int leaf_addr = find_leaf(key_value);
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> leaf;
     read_node(leaf_addr, leaf);
-    int pos = leaf.find_pos(key_value);
+    size_t   pos = leaf.find_pos(key_value);
 
     if (pos < leaf.num_entries && (strcmp(leaf.entries[pos].key, key) != 0 || leaf.entries[pos].value != value)) {
       return; //not found
@@ -577,7 +577,7 @@ public:
     }
 
     //remove
-    for (int i = pos; i < leaf.num_entries - 1; ++i) {
+    for (size_t i = pos; i < leaf.num_entries - 1; ++i) {
       leaf.entries[i] = leaf.entries[i + 1];
     }
     --leaf.num_entries;
@@ -591,10 +591,10 @@ public:
     int leaf_addr = find_leaf(key);
     Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> leaf;
     read_node(leaf_addr, leaf);
-    int pos = leaf.find_key_pos(key);
+    size_t pos = leaf.find_key_pos(key);
 
     while (true) {
-      for (int i = pos; i < leaf.num_entries; ++i) {
+      for (size_t i = pos; i < leaf.num_entries; ++i) {
         if (strcmp(leaf.entries[i].key, key) == 0) {
           result.push_back(leaf.entries[i].value);
         } else {

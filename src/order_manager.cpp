@@ -33,7 +33,7 @@ bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, Tra
     order.leaving_time.time_ = find_train[0].startTime;
     order.arriving_time = order.leaving_time + find_train[0].travelTimes[t - 1];
   }
-  if (del < 0) return false;
+  if (del < 0 || del > date(find_train[0].saleDate[1]) - date(find_train[0].saleDate[0])) return false;
   order.price = 0;
   for (int i = f; i < t; ++i) {
     order.price += find_train[0].price[i];
@@ -90,7 +90,7 @@ bool OrderManager::refund_ticket(char *username, int n, UserManager &user, Train
     return false;
   }
   auto find = basic.find(username);
-  if (find.size() < n || strcmp(find[n - 1].status, "refunded") == 0) {
+  if (find.size() < size_t(n) || strcmp(find[n - 1].status, "refunded") == 0) {
     return false;
   }
   if (strcmp(find[n - 1].status, "pending") == 0) {

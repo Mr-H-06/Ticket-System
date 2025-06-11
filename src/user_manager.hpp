@@ -15,6 +15,7 @@ struct user_basic {
   bool operator==(const user_basic &other) const {/*
     return strcmp(password, other.password) == 0 && strcmp(name, other.name) == 0 && strcmp(mailAddr, other.mailAddr) ==
            0 && privilege == other.privilege;*/
+    return privilege == other.privilege;
     return false;
   }
 
@@ -24,11 +25,12 @@ struct user_basic {
     if (strcmp(name, other.name) != 0) return strcmp(name, other.name) < 0;
     if (strcmp(mailAddr, other.mailAddr) != 0) return strcmp(mailAddr, other.mailAddr) < 0;
     return strcmp(password, other.password) < 0;*/
+    return privilege < other.privilege;
     return false;
   }
 
   bool operator!=(const user_basic &other) const{
-    //return !(*this == other);
+    return !(*this == other);
     return false;
   }
 };
