@@ -16,7 +16,8 @@ struct train_basic {
   char startTime[6]; // hh:mm
   int travelTimes[95]; // <=1e4       sum
   int stopoverTimes[95]; // <=1e4     sum
-  char saleDate[2][6]; //start & end mm-dd
+  //char saleDate[2][6]; //start & end mm-dd
+  date saleDate[2];
   char type;
   bool release;
   int seatAddr;
@@ -205,16 +206,18 @@ public:
   };
 
   struct CompareTime {
-    bool operator()(const query_info &a, const query_info &b) {
+    bool operator()(const query_info &a, const query_info &b) {/*
       if (a.time != b.time) return a.time < b.time;
-      return strcmp(a.trainId, b.trainId) < 0;
+      return strcmp(a.trainId, b.trainId) < 0;*/
+      return a.time < b.time || (a.time == b.time && strcmp(a.trainId, b.trainId) < 0);
     }
   };
 
   struct CompareCost {
-    bool operator()(const query_info &a, const query_info &b) {
+    bool operator()(const query_info &a, const query_info &b) {/*
       if (a.price != b.price) return a.price < b.price;
-      return strcmp(a.trainId, b.trainId) < 0;
+      return strcmp(a.trainId, b.trainId) < 0;*/
+      return a.price < b.price || (a.price == b.price && strcmp(a.trainId, b.trainId) < 0);
     }
   };
 
@@ -233,8 +236,8 @@ public:
         while (comp(pivot, vec[j])) j--;
         if (i <= j) {
           std::swap(vec[i], vec[j]);
-          i++;
-          j--;
+          ++i;
+          --j;
         }
       }
 

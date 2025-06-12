@@ -4,21 +4,24 @@
 #include "user_manager.hpp"
 #include <cstdio>
 
-int main() {/*
-  std::cout << sizeof(Node<train_basic, 21, 6>) << '\n';
-  std::cout << sizeof(Node<station_idx, 41, 61>) << '\n';
-  std::cout << sizeof(Node<user_basic, 21, 35>) << '\n';
-  std::cout << sizeof(Node<order_basic, 21, 22>) << '\n';
-  std::cout << sizeof(Node<waiting, 21, 24>) << '\n';
-  std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 4 << ' ' << 4096 * 8 << ' ' << 4096 * 16;
-  return 0;*/
+int main() {
+  /*
+    std::cout << sizeof(Node<train_basic, 21, 6>) << '\n';
+    std::cout << sizeof(Node<station_idx, 41, 61>) << '\n';
+    std::cout << sizeof(Node<user_basic, 21, 35>) << '\n';
+    std::cout << sizeof(Node<order_basic, 21, 22>) << '\n';
+    std::cout << sizeof(Node<waiting, 21, 24>) << '\n';
+    std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 4 << ' ' << 4096 * 8 << ' ' << 4096 * 16;
+    return 0;*/
   //clock_t start = clock();
-  //double timek = 0;
+  //double time_query_ticket = 0;
+  //double time_query_profile = 0;
+  //double time_buy_ticket = 0;
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/14.in");
-  //freopen("out.out", "w", stdout);
+  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
+  freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
   UserManager user;
@@ -108,9 +111,12 @@ int main() {/*
         }
         t = strtok(nullptr, " ");
       }
+      //clock_t a = clock();
       if (!user.query_profile(cur_username, username)) {
         std::cout << "-1\n";
       }
+      //clock_t b = clock();
+      //time_query_profile += b - a;
     } else if (strcmp(t, "modify_profile") == 0) {
       t = strtok(nullptr, " ");
       user_basic u;
@@ -143,7 +149,8 @@ int main() {/*
     } else if (strcmp(t, "add_train") == 0) {
       train_basic newtrain;
       seats newtrain_seats;
-      char trainId[21], station_temp[5000], date_temp[12], price_temp[600], travelTime_temp[500], stopoverTimes_temp[500];
+      char trainId[21], station_temp[5000], date_temp[12], price_temp[600], travelTime_temp[500], stopoverTimes_temp[
+        500];
       //memset(trainId, 0, 21);
       //memset(station_temp, 0, 5000);
       //memset(date_temp, 0, 12);
@@ -199,9 +206,11 @@ int main() {/*
       }
       // saleDate
       //t = strtok(date_temp, "|");
-      strcpy(newtrain.saleDate[0], strtok(date_temp, "|"));
+      //strcpy(newtrain.saleDate[0], strtok(date_temp, "|"));
+      newtrain.saleDate[0] = date(strtok(date_temp, "|"));
       //t = strtok(nullptr, "|");
-      strcpy(newtrain.saleDate[1], strtok(nullptr, "|"));
+      //strcpy(newtrain.saleDate[1], strtok(nullptr, "|"));
+      newtrain.saleDate[1] = date(strtok(nullptr, "|"));
       // price
       ins = 0;
       t = strtok(price_temp, "|");
@@ -269,7 +278,8 @@ int main() {/*
           strcpy(trainId, strtok(nullptr, " "));
         } else if (strcmp(t, "-d") == 0) {
           //t = strtok(nullptr, " ");
-          strcpy(d.day, strtok(nullptr, " "));
+          d = date(strtok(nullptr, " "));
+          //strcpy(d.day, strtok(nullptr, " "));
         }
         t = strtok(nullptr, " ");
       }
@@ -290,7 +300,8 @@ int main() {/*
           strcpy(to, strtok(nullptr, " "));
         } else if (strcmp(t, "-d") == 0) {
           //t = strtok(nullptr, " ");
-          strcpy(d.day, strtok(nullptr, " "));
+          d = date(strtok(nullptr, " "));
+          //strcpy(d.day, strtok(nullptr, " "));
         } else if (strcmp(t, "-p") == 0) {
           t = strtok(nullptr, " ");
           if (strcmp(t, "time") == 0) {
@@ -301,10 +312,10 @@ int main() {/*
         }
         t = strtok(nullptr, " ");
       }
-      clock_t s = clock();
+      //clock_t a = clock();
       train.query_ticket(d, from, to, type); //type = false -> time / true -> cost
-      clock_t t = clock();
-      //timek += t - s;
+      //clock_t b = clock();
+      //time_query_ticket += b - a;
     } else if (strcmp(t, "query_transfer") == 0) {
       t = strtok(nullptr, " ");
       bool type = false;
@@ -319,7 +330,8 @@ int main() {/*
           strcpy(to, strtok(nullptr, " "));
         } else if (strcmp(t, "-d") == 0) {
           //t = strtok(nullptr, " ");
-          strcpy(d.day, strtok(nullptr, " "));
+          d = date(strtok(nullptr, " "));
+          //strcpy(d.day, strtok(nullptr, " "));
         } else if (strcmp(t, "-p") == 0) {
           t = strtok(nullptr, " ");
           if (strcmp(t, "time") == 0) {
@@ -350,7 +362,8 @@ int main() {/*
           strcpy(neworder.trainId, strtok(nullptr, " "));
         } else if (strcmp(t, "-d") == 0) {
           //t = strtok(nullptr, " ");
-          strcpy(neworder.leaving_time.date_.day, strtok(nullptr, " "));
+          neworder.leaving_time = date_time(strtok(nullptr, " "), "00:00");
+          //strcpy(neworder.leaving_time.date_.day, strtok(nullptr, " "));
         } else if (strcmp(t, "-n") == 0) {
           //t = strtok(nullptr, " ");
           neworder.num = std::stoi(strtok(nullptr, " "));
@@ -370,9 +383,12 @@ int main() {/*
         }
         t = strtok(nullptr, " ");
       }
+      //clock_t a = clock();
       if (!order.buy_ticket(username, neworder, type, train, user)) {
         std::cout << "-1\n";
       }
+      //clock_t b = clock();
+      //time_buy_ticket += b - a;
     } else if (strcmp(t, "query_order") == 0) {
       t = strtok(nullptr, " ");
       if (strcmp(t, "-u") == 0) {
@@ -406,9 +422,11 @@ int main() {/*
       order.clear();
     } else if (strcmp(t, "exit") == 0) {
       std::cout << "bye\n";
-     //clock_t end = clock();
-     //std::cout << double(end - start) / CLOCKS_PER_SEC << '\n';
-     //std::cout << timek / CLOCKS_PER_SEC << '\n';
+      //clock_t end = clock();
+      //std::cout << double(end - start) / CLOCKS_PER_SEC << '\n';
+      //std::cout << "query_ticket:" << time_query_ticket / CLOCKS_PER_SEC << '\n';
+      //std::cout << "query_profile:" << time_query_profile / CLOCKS_PER_SEC << '\n';
+      //std::cout << "buy_ticket:" <<time_buy_ticket / CLOCKS_PER_SEC << '\n';
       return 0;
     }
   }

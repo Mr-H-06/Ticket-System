@@ -1,14 +1,33 @@
 #include "time_sys.hpp"
 
+#include <ctime>
+
 date::date() {
-  strcpy(day, "");
+  day = 0;
 }
 
-date::date(char *day_) {
-  strcpy(day, day_);
+date::date(const char *day_) {
+  //strcpy(day, day_);
+  day = (day_[3] - '0') * 10 + day_[4] - '0';
+  if (day_[1] == '6') {
+    return;
+  } else if (day_[1] == '7') {
+    day += 30;
+  } else if (day_[1] == '8') {
+    day += 61;
+  } else if (day_[1] == '9') {
+    day += 92;
+  } else {
+    day = 1e9;
+  }
 }
+
+date::date(const date_time &d) : day(d.time / 1440) {
+}
+
 
 int date::operator-(const date &minus) const {
+  return day - minus.day; /*
   if (day[1] < minus.day[1]) {
     return -1;
   }
@@ -30,24 +49,37 @@ int date::operator-(const date &minus) const {
     }
   }
   return 62 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
+*/
 }
 
 bool date::operator<(const date &other) const {
-  return strcmp(this->day, other.day) < 0;
+  return day < other.day;
+  //return strcmp(this->day, other.day) < 0;
 }
 
-timing::timing() {
-  strcpy(hm, "");
+bool date::operator==(const date &other) const {
+  return day == other.day;
+}
+
+/*timing::timing() {
+  //strcpy(hm, "");
+  hm = 0;
 }
 
 timing::timing(char *hm_) {
-  strcpy(hm, hm_);
+  //strcpy(hm, hm_);
+  hm = (hm_[0] - '0') * 600 + (hm_[1] - '0') *  60 + (hm_[3] - '0') * 10 + (hm_[4] - '0');
 }
 
+bool timing::operator<(const timing &other) const {
+  return hm < other.hm;
+}*/
+
 bool date_time::operator<(const date_time &other) const {
-  int cmp = strcmp(this->date_.day, other.date_.day);
+  return time < other.time;
+  /*int cmp = strcmp(this->date_.day, other.date_.day);
   if (cmp != 0) return cmp < 0;
-  return strcmp(this->time_.hm, other.time_.hm) < 0;
+  return strcmp(this->time_.hm, other.time_.hm) < 0;*/
 }
 
 date_time::date_time() {
@@ -55,10 +87,23 @@ date_time::date_time() {
   //memset(time_.hm, 0, sizeof(time_));
 }
 
-date_time::date_time(date d, timing t) : date_(d), time_(t) {
+/*date_time::date_time(date d, timing t) : date_(d), time_(t) {
+}*/
+
+date_time::date_time(const char *d, const char *t = "00:00") {
+  time = date(d).day * 1440 + (t[0] - '0') * 600 + (t[1] - '0') * 60 + (t[3] - '0') * 10 + (t[4] - '0');
 }
 
+date_time::date_time(date d, const char *t = "00:00") {
+  time = d.day * 1440 + (t[0] - '0') * 600 + (t[1] - '0') * 60 + (t[3] - '0') * 10 + (t[4] - '0');
+}
+
+date_time::date_time(int t) : time(t) {
+}
+
+
 date_time date_time::operator+(int add) const {
+  return time + add; /*
   char ret1[6];
   ret1[2] = ':';
   //minute
@@ -98,10 +143,36 @@ date_time date_time::operator+(int add) const {
   ret2[3] = '0' + s / 10;
   ret2[4] = '0' + s % 10;
   ret1[5] = ret2[5] = '\0';
-  return date_time(date(ret2), timing(ret1));
+  return date_time(date(ret2), timing(ret1));*/
 }
 
+std::string date_time::to_string() {
+  int tmp = time, deal;
+  std::string s;
+  deal = tmp % 60;
+  s = ":" + std::to_string(deal / 10) + std::to_string(deal % 10);
+  tmp /= 60;
+  deal = tmp % 24;
+  s = " " + std::to_string(deal / 10) + std::to_string(deal % 10) + s;
+  tmp /= 24;
+  if (tmp <= 30) {
+    s = "06-" + std::to_string(tmp / 10) + std::to_string(tmp % 10) + s;
+  } else if (tmp <= 61) {
+    tmp -= 30;
+    s = "07-" + std::to_string(tmp / 10) + std::to_string(tmp % 10) + s;
+  } else if (tmp <= 92) {
+    tmp -= 61;
+    s = "08-" + std::to_string(tmp / 10) + std::to_string(tmp % 10) + s;
+  } else {
+    tmp -= 92;
+    s = "09-" + std::to_string(tmp / 10) + std::to_string(tmp % 10) + s;
+  }
+  return s;
+}
+
+
 int date_time::operator-(const date_time &other) const {
+  return time - other.time; /*
   int a, b;
   if (this->date_.day[1] == '6') {
     a = 0;
@@ -132,5 +203,5 @@ int date_time::operator-(const date_time &other) const {
   b += (other.time_.hm[0] - '0') * 10 + (other.time_.hm[1] - '0');
   b *= 60;
   b += (other.time_.hm[3] - '0') * 10 + (other.time_.hm[4] - '0');
-  return a - b;
+  return a - b;*/
 }
