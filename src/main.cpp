@@ -10,7 +10,7 @@ int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/2.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/47.in");
   //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
@@ -25,7 +25,10 @@ int main() {
     std::cout << t << ' ';
     char idx[12];
     //memset(idx, 0, sizeof(idx));
-    strcpy(idx, t);
+    strcpy(idx, t);/*
+    if(strcmp(idx, "[1910288]") == 0) {
+      std::cout << '\n';
+    }*/
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
       user_basic u;

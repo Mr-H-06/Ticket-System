@@ -29,7 +29,7 @@ int date::operator-(const date &minus) const {
       return 32 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
     }
   }
-  return 63 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
+  return 62 + (day[3] - '0') * 10 + day[4] - '0' + ('3' - minus.day[3]) * 10 - minus.day[4] + '0';
 }
 
 bool date::operator<(const date &other) const {

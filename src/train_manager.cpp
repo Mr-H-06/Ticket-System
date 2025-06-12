@@ -76,7 +76,7 @@ void TrainManager::query_ticket(date d, char *from, char *to, bool type) {
     auto y = find_to[j];
     if (x < y) {
       ++i;
-    } else if (y < x){
+    } else if (y < x) {
       ++j;
     } else {
       auto find = basic.find(x.trainId);
@@ -161,9 +161,6 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
   sjtu::map<std::string, sjtu::vector<transfer_info> > transfer;
   for (auto x: find_from) {
     auto find = basic.find(x.trainId);
-    if (d < date(find[0].saleDate[0]) || date(find[0].saleDate[1]) < d) {
-      continue;
-    }
     seats s;
     seat.find(find[0].seatAddr, s);
     int f, k, del;
@@ -177,14 +174,14 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
     info.seat = 1e9;
     strcpy(info.trainId, x.trainId);
     if (f > 0) {
-      info.leaving_time = date_time(d, find[0].startTime) + find[0].stopoverTimes[f - 1];
+      info.leaving_time = date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[f - 1];
+      del = d - info.leaving_time.date_;
       info.leaving_time.date_ = d;
-      del = d - (date_time(find[0].saleDate[0], find[0].startTime) + find[0].stopoverTimes[f - 1]).date_;
     } else {
       info.leaving_time = date_time(d, find[0].startTime);
       del = d - date(find[0].saleDate[0]);
     }
-    if (del < 0) continue;
+    if (del < 0 || del > date(find[0].saleDate[1]) - date(find[0].saleDate[0])) continue;
     for (k = f + 1; k < find[0].stationNum; ++k) {
       info.price += find[0].price[k - 1];
       info.seat = std::min(info.seat, s.seat[del][k - 1]);
