@@ -69,7 +69,7 @@ public:
 
   OrderManager();
 
-  BPlusTree<order_basic, 21, 22> basic;
-  BPlusTree<waiting, 21, 24> waiting_queue;
+  BPlusTree<order_basic, 21, 24> basic;
+  BPlusTree<waiting, 21, 27> waiting_queue;
 };
 #endif

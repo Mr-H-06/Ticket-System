@@ -5,12 +5,12 @@
 #include <cstdio>
 
 int main() {
-  /*
-    std::cout << sizeof(Node<train_basic, 21, 6>) << '\n';
+    /*
+    std::cout << sizeof(Node<train_basic, 21, 12>) << '\n';
     std::cout << sizeof(Node<station_idx, 41, 61>) << '\n';
     std::cout << sizeof(Node<user_basic, 21, 35>) << '\n';
-    std::cout << sizeof(Node<order_basic, 21, 22>) << '\n';
-    std::cout << sizeof(Node<waiting, 21, 24>) << '\n';
+    std::cout << sizeof(Node<order_basic, 21, 24>) << '\n';
+    std::cout << sizeof(Node<waiting, 21, 27>) << '\n';
     std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 4 << ' ' << 4096 * 8 << ' ' << 4096 * 16;
     return 0;*/
   //clock_t start = clock();
@@ -20,17 +20,17 @@ int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
-  //freopen("out.out", "w", stdout);
+  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
+  freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
   UserManager user;
   TrainManager train;
-  //user.clear();
-  //order.clear();
-  //train.clear();
-  //while (std::getline(file, line)) {
-  while (std::getline(std::cin, line)) {
+  user.clear();
+  order.clear();
+  train.clear();
+  while (std::getline(file, line)) {
+  //while (std::getline(std::cin, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
     char idx[12];
