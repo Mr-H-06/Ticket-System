@@ -256,6 +256,6 @@ public:
 
   BPlusTree<train_basic, 21, 6> basic;
   Block seat;
-  BPlusTree<station_idx, 41, 60> station;
+  BPlusTree<station_idx, 41, 61> station;
 };
 #endif

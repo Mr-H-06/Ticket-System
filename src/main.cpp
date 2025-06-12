@@ -6,8 +6,8 @@
 
 int main() {/*
   std::cout << sizeof(Node<train_basic, 21, 6>) << '\n';
-  std::cout << sizeof(Node<station_idx, 41, 60>) << '\n';
-  std::cout << sizeof(Node<user_basic, 21, 34>) << '\n';
+  std::cout << sizeof(Node<station_idx, 41, 61>) << '\n';
+  std::cout << sizeof(Node<user_basic, 21, 35>) << '\n';
   std::cout << sizeof(Node<order_basic, 21, 22>) << '\n';
   std::cout << sizeof(Node<waiting, 21, 24>) << '\n';
   std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 4 << ' ' << 4096 * 8 << ' ' << 4096 * 16;
@@ -17,7 +17,7 @@ int main() {/*
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/34.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/14.in");
   //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
