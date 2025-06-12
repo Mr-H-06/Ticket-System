@@ -20,8 +20,8 @@ int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
-  freopen("out.out", "w", stdout);
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
+  //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
   UserManager user;
