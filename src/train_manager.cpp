@@ -195,7 +195,7 @@ void TrainManager::query_transfer(date d, char *from, char *to, bool type) {
   }
 
   int ans_time = 1e9, ans_price = 1e9;
-  char trans_station[51];
+  char trans_station[41];
   transfer_info first, second, present_second;
   if (type) {
     for (auto x: find_to) {

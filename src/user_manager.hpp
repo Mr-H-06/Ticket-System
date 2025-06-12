@@ -54,7 +54,7 @@ public:
 
   UserManager();
 
-  BPlusTree<user_basic, 21, 42> basic;
+  BPlusTree<user_basic, 21, 34> basic;
 
   struct signed_in {
     char user[21];

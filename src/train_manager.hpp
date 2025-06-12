@@ -10,12 +10,12 @@
 struct train_basic {
   //char trainId[20];     -->key
   int stationNum; //[0, 20];
-  char stations[100][41]; //Chinese
+  char stations[95][41]; //Chinese
   int seatNum; //   <=1e5;
-  int price[100]; // <=1e5
+  int price[95]; // <=1e5
   char startTime[6]; // hh:mm
-  int travelTimes[100]; // <=1e4       sum
-  int stopoverTimes[100]; // <=1e4     sum
+  int travelTimes[95]; // <=1e4       sum
+  int stopoverTimes[95]; // <=1e4     sum
   char saleDate[2][6]; //start & end mm-dd
   char type;
   bool release;
@@ -254,8 +254,8 @@ public:
     date_time arriving_time;
   };
 
-  BPlusTree<train_basic, 21, 14> basic;
+  BPlusTree<train_basic, 21, 16> basic;
   Block seat;
-  BPlusTree<station_idx, 51, 136> station;
+  BPlusTree<station_idx, 41, 122> station;
 };
 #endif

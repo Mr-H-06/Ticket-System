@@ -4,13 +4,20 @@
 #include "user_manager.hpp"
 #include <cstdio>
 
-int main() {
+int main() {/*
+  std::cout << sizeof(Node<train_basic, 21, 16>) << '\n';
+  std::cout << sizeof(Node<station_idx, 41, 244>) << '\n';
+  std::cout << sizeof(Node<user_basic, 21, 70>) << '\n';
+  std::cout << sizeof(Node<order_basic, 21, 44>) << '\n';
+  std::cout << sizeof(Node<waiting, 21, 48>) << '\n';
+  std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 3 << ' ' << 4096 * 4;
+  return 0;*/
   //clock_t start = clock();
   //double timek = 0;
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/47.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
   //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
@@ -25,14 +32,11 @@ int main() {
     std::cout << t << ' ';
     char idx[12];
     //memset(idx, 0, sizeof(idx));
-    strcpy(idx, t);/*
-    if(strcmp(idx, "[1910288]") == 0) {
-      std::cout << '\n';
-    }*/
+    strcpy(idx, t);
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
       user_basic u;
-      char cur_username[25], username[25];
+      char cur_username[21], username[21];
       t = strtok(nullptr, " ");
       while (t) {
         if (strcmp(t, "-c") == 0) {
@@ -276,7 +280,7 @@ int main() {
       t = strtok(nullptr, " ");
       bool type = false;
       date d;
-      char from[51], to[51];
+      char from[41], to[41];
       while (t) {
         if (strcmp(t, "-s") == 0) {
           //t = strtok(nullptr, " ");
@@ -379,7 +383,7 @@ int main() {
       }
     } else if (strcmp(t, "refund_ticket") == 0) {
       t = strtok(nullptr, " ");
-      char username[51];
+      char username[41];
       int n = 1;
       while (t) {
         if (strcmp(t, "-u") == 0) {

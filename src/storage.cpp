@@ -94,14 +94,14 @@ private:
   }
 
   int allocate_node() {
-    //int addr = 0;
-    //if (head == rear) {
+    int addr = 0;
+    if (head == rear) {
       file.seekp(0, std::ios::end);
-      int addr = file.tellp();
-    //} else {
-    //  addr = queue[head];
-    //  head = (head + 1) % 100001;
-    //}
+      addr = file.tellp();
+    } else {
+      addr = queue[head];
+      head = (head + 1) % 100001;
+    }
     //Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
     //new_node.self_addr = addr;
     //write_node(new_node);
@@ -362,8 +362,8 @@ private:
       }
       write_node(left);
       handle_merge(parent);
-      //queue[rear] = node.self_addr;
-      //rear = (rear + 1) % 100001;
+      queue[rear] = node.self_addr;
+      rear = (rear + 1) % 100001;
     } else if (pos < parent.num_entries) {
       Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> right;
       read_node(parent.children[pos + 1], right);
@@ -411,8 +411,8 @@ private:
         root = node;
         node.parent = INVALID_ADDR;
       }
-      //queue[rear] = right.self_addr;
-      //rear = (rear + 1) % 100001;
+      queue[rear] = right.self_addr;
+      rear = (rear + 1) % 100001;
       write_node(node);
       handle_merge(parent);
     }
