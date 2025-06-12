@@ -5,19 +5,19 @@
 #include <cstdio>
 
 int main() {/*
-  std::cout << sizeof(Node<train_basic, 21, 16>) << '\n';
-  std::cout << sizeof(Node<station_idx, 41, 244>) << '\n';
-  std::cout << sizeof(Node<user_basic, 21, 70>) << '\n';
-  std::cout << sizeof(Node<order_basic, 21, 44>) << '\n';
-  std::cout << sizeof(Node<waiting, 21, 48>) << '\n';
-  std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 3 << ' ' << 4096 * 4;
+  std::cout << sizeof(Node<train_basic, 21, 6>) << '\n';
+  std::cout << sizeof(Node<station_idx, 41, 60>) << '\n';
+  std::cout << sizeof(Node<user_basic, 21, 34>) << '\n';
+  std::cout << sizeof(Node<order_basic, 21, 22>) << '\n';
+  std::cout << sizeof(Node<waiting, 21, 24>) << '\n';
+  std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 4 << ' ' << 4096 * 8 << ' ' << 4096 * 16;
   return 0;*/
   //clock_t start = clock();
   //double timek = 0;
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
+  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/34.in");
   //freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
@@ -301,9 +301,9 @@ int main() {/*
         }
         t = strtok(nullptr, " ");
       }
-      //clock_t s = clock();
+      clock_t s = clock();
       train.query_ticket(d, from, to, type); //type = false -> time / true -> cost
-      //clock_t t = clock();
+      clock_t t = clock();
       //timek += t - s;
     } else if (strcmp(t, "query_transfer") == 0) {
       t = strtok(nullptr, " ");
@@ -406,9 +406,9 @@ int main() {/*
       order.clear();
     } else if (strcmp(t, "exit") == 0) {
       std::cout << "bye\n";
-      //clock_t end = clock();
-      //std::cout << double(end - start) / CLOCKS_PER_SEC << '\n';
-      //std::cout << timek / CLOCKS_PER_SEC << '\n';
+     //clock_t end = clock();
+     //std::cout << double(end - start) / CLOCKS_PER_SEC << '\n';
+     //std::cout << timek / CLOCKS_PER_SEC << '\n';
       return 0;
     }
   }
