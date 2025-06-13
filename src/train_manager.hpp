@@ -7,7 +7,7 @@
 #include <fstream>
 #include "map.hpp"
 
-struct train_basic {
+struct TrainBasic {
   //char trainId[20];     -->key
   int stationNum; //[0, 20];
   char stations[95][41]; //Chinese
@@ -17,12 +17,12 @@ struct train_basic {
   int travelTimes[95]; // <=1e4       sum
   int stopoverTimes[95]; // <=1e4     sum
   //char saleDate[2][6]; //start & end mm-dd
-  date saleDate[2];
+  Date saleDate[2];
   char type;
   bool release;
   int seatAddr;
 
-  train_basic() : release(false) {
+  TrainBasic() : release(false) {
     //memset(stations, 0, sizeof(stations));
     //memset(startTime, 0, sizeof(startTime));
     //memset(travelTimes, 0, sizeof(travelTimes));
@@ -30,7 +30,7 @@ struct train_basic {
     //memset(saleDate, 0, sizeof(saleDate));
   }
 
-  bool operator<(const train_basic &other) const {
+  bool operator<(const TrainBasic &other) const {
     /*
         if (stationNum != other.stationNum) return stationNum < other.stationNum;
         if (type != other.type) return type < other.type;
@@ -57,7 +57,7 @@ struct train_basic {
     return false;
   }
 
-  bool operator==(const train_basic &other) const {
+  bool operator==(const TrainBasic &other) const {
     /*
         if (stationNum != other.stationNum) return false;
         if (type != other.type) return false;
@@ -77,51 +77,51 @@ struct train_basic {
     return false;
   }
 
-  bool operator!=(const train_basic &other) const {
+  bool operator!=(const TrainBasic &other) const {
     return !(*this == other);
     return false;
   }
 };
 
-struct seats {
+struct Seats {
   int seat[92][23];
 
-  seats() {
+  Seats() {
     //memset(seat, 0, sizeof(seat));
   };
 
-  bool operator<(const seats &other) const {
+  bool operator<(const Seats &other) const {
     return seat[0][0] < other.seat[0][0];
     return false;
   }
 
-  bool operator==(const seats &other) const {
+  bool operator==(const Seats &other) const {
     return seat[0][0] == other.seat[0][0];
     return false;
   }
 
-  bool operator!=(const seats &other) const {
+  bool operator!=(const Seats &other) const {
     return !(*this == other);
     return false;
   }
 };
 
-struct station_idx {
+struct StationIdx {
   char trainId[21];
 
-  station_idx();
+  StationIdx();
 
-  station_idx(char *trainId_);
+  StationIdx(char *trainId_);
 
-  bool operator!=(const station_idx &other) const {
+  bool operator!=(const StationIdx &other) const {
     return !(*this == other);
   }
 
-  bool operator==(const station_idx &other) const {
+  bool operator==(const StationIdx &other) const {
     return strcmp(trainId, other.trainId) == 0;
   }
 
-  bool operator<(const station_idx &other) const {
+  bool operator<(const StationIdx &other) const {
     return strcmp(trainId, other.trainId) < 0;
   }
 };
@@ -151,22 +151,22 @@ public:
     file.close();
   }
 
-  int insert(seats &seat) {
+  int insert(Seats &seat) {
     file.seekp(0, std::ios::end);
     int addr = file.tellp();
     file.seekp(addr);
-    file.write(reinterpret_cast<char *>(&seat), sizeof(seats));
+    file.write(reinterpret_cast<char *>(&seat), sizeof(Seats));
     return addr;
   }
 
-  void modify(int addr, seats &seat) {
+  void modify(int addr, Seats &seat) {
     file.seekp(addr);
-    file.write(reinterpret_cast<char *>(&seat), sizeof(seats));
+    file.write(reinterpret_cast<char *>(&seat), sizeof(Seats));
   }
 
-  void find(int addr, seats &seat) {
+  void find(int addr, Seats &seat) {
     file.seekg(addr);
-    file.read(reinterpret_cast<char *>(&seat), sizeof(seats));
+    file.read(reinterpret_cast<char *>(&seat), sizeof(Seats));
   }
 
 
@@ -180,25 +180,25 @@ public:
 
 class TrainManager {
 public:
-  bool add_train(char *trainId, train_basic &train, seats &train_seat);
+  bool addTrain(char *trainId, TrainBasic &train, Seats &train_seat);
 
-  bool delete_train(char *trainId);
+  bool deleteTrain(char *trainId);
 
-  bool release_train(char *trainId);
+  bool releaseTrain(char *trainId);
 
-  bool query_train(date d, char *trainId);
+  bool queryTrain(Date d, char *trainId);
 
-  void query_ticket(date d, char *from, char *to, bool type); //type = false -> time / true -> cost
+  void queryTicket(Date d, char *from, char *to, bool type); //type = false -> time / true -> cost
 
-  void query_transfer(date d, char *from, char *to, bool type); // type = false -> time / true -> cost
+  void queryTransfer(Date d, char *from, char *to, bool type); // type = false -> time / true -> cost
 
   void clear();
 
   TrainManager();
 
-  struct query_info {
-    date_time leaving_time;
-    date_time arriving_time;
+  struct QueryInfo {
+    DateTime leaving_time;
+    DateTime arriving_time;
     char trainId[21];
     int price;
     int time;
@@ -206,7 +206,7 @@ public:
   };
 
   struct CompareTime {
-    bool operator()(const query_info &a, const query_info &b) {/*
+    bool operator()(const QueryInfo &a, const QueryInfo &b) {/*
       if (a.time != b.time) return a.time < b.time;
       return strcmp(a.trainId, b.trainId) < 0;*/
       return a.time < b.time || (a.time == b.time && strcmp(a.trainId, b.trainId) < 0);
@@ -214,7 +214,7 @@ public:
   };
 
   struct CompareCost {
-    bool operator()(const query_info &a, const query_info &b) {/*
+    bool operator()(const QueryInfo &a, const QueryInfo &b) {/*
       if (a.price != b.price) return a.price < b.price;
       return strcmp(a.trainId, b.trainId) < 0;*/
       return a.price < b.price || (a.price == b.price && strcmp(a.trainId, b.trainId) < 0);
@@ -248,17 +248,17 @@ public:
     sort_range(0, vec.size() - 1);
   }
 
-  struct transfer_info {
+  struct TransferInfo {
     char trainId[21];
     int seat;
     int price;
     //int time;
-    date_time leaving_time;
-    date_time arriving_time;
+    DateTime leaving_time;
+    DateTime arriving_time;
   };
 
-  BPlusTree<train_basic, 21, 24> basic;
+  BPlusTree<TrainBasic, 21, 6> basic;
   Block seat;
-  BPlusTree<station_idx, 41, 61> station;
+  BPlusTree<StationIdx, 41, 61> station;
 };
 #endif

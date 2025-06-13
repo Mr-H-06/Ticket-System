@@ -75,7 +75,7 @@ private:
   int root_addr;
   int first_leaf_addr;
   Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> root;
-  int head, rear, queue[100001];
+  int head, rear, queue[1000001];
 
   void read_node(int addr, Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> &node) {
     if (addr == INVALID_ADDR) return; /*
@@ -100,7 +100,7 @@ private:
       addr = file.tellp();
     } else {
       addr = queue[head];
-      head = (head + 1) % 100001;
+      head = (head + 1) % 1000001;
     }
     //Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> new_node;
     //new_node.self_addr = addr;
@@ -363,7 +363,7 @@ private:
       write_node(left);
       handle_merge(parent);
       queue[rear] = node.self_addr;
-      rear = (rear + 1) % 100001;
+      rear = (rear + 1) % 1000001;
     } else if (pos < parent.num_entries) {
       Node<T, MAX_KEY_SIZE, MAX_KEY_PER_NODE> right;
       read_node(parent.children[pos + 1], right);
@@ -412,7 +412,7 @@ private:
         node.parent = INVALID_ADDR;
       }
       queue[rear] = right.self_addr;
-      rear = (rear + 1) % 100001;
+      rear = (rear + 1) % 1000001;
       write_node(node);
       handle_merge(parent);
     }

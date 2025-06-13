@@ -6,70 +6,70 @@
 #include "train_manager.hpp"
 #include "user_manager.hpp"
 
-struct order_basic {
+struct OrderBasic {
   // username - index
   int idx;
   char trainId[21];
   char status[11];
   char from[41];
   char to[41];
-  date_time leaving_time;
-  date_time arriving_time;
+  DateTime leaving_time;
+  DateTime arriving_time;
   int price;
   int num;
 
-  order_basic() = default;
+  OrderBasic() = default;
 
-  bool operator<(const order_basic &other) const {
+  bool operator<(const OrderBasic &other) const {
     return idx > other.idx;
   }
 
-  bool operator==(const order_basic &other) const {
+  bool operator==(const OrderBasic &other) const {
     return idx == other.idx;
   }
 
-  bool operator!=(const order_basic &other) const {
+  bool operator!=(const OrderBasic &other) const {
     return idx != other.idx;
   }
 };
 
-struct waiting { //trainId
+struct Waiting { //trainId
   int idx;
   char username[21];
   char from[41];
   char to[41];
-  date_time leaving_time;
-  date_time arriving_time;
+  DateTime leaving_time;
+  DateTime arriving_time;
   int num;
 
-  waiting() = default;
+  Waiting() = default;
 
-  bool operator<(const waiting &other)const {
+  bool operator<(const Waiting &other)const {
     return idx < other.idx;
   }
 
-  bool operator==(const waiting &other) const {
+  bool operator==(const Waiting &other) const {
     return idx == other.idx;
   }
 
-  bool operator!=(const waiting &other)const {
+  bool operator!=(const Waiting &other)const {
     return idx != other.idx;
   }
 };
 
 class OrderManager {
 public:
-  bool buy_ticket(char *username,order_basic &order, bool type, TrainManager &train, UserManager &user);
+  bool buyTicket(char *username,OrderBasic &order, bool type, TrainManager &train, UserManager &user);
 
-  bool query_order(char *username, UserManager &user);
+  bool queryOrder(char *username, UserManager &user);
 
-  bool refund_ticket(char *username, int n, UserManager &user, TrainManager &train);
+  bool refundTicket(char *username, int n, UserManager &user, TrainManager &train);
 
   void clear();
 
   OrderManager();
 
-  BPlusTree<order_basic, 21, 24> basic;
-  BPlusTree<waiting, 21, 27> waiting_queue;
+  BPlusTree<OrderBasic, 21, 24> basic;
+  BPlusTree<Waiting, 21, 27> waiting_queue;
 };
 #endif

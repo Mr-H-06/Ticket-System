@@ -38,19 +38,19 @@ struct user_basic {
 
 class UserManager {
 public:
-  bool add_user(char *cur_username, char *username, user_basic &user);
+  bool addUser(char *cur_username, char *username, user_basic &user);
 
   bool login(char *username, char *password);
 
   bool logout(char *username);
 
-  bool query_profile(char *cur_username, char *username);
+  bool queryProfile(char *cur_username, char *username);
 
-  bool modify_profile(char *cur_username, char *username, user_basic &user);
+  bool modifyProfile(char *cur_username, char *username, user_basic &user);
 
   void clear();
 
-  bool check_log(char *username);
+  bool checkLogin(char *username);
 
   UserManager();
 

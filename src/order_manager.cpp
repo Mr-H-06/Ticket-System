@@ -1,11 +1,11 @@
 #include "order_manager.hpp"
 #include "user_manager.hpp"
 
-bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, TrainManager &train, UserManager &user) {
-  if (!user.check_log(username)) return false;
+bool OrderManager::buyTicket(char *username, OrderBasic &order, bool type, TrainManager &train, UserManager &user) {
+  if (!user.checkLogin(username)) return false;
   auto find_train = train.basic.find(order.trainId);
   if (order.num > find_train[0].seatNum) return false;
-  seats find_seat;
+  Seats find_seat;
   train.seat.find(find_train[0].seatAddr, find_seat);
   if (find_train.empty() || !find_train[0].release) return false;
   int f, t;
@@ -28,17 +28,17 @@ bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, Tra
                                       stopoverTimes[f - 1]).date_;
     order.leaving_time.time_ = (date_time(order.leaving_time.date_, find_train[0].startTime) + find_train[0].
     stopoverTimes[f - 1]).time_;*/
-    del = date(order.leaving_time) - date(date_time(find_train[0].saleDate[0], find_train[0].startTime) + find_train[0].
+    del = Date(order.leaving_time) - Date(DateTime(find_train[0].saleDate[0], find_train[0].startTime) + find_train[0].
                                       stopoverTimes[f - 1]);
-    order.leaving_time = date(order.leaving_time).day * 1440 + (date_time(order.leaving_time, find_train[0].startTime) + find_train[0].
+    order.leaving_time = Date(order.leaving_time).day * 1440 + (DateTime(order.leaving_time, find_train[0].startTime) + find_train[0].
                                 stopoverTimes[f - 1]).time % 1440;
     order.arriving_time = order.leaving_time + (find_train[0].travelTimes[t - 1] - find_train[0].stopoverTimes[f - 1]);
   } else {
-    del = date(order.leaving_time) - date(find_train[0].saleDate[0]);
-    order.leaving_time =  date_time(date(order.leaving_time), find_train[0].startTime);
+    del = Date(order.leaving_time) - Date(find_train[0].saleDate[0]);
+    order.leaving_time =  DateTime(Date(order.leaving_time), find_train[0].startTime);
     order.arriving_time = order.leaving_time + find_train[0].travelTimes[t - 1];
   }
-  if (del < 0 || del > date(find_train[0].saleDate[1]) - date(find_train[0].saleDate[0])) return false;
+  if (del < 0 || del > Date(find_train[0].saleDate[1]) - Date(find_train[0].saleDate[0])) return false;
   order.price = 0;
   for (int i = f; i < t; ++i) {
     order.price += find_train[0].price[i];
@@ -46,7 +46,7 @@ bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, Tra
   for (int i = f; i < t; ++i) {
     if (find_seat.seat[del][i] < order.num) {
       if (type) {
-        waiting w;
+        Waiting w;
         w.arriving_time = order.arriving_time;
         w.leaving_time = order.leaving_time;
         strcpy(w.from, order.from);
@@ -75,21 +75,21 @@ bool OrderManager::buy_ticket(char *username, order_basic &order, bool type, Tra
   return true;
 }
 
-bool OrderManager::query_order(char *username, UserManager &user) {
-  if (!user.check_log(username)) {
+bool OrderManager::queryOrder(char *username, UserManager &user) {
+  if (!user.checkLogin(username)) {
     return false;
   }
   auto find = basic.find(username);
   std::cout << find.size() << '\n';
   for (auto x: find) {
-    std::cout << '[' << x.status << "] " << x.trainId << ' ' << x.from << ' ' << x.leaving_time.to_string() << " -> " << x.to << ' ' << x.arriving_time.to_string() << ' ' << x.price << ' ' << x.num << '\n';
+    std::cout << '[' << x.status << "] " << x.trainId << ' ' << x.from << ' ' << x.leaving_time.toString() << " -> " << x.to << ' ' << x.arriving_time.toString() << ' ' << x.price << ' ' << x.num << '\n';
   }
   return true;
 }
 
 
-bool OrderManager::refund_ticket(char *username, int n, UserManager &user, TrainManager &train) {
-  if (!user.check_log(username)) {
+bool OrderManager::refundTicket(char *username, int n, UserManager &user, TrainManager &train) {
+  if (!user.checkLogin(username)) {
     return false;
   }
   auto find = basic.find(username);
@@ -113,7 +113,7 @@ bool OrderManager::refund_ticket(char *username, int n, UserManager &user, Train
   strcpy(find[n - 1].status, "refunded");
   basic.insert(username, find[n - 1]);
   auto find_train = train.basic.find(find[n - 1].trainId);
-  seats seat;
+  Seats seat;
   train.seat.find(find_train[0].seatAddr, seat);
   //train.seat.remove(find[n - 1].trainId, seat[0]);
   int f, t;
@@ -129,10 +129,10 @@ bool OrderManager::refund_ticket(char *username, int n, UserManager &user, Train
   }
   int del;
   if (f > 0) {
-    del = date(find[n - 1].leaving_time) - date((date_time(find_train[0].saleDate[0], find_train[0].startTime) + find_train[
+    del = Date(find[n - 1].leaving_time) - Date((DateTime(find_train[0].saleDate[0], find_train[0].startTime) + find_train[
                                               0].stopoverTimes[f - 1]));
   } else {
-    del = date(find[n - 1].leaving_time) - find_train[0].saleDate[0];
+    del = Date(find[n - 1].leaving_time) - find_train[0].saleDate[0];
   }
   for (int i = f; i < t; ++i) {
     seat.seat[del][i] += find[n - 1].num;
@@ -152,9 +152,9 @@ bool OrderManager::refund_ticket(char *username, int n, UserManager &user, Train
       }
     }
     if (f == 0) {
-      del = date(x.leaving_time) - find_train[0].saleDate[0];
+      del = Date(x.leaving_time) - find_train[0].saleDate[0];
     } else {
-      del = date(x.leaving_time) - date(date_time(find_train[0].saleDate[0], find_train[0].startTime) + find_train[0].
+      del = Date(x.leaving_time) - Date(DateTime(find_train[0].saleDate[0], find_train[0].startTime) + find_train[0].
                                     stopoverTimes[f - 1]);
     }
     bool check = true;

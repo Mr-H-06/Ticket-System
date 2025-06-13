@@ -63,7 +63,7 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      if (user.add_user(cur_username, username, u)) {
+      if (user.addUser(cur_username, username, u)) {
         std::cout << "0\n";
       } else {
         std::cout << "-1\n";
@@ -112,7 +112,7 @@ int main() {
         t = strtok(nullptr, " ");
       }
       //clock_t a = clock();
-      if (!user.query_profile(cur_username, username)) {
+      if (!user.queryProfile(cur_username, username)) {
         std::cout << "-1\n";
       }
       //clock_t b = clock();
@@ -143,12 +143,12 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      if (!user.modify_profile(cur_username, username, u)) {
+      if (!user.modifyProfile(cur_username, username, u)) {
         std::cout << "-1\n";
       }
     } else if (strcmp(t, "add_train") == 0) {
-      train_basic newtrain;
-      seats newtrain_seats;
+      TrainBasic newtrain;
+      Seats newtrain_seats;
       char trainId[21], station_temp[5000], date_temp[12], price_temp[600], travelTime_temp[500], stopoverTimes_temp[
         500];
       //memset(trainId, 0, 21);
@@ -207,10 +207,10 @@ int main() {
       // saleDate
       //t = strtok(date_temp, "|");
       //strcpy(newtrain.saleDate[0], strtok(date_temp, "|"));
-      newtrain.saleDate[0] = date(strtok(date_temp, "|"));
+      newtrain.saleDate[0] = Date(strtok(date_temp, "|"));
       //t = strtok(nullptr, "|");
       //strcpy(newtrain.saleDate[1], strtok(nullptr, "|"));
-      newtrain.saleDate[1] = date(strtok(nullptr, "|"));
+      newtrain.saleDate[1] = Date(strtok(nullptr, "|"));
       // price
       ins = 0;
       t = strtok(price_temp, "|");
@@ -238,12 +238,12 @@ int main() {
         newtrain.travelTimes[i + 1] += newtrain.stopoverTimes[i];
       }
       // seats
-      for (int i = date(newtrain.saleDate[1]) - date(newtrain.saleDate[0]); i >= 0; --i) {
+      for (int i = Date(newtrain.saleDate[1]) - Date(newtrain.saleDate[0]); i >= 0; --i) {
         for (int j = 0; j < newtrain.stationNum - 1; ++j) {
           newtrain_seats.seat[i][j] = newtrain.seatNum;
         }
       }
-      if (train.add_train(trainId, newtrain, newtrain_seats)) {
+      if (train.addTrain(trainId, newtrain, newtrain_seats)) {
         std::cout << "0\n";
       } else {
         std::cout << "-1\n";
@@ -253,7 +253,7 @@ int main() {
       if (strcmp(t, "-i") == 0) {
         t = strtok(nullptr, " ");
       }
-      if (train.delete_train(t)) {
+      if (train.deleteTrain(t)) {
         std::cout << "0\n";
       } else {
         std::cout << "-1\n";
@@ -263,7 +263,7 @@ int main() {
       if (strcmp(t, "-i") == 0) {
         t = strtok(nullptr, " ");
       }
-      if (train.release_train(t)) {
+      if (train.releaseTrain(t)) {
         std::cout << "0\n";
       } else {
         std::cout << "-1\n";
@@ -271,25 +271,25 @@ int main() {
     } else if (strcmp(t, "query_train") == 0) {
       t = strtok(nullptr, " ");
       char trainId[21];
-      date d;
+      Date d;
       while (t) {
         if (strcmp(t, "-i") == 0) {
           //t = strtok(nullptr, " ");
           strcpy(trainId, strtok(nullptr, " "));
         } else if (strcmp(t, "-d") == 0) {
           //t = strtok(nullptr, " ");
-          d = date(strtok(nullptr, " "));
+          d = Date(strtok(nullptr, " "));
           //strcpy(d.day, strtok(nullptr, " "));
         }
         t = strtok(nullptr, " ");
       }
-      if (!train.query_train(d, trainId)) {
+      if (!train.queryTrain(d, trainId)) {
         std::cout << "-1\n";
       }
     } else if (strcmp(t, "query_ticket") == 0) {
       t = strtok(nullptr, " ");
       bool type = false;
-      date d;
+      Date d;
       char from[41], to[41];
       while (t) {
         if (strcmp(t, "-s") == 0) {
@@ -300,7 +300,7 @@ int main() {
           strcpy(to, strtok(nullptr, " "));
         } else if (strcmp(t, "-d") == 0) {
           //t = strtok(nullptr, " ");
-          d = date(strtok(nullptr, " "));
+          d = Date(strtok(nullptr, " "));
           //strcpy(d.day, strtok(nullptr, " "));
         } else if (strcmp(t, "-p") == 0) {
           t = strtok(nullptr, " ");
@@ -313,13 +313,13 @@ int main() {
         t = strtok(nullptr, " ");
       }
       //clock_t a = clock();
-      train.query_ticket(d, from, to, type); //type = false -> time / true -> cost
+      train.queryTicket(d, from, to, type); //type = false -> time / true -> cost
       //clock_t b = clock();
       //time_query_ticket += b - a;
     } else if (strcmp(t, "query_transfer") == 0) {
       t = strtok(nullptr, " ");
       bool type = false;
-      date d;
+      Date d;
       char from[41], to[41];
       while (t) {
         if (strcmp(t, "-s") == 0) {
@@ -330,7 +330,7 @@ int main() {
           strcpy(to, strtok(nullptr, " "));
         } else if (strcmp(t, "-d") == 0) {
           //t = strtok(nullptr, " ");
-          d = date(strtok(nullptr, " "));
+          d = Date(strtok(nullptr, " "));
           //strcpy(d.day, strtok(nullptr, " "));
         } else if (strcmp(t, "-p") == 0) {
           t = strtok(nullptr, " ");
@@ -342,11 +342,11 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      train.query_transfer(d, from, to, type); //type = false -> time / true -> cost
+      train.queryTransfer(d, from, to, type); //type = false -> time / true -> cost
     } else if (strcmp(t, "buy_ticket") == 0) {
       t = strtok(nullptr, " ");
       char username[21];
-      order_basic neworder;
+      OrderBasic neworder;
       neworder.idx = 0;
       for (size_t i = 1; i < strlen(idx) - 1; ++i) {
         neworder.idx *= 10;
@@ -362,7 +362,7 @@ int main() {
           strcpy(neworder.trainId, strtok(nullptr, " "));
         } else if (strcmp(t, "-d") == 0) {
           //t = strtok(nullptr, " ");
-          neworder.leaving_time = date_time(strtok(nullptr, " "), "00:00");
+          neworder.leaving_time = DateTime(strtok(nullptr, " "), "00:00");
           //strcpy(neworder.leaving_time.date_.day, strtok(nullptr, " "));
         } else if (strcmp(t, "-n") == 0) {
           //t = strtok(nullptr, " ");
@@ -384,7 +384,7 @@ int main() {
         t = strtok(nullptr, " ");
       }
       //clock_t a = clock();
-      if (!order.buy_ticket(username, neworder, type, train, user)) {
+      if (!order.buyTicket(username, neworder, type, train, user)) {
         std::cout << "-1\n";
       }
       //clock_t b = clock();
@@ -394,7 +394,7 @@ int main() {
       if (strcmp(t, "-u") == 0) {
         t = strtok(nullptr, " ");
       }
-      if (!order.query_order(t, user)) {
+      if (!order.queryOrder(t, user)) {
         std::cout << "-1\n";
       }
     } else if (strcmp(t, "refund_ticket") == 0) {
@@ -411,7 +411,7 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      if (order.refund_ticket(username, n, user, train)) {
+      if (order.refundTicket(username, n, user, train)) {
         std::cout << "0\n";
       } else {
         std::cout << "-1\n";

@@ -7,7 +7,7 @@ user_basic::user_basic() {
   privilege = -1;
 }
 
-bool UserManager::add_user(char *cur_username, char *username, user_basic &user) {
+bool UserManager::addUser(char *cur_username, char *username, user_basic &user) {
   if (basic.empty()) {
     user.privilege = 10;
     basic.insert(username, user);
@@ -54,7 +54,7 @@ bool UserManager::logout(char *username) {
   return false;
 }
 
-bool UserManager::query_profile(char *cur_username, char *username) {
+bool UserManager::queryProfile(char *cur_username, char *username) {
   for (size_t i = 0; i < log.size(); ++i) {
     if (strcmp(log[i].user, cur_username) == 0) {
       auto find = basic.find(username);
@@ -69,7 +69,7 @@ bool UserManager::query_profile(char *cur_username, char *username) {
   return false;
 }
 
-bool UserManager::modify_profile(char *cur_username, char *username, user_basic &user) {
+bool UserManager::modifyProfile(char *cur_username, char *username, user_basic &user) {
   for (size_t i = 0; i < log.size(); ++i) {
     if (strcmp(log[i].user, cur_username) == 0) {
       auto find = basic.find(username);
@@ -103,7 +103,7 @@ void UserManager::clear() {
   log.clear();
 }
 
-bool UserManager::check_log(char *username) {
+bool UserManager::checkLogin(char *username) {
   for (size_t i = 0; i < log.size(); ++i) {
     if (strcmp(log[i].user, username) == 0) {
       return true;

@@ -2,11 +2,11 @@
 
 #include <ctime>
 
-date::date() {
+Date::Date() {
   day = 0;
 }
 
-date::date(const char *day_) {
+Date::Date(const char *day_) {
   //strcpy(day, day_);
   day = (day_[3] - '0') * 10 + day_[4] - '0';
   if (day_[1] == '6') {
@@ -22,11 +22,11 @@ date::date(const char *day_) {
   }
 }
 
-date::date(const date_time &d) : day(d.time / 1440) {
+Date::Date(const DateTime &d) : day(d.time / 1440) {
 }
 
 
-int date::operator-(const date &minus) const {
+int Date::operator-(const Date &minus) const {
   return day - minus.day; /*
   if (day[1] < minus.day[1]) {
     return -1;
@@ -52,12 +52,12 @@ int date::operator-(const date &minus) const {
 */
 }
 
-bool date::operator<(const date &other) const {
+bool Date::operator<(const Date &other) const {
   return day < other.day;
   //return strcmp(this->day, other.day) < 0;
 }
 
-bool date::operator==(const date &other) const {
+bool Date::operator==(const Date &other) const {
   return day == other.day;
 }
 
@@ -75,14 +75,14 @@ bool timing::operator<(const timing &other) const {
   return hm < other.hm;
 }*/
 
-bool date_time::operator<(const date_time &other) const {
+bool DateTime::operator<(const DateTime &other) const {
   return time < other.time;
   /*int cmp = strcmp(this->date_.day, other.date_.day);
   if (cmp != 0) return cmp < 0;
   return strcmp(this->time_.hm, other.time_.hm) < 0;*/
 }
 
-date_time::date_time() {
+DateTime::DateTime() {
   //memset(date_.day, 0, sizeof(date_));
   //memset(time_.hm, 0, sizeof(time_));
 }
@@ -90,19 +90,19 @@ date_time::date_time() {
 /*date_time::date_time(date d, timing t) : date_(d), time_(t) {
 }*/
 
-date_time::date_time(const char *d, const char *t = "00:00") {
-  time = date(d).day * 1440 + (t[0] - '0') * 600 + (t[1] - '0') * 60 + (t[3] - '0') * 10 + (t[4] - '0');
+DateTime::DateTime(const char *d, const char *t = "00:00") {
+  time = Date(d).day * 1440 + (t[0] - '0') * 600 + (t[1] - '0') * 60 + (t[3] - '0') * 10 + (t[4] - '0');
 }
 
-date_time::date_time(date d, const char *t = "00:00") {
+DateTime::DateTime(Date d, const char *t = "00:00") {
   time = d.day * 1440 + (t[0] - '0') * 600 + (t[1] - '0') * 60 + (t[3] - '0') * 10 + (t[4] - '0');
 }
 
-date_time::date_time(int t) : time(t) {
+DateTime::DateTime(int t) : time(t) {
 }
 
 
-date_time date_time::operator+(int add) const {
+DateTime DateTime::operator+(int add) const {
   return time + add; /*
   char ret1[6];
   ret1[2] = ':';
@@ -146,7 +146,7 @@ date_time date_time::operator+(int add) const {
   return date_time(date(ret2), timing(ret1));*/
 }
 
-std::string date_time::to_string() {
+std::string DateTime::toString() {
   int tmp = time, deal;
   std::string s;
   deal = tmp % 60;
@@ -171,7 +171,7 @@ std::string date_time::to_string() {
 }
 
 
-int date_time::operator-(const date_time &other) const {
+int DateTime::operator-(const DateTime &other) const {
   return time - other.time; /*
   int a, b;
   if (this->date_.day[1] == '6') {

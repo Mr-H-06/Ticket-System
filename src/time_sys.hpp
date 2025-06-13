@@ -4,24 +4,24 @@
 #include <cstring>
 #include <string>
 
-struct date_time;
+struct DateTime;
 
-struct date {
+struct Date {
   //char day[6];
-  friend struct date_time;
+  friend struct DateTime;
   int day;
 
-  date();
+  Date();
 
-  date(const char *day_);
+  Date(const char *day_);
 
-  date(const date_time &d);
+  Date(const DateTime &d);
 
-  int operator-(const date &minus) const;
+  int operator-(const Date &minus) const;
 
-  bool operator<(const date &other) const;
+  bool operator<(const Date &other) const;
 
-  bool operator==(const date &) const;
+  bool operator==(const Date &) const;
 };
 
 /*struct timing {
@@ -35,28 +35,28 @@ struct date {
   bool operator==(const timing &) const;
 };*/
 
-struct date_time {/*
+struct DateTime {/*
   date date_;
   timing time_;*/
   int time;
 
-  bool operator<(const date_time &other) const;
+  bool operator<(const DateTime &other) const;
 
-  date_time();
+  DateTime();
 
   //date_time(date d, timing t);
 
-  date_time(const char *d, const char *t);
+  DateTime(const char *d, const char *t);
 
-  date_time(date d, const char *t);
+  DateTime(Date d, const char *t);
 
-  date_time(int t);
+  DateTime(int t);
 
-  date_time operator+(int add) const;
+  DateTime operator+(int add) const;
 
-  std::string to_string();
+  std::string toString();
 
-  int operator-(const date_time &other) const;
+  int operator-(const DateTime &other) const;
 };
 
 #endif
