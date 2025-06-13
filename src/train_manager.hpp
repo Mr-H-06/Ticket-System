@@ -257,7 +257,7 @@ public:
     date_time arriving_time;
   };
 
-  BPlusTree<train_basic, 21, 12> basic;
+  BPlusTree<train_basic, 21, 24> basic;
   Block seat;
   BPlusTree<station_idx, 41, 61> station;
 };

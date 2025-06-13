@@ -13,24 +13,24 @@ int main() {
     std::cout << sizeof(Node<waiting, 21, 27>) << '\n';
     std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 4 << ' ' << 4096 * 8 << ' ' << 4096 * 16;
     return 0;*/
-  //clock_t start = clock();
-  //double time_query_ticket = 0;
+  clock_t start = clock();
+  double time_query_ticket = 0;
   //double time_query_profile = 0;
   //double time_buy_ticket = 0;
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
-  //std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
-  //freopen("out.out", "w", stdout);
+  std::ifstream file("/mnt/c/Users/hejia/Desktop/Ticket System/1867/33.in");
+  freopen("out.out", "w", stdout);
   std::string line;
   OrderManager order;
   UserManager user;
   TrainManager train;
-  //user.clear();
-  //order.clear();
-  //train.clear();
-  //while (std::getline(file, line)) {
-  while (std::getline(std::cin, line)) {
+  user.clear();
+  order.clear();
+  train.clear();
+  while (std::getline(file, line)) {
+  //while (std::getline(std::cin, line)) {
     char *t = strtok(const_cast<char *>(line.c_str()), " ");
     std::cout << t << ' ';
     char idx[12];
@@ -312,10 +312,10 @@ int main() {
         }
         t = strtok(nullptr, " ");
       }
-      //clock_t a = clock();
+      clock_t a = clock();
       train.query_ticket(d, from, to, type); //type = false -> time / true -> cost
-      //clock_t b = clock();
-      //time_query_ticket += b - a;
+      clock_t b = clock();
+      time_query_ticket += b - a;
     } else if (strcmp(t, "query_transfer") == 0) {
       t = strtok(nullptr, " ");
       bool type = false;
@@ -422,9 +422,9 @@ int main() {
       order.clear();
     } else if (strcmp(t, "exit") == 0) {
       std::cout << "bye\n";
-      //clock_t end = clock();
-      //std::cout << double(end - start) / CLOCKS_PER_SEC << '\n';
-      //std::cout << "query_ticket:" << time_query_ticket / CLOCKS_PER_SEC << '\n';
+      clock_t end = clock();
+      std::cout << double(end - start) / CLOCKS_PER_SEC << '\n';
+      std::cout << "query_ticket:" << time_query_ticket / CLOCKS_PER_SEC << '\n';
       //std::cout << "query_profile:" << time_query_profile / CLOCKS_PER_SEC << '\n';
       //std::cout << "buy_ticket:" <<time_buy_ticket / CLOCKS_PER_SEC << '\n';
       return 0;
