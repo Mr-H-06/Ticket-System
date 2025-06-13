@@ -7,15 +7,17 @@ bool OrderManager::buyTicket(char *username, OrderBasic &order, bool type, Train
   if (order.num > find_train[0].seatNum) return false;
   Seats find_seat;
   train.seat.find(find_train[0].seatAddr, find_seat);
+  Station find_station;
+  train.trainStations.find(find_train[0].stationAddr, find_station);
   if (find_train.empty() || !find_train[0].release) return false;
   int f, t;
   for (f = 0; f < find_train[0].stationNum; ++f) {
-    if (strcmp(order.from, find_train[0].stations[f]) == 0) {
+    if (strcmp(order.from, find_station.stations[f]) == 0) {
       break;
     }
   }
   for (t = f + 1; t < find_train[0].stationNum; ++t) {
-    if (strcmp(order.to, find_train[0].stations[t]) == 0) {
+    if (strcmp(order.to, find_station.stations[t]) == 0) {
       break;
     }
   }
@@ -24,9 +26,9 @@ bool OrderManager::buyTicket(char *username, OrderBasic &order, bool type, Train
   }
   int del;
   if (f > 0) {
-    /*del = order.leaving_time.date_ - (date_time(find_train[0].saleDate[0], find_train[0].startTime) + find_train[0].
+    /*del = order.leaving_time.date_ - (DateTime(find_train[0].saleDate[0], find_train[0].startTime) + find_train[0].
                                       stopoverTimes[f - 1]).date_;
-    order.leaving_time.time_ = (date_time(order.leaving_time.date_, find_train[0].startTime) + find_train[0].
+    order.leaving_time.time_ = (DateTime(order.leaving_time.date_, find_train[0].startTime) + find_train[0].
     stopoverTimes[f - 1]).time_;*/
     del = Date(order.leaving_time) - Date(DateTime(find_train[0].saleDate[0], find_train[0].startTime) + find_train[0].
                                       stopoverTimes[f - 1]);
@@ -115,15 +117,17 @@ bool OrderManager::refundTicket(char *username, int n, UserManager &user, TrainM
   auto find_train = train.basic.find(find[n - 1].trainId);
   Seats seat;
   train.seat.find(find_train[0].seatAddr, seat);
+  Station station;
+  train.trainStations.find(find_train[0].stationAddr, station);
   //train.seat.remove(find[n - 1].trainId, seat[0]);
   int f, t;
   for (f = 0; f < find_train[0].stationNum; ++f) {
-    if (strcmp(find[n - 1].from, find_train[0].stations[f]) == 0) {
+    if (strcmp(find[n - 1].from, station.stations[f]) == 0) {
       break;
     }
   }
   for (t = f + 1; t < find_train[0].stationNum; ++t) {
-    if (strcmp(find[n - 1].to, find_train[0].stations[t]) == 0) {
+    if (strcmp(find[n - 1].to, station.stations[t]) == 0) {
       break;
     }
   }
@@ -142,12 +146,12 @@ bool OrderManager::refundTicket(char *username, int n, UserManager &user, TrainM
   auto waiting_list = waiting_queue.find(find[n - 1].trainId);
   for (auto x: waiting_list) {
     for (f = 0; f < find_train[0].stationNum; ++f) {
-      if (strcmp(x.from, find_train[0].stations[f]) == 0) {
+      if (strcmp(x.from, station.stations[f]) == 0) {
         break;
       }
     }
     for (t = f + 1; t < find_train[0].stationNum; ++t) {
-      if (strcmp(x.to, find_train[0].stations[t]) == 0) {
+      if (strcmp(x.to, station.stations[t]) == 0) {
         break;
       }
     }

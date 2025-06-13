@@ -36,7 +36,7 @@ struct Date {
 };*/
 
 struct DateTime {/*
-  date date_;
+  Date date_;
   timing time_;*/
   int time;
 
@@ -44,7 +44,7 @@ struct DateTime {/*
 
   DateTime();
 
-  //date_time(date d, timing t);
+  //DateTime(Date d, timing t);
 
   DateTime(const char *d, const char *t);
 

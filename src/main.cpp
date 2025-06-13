@@ -6,11 +6,11 @@
 
 int main() {
     /*
-    std::cout << sizeof(Node<train_basic, 21, 12>) << '\n';
-    std::cout << sizeof(Node<station_idx, 41, 61>) << '\n';
-    std::cout << sizeof(Node<user_basic, 21, 35>) << '\n';
-    std::cout << sizeof(Node<order_basic, 21, 24>) << '\n';
-    std::cout << sizeof(Node<waiting, 21, 27>) << '\n';
+    std::cout << sizeof(Node<TrainBasic, 21, 12>) << '\n';
+    std::cout << sizeof(Node<StationIdx, 41, 61>) << '\n';
+    std::cout << sizeof(Node<UserBasic, 21, 35>) << '\n';
+    std::cout << sizeof(Node<OrderBasic, 21, 24>) << '\n';
+    std::cout << sizeof(Node<Waiting, 21, 27>) << '\n';
     std::cout << 4096 << ' ' << 4096 * 2 << ' ' << 4096 * 4 << ' ' << 4096 * 8 << ' ' << 4096 * 16;
     return 0;*/
   //clock_t start = clock();
@@ -38,7 +38,7 @@ int main() {
     strcpy(idx, t);
     t = strtok(nullptr, " ");
     if (strcmp(t, "add_user") == 0) {
-      user_basic u;
+      UserBasic u;
       char cur_username[21], username[21];
       t = strtok(nullptr, " ");
       while (t) {
@@ -119,7 +119,7 @@ int main() {
       //time_query_profile += b - a;
     } else if (strcmp(t, "modify_profile") == 0) {
       t = strtok(nullptr, " ");
-      user_basic u;
+      UserBasic u;
       char cur_username[21], username[21];
       while (t) {
         if (strcmp(t, "-c") == 0) {
@@ -149,6 +149,7 @@ int main() {
     } else if (strcmp(t, "add_train") == 0) {
       TrainBasic newtrain;
       Seats newtrain_seats;
+      Station newtrain_stations;
       char trainId[21], station_temp[5000], date_temp[12], price_temp[600], travelTime_temp[500], stopoverTimes_temp[
         500];
       //memset(trainId, 0, 21);
@@ -201,7 +202,7 @@ int main() {
       int ins = 0;
       t = strtok(station_temp, "|");
       while (t) {
-        strcpy(newtrain.stations[ins++], t);
+        strcpy(newtrain_stations.stations[ins++], t);
         t = strtok(nullptr, "|");
       }
       // saleDate
@@ -237,13 +238,13 @@ int main() {
         newtrain.stopoverTimes[i] += newtrain.travelTimes[i];
         newtrain.travelTimes[i + 1] += newtrain.stopoverTimes[i];
       }
-      // seats
+      // Seats
       for (int i = Date(newtrain.saleDate[1]) - Date(newtrain.saleDate[0]); i >= 0; --i) {
         for (int j = 0; j < newtrain.stationNum - 1; ++j) {
           newtrain_seats.seat[i][j] = newtrain.seatNum;
         }
       }
-      if (train.addTrain(trainId, newtrain, newtrain_seats)) {
+      if (train.addTrain(trainId, newtrain, newtrain_seats, newtrain_stations)) {
         std::cout << "0\n";
       } else {
         std::cout << "-1\n";

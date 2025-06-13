@@ -87,7 +87,7 @@ DateTime::DateTime() {
   //memset(time_.hm, 0, sizeof(time_));
 }
 
-/*date_time::date_time(date d, timing t) : date_(d), time_(t) {
+/*DateTime::DateTime(Date d, timing t) : date_(d), time_(t) {
 }*/
 
 DateTime::DateTime(const char *d, const char *t = "00:00") {
@@ -143,7 +143,7 @@ DateTime DateTime::operator+(int add) const {
   ret2[3] = '0' + s / 10;
   ret2[4] = '0' + s % 10;
   ret1[5] = ret2[5] = '\0';
-  return date_time(date(ret2), timing(ret1));*/
+  return DateTime(Date(ret2), timing(ret1));*/
 }
 
 std::string DateTime::toString() {

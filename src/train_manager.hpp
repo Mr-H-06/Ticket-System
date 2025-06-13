@@ -10,7 +10,8 @@
 struct TrainBasic {
   //char trainId[20];     -->key
   int stationNum; //[0, 20];
-  char stations[95][41]; //Chinese
+  //char stations[95][41]; //Chinese
+  int stationAddr;
   int seatNum; //   <=1e5;
   int price[95]; // <=1e5
   char startTime[6]; // hh:mm
@@ -106,6 +107,24 @@ struct Seats {
   }
 };
 
+struct Station {
+  char stations[95][41];
+
+  Station() = default;
+
+  bool operator<(const Station &other) const {
+    return strcmp(stations[0], other.stations[0]) < 0;
+  }
+
+  bool operator==(const Station &other) const {
+    return strcmp(stations[0], other.stations[0]) == 0;
+  }
+
+  bool operator!=(const Station &other) const {
+    return !(*this == other);
+  }
+};
+
 struct StationIdx {
   char trainId[21];
 
@@ -126,6 +145,8 @@ struct StationIdx {
   }
 };
 
+template<typename T>
+
 class Block {
   std::fstream file;
   std::string filename;
@@ -133,8 +154,8 @@ class Block {
   /*int allocate() {
     file.seekp(0, std::ios::end);
     int addr = file.tellp();
-    seats newseat;
-    file.write(reinterpret_cast<char *>(&newseat), sizeof(seats));
+    Seats newseat;
+    file.write(reinterpret_cast<char *>(&newseat), sizeof(Seats));
     return addr;
   }*/
 public:
@@ -151,28 +172,31 @@ public:
     file.close();
   }
 
-  int insert(Seats &seat) {
+  //template<typename T>
+  int insert(T &read) {
     file.seekp(0, std::ios::end);
     int addr = file.tellp();
     file.seekp(addr);
-    file.write(reinterpret_cast<char *>(&seat), sizeof(Seats));
+    file.write(reinterpret_cast<char *>(&read), sizeof(T));
     return addr;
   }
 
-  void modify(int addr, Seats &seat) {
+  //template<typename T>
+  void modify(int addr, T &read) {
     file.seekp(addr);
-    file.write(reinterpret_cast<char *>(&seat), sizeof(Seats));
+    file.write(reinterpret_cast<char *>(&read), sizeof(T));
   }
 
-  void find(int addr, Seats &seat) {
+  //template<typename T>
+  void find(int addr, T &read) {
     file.seekg(addr);
-    file.read(reinterpret_cast<char *>(&seat), sizeof(Seats));
+    file.read(reinterpret_cast<char *>(&read), sizeof(T));
   }
 
 
   void clear() {
     file.close();
-    file.open(filename, std::ios::out | std::ios::trunc |  std::ios::binary);
+    file.open(filename, std::ios::out | std::ios::trunc | std::ios::binary);
     file.close();
     file.open(filename, std::ios::in | std::ios::out | std::ios::binary);
   }
@@ -180,7 +204,7 @@ public:
 
 class TrainManager {
 public:
-  bool addTrain(char *trainId, TrainBasic &train, Seats &train_seat);
+  bool addTrain(char *trainId, TrainBasic &train, Seats &train_seat, Station &train_stations);
 
   bool deleteTrain(char *trainId);
 
@@ -206,23 +230,25 @@ public:
   };
 
   struct CompareTime {
-    bool operator()(const QueryInfo &a, const QueryInfo &b) {/*
-      if (a.time != b.time) return a.time < b.time;
-      return strcmp(a.trainId, b.trainId) < 0;*/
+    bool operator()(const QueryInfo &a, const QueryInfo &b) {
+      /*
+            if (a.time != b.time) return a.time < b.time;
+            return strcmp(a.trainId, b.trainId) < 0;*/
       return a.time < b.time || (a.time == b.time && strcmp(a.trainId, b.trainId) < 0);
     }
   };
 
   struct CompareCost {
-    bool operator()(const QueryInfo &a, const QueryInfo &b) {/*
-      if (a.price != b.price) return a.price < b.price;
-      return strcmp(a.trainId, b.trainId) < 0;*/
+    bool operator()(const QueryInfo &a, const QueryInfo &b) {
+      /*
+            if (a.price != b.price) return a.price < b.price;
+            return strcmp(a.trainId, b.trainId) < 0;*/
       return a.price < b.price || (a.price == b.price && strcmp(a.trainId, b.trainId) < 0);
     }
   };
 
-  template<typename T, typename Compare = std::less<T>>
-  void quick_sort(sjtu::vector<T>& vec, Compare comp = Compare()) {
+  template<typename T, typename Compare = std::less<T> >
+  void quick_sort(sjtu::vector<T> &vec, Compare comp = Compare()) {
     if (vec.empty()) return;
 
     std::function<void(int, int)> sort_range = [&](int left, int right) {
@@ -257,8 +283,9 @@ public:
     DateTime arriving_time;
   };
 
-  BPlusTree<TrainBasic, 21, 6> basic;
-  Block seat;
+  BPlusTree<TrainBasic, 21, 12> basic;
+  Block<Seats> seat;
+  Block<Station> trainStations;
   BPlusTree<StationIdx, 41, 61> station;
 };
 #endif

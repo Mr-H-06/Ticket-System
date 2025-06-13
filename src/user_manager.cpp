@@ -1,13 +1,13 @@
 #include "user_manager.hpp"
 
-user_basic::user_basic() {
+UserBasic::UserBasic() {
   strcpy(password, "");
   strcpy(name, "");
   strcpy(mailAddr, "");
   privilege = -1;
 }
 
-bool UserManager::addUser(char *cur_username, char *username, user_basic &user) {
+bool UserManager::addUser(char *cur_username, char *username, UserBasic &user) {
   if (basic.empty()) {
     user.privilege = 10;
     basic.insert(username, user);
@@ -35,7 +35,7 @@ bool UserManager::login(char *username, char *password) {
   auto find = basic.find(username);
   if (find.empty()) return false;
   if (strcmp(find[0].password, password) == 0) {
-    signed_in s;
+    SignedIn s;
     s.privilege = find[0].privilege;
     strcpy(s.user, username);
     log.push_back(s);
@@ -69,7 +69,7 @@ bool UserManager::queryProfile(char *cur_username, char *username) {
   return false;
 }
 
-bool UserManager::modifyProfile(char *cur_username, char *username, user_basic &user) {
+bool UserManager::modifyProfile(char *cur_username, char *username, UserBasic &user) {
   for (size_t i = 0; i < log.size(); ++i) {
     if (strcmp(log[i].user, cur_username) == 0) {
       auto find = basic.find(username);
@@ -112,5 +112,5 @@ bool UserManager::checkLogin(char *username) {
   return false;
 }
 
-UserManager::UserManager() : basic("user_basic.txt") {
+UserManager::UserManager() : basic("UserBasic.txt") {
 }
