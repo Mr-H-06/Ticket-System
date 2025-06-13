@@ -5,8 +5,9 @@
 #include <cstdio>
 
 int main() {
+
     /*
-    std::cout << sizeof(Node<TrainBasic, 21, 12>) << '\n';
+    std::cout << sizeof(Node<TrainBasic, 21, 13>) << '\n';
     std::cout << sizeof(Node<StationIdx, 41, 61>) << '\n';
     std::cout << sizeof(Node<UserBasic, 21, 35>) << '\n';
     std::cout << sizeof(Node<OrderBasic, 21, 24>) << '\n';

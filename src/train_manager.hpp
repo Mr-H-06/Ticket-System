@@ -283,7 +283,7 @@ public:
     DateTime arriving_time;
   };
 
-  BPlusTree<TrainBasic, 21, 12> basic;
+  BPlusTree<TrainBasic, 21, 13> basic;
   Block<Seats> seat;
   Block<Station> trainStations;
   BPlusTree<StationIdx, 41, 61> station;
